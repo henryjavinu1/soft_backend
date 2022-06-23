@@ -32,7 +32,7 @@ db.sequelize.sync({force: true}).then(() => {
 
 // simple route
 app.get("/", (req, res) => {
-  res.json({ message: "Bienvenido." });
+  res.json({ message: "¡Bienvenido!" });
 });
 
 // routes
