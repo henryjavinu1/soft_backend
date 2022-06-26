@@ -1,23 +1,18 @@
 const config = require("../../config/db.config.js");
 
 const Sequelize = require("sequelize");
-const sequelize = new Sequelize(
-  config.DB,
-  config.USER,
-  config.PASSWORD,
-  {
-    host: config.HOST,
-    dialect: config.dialect,
-    operatorsAliases: false,
+const sequelize = new Sequelize(config.DB, config.USER, config.PASSWORD, {
+  host: config.HOST,
+  dialect: config.dialect,
+  operatorsAliases: false,
 
-    pool: {
-      max: config.pool.max,
-      min: config.pool.min,
-      acquire: config.pool.acquire,
-      idle: config.pool.idle
-    }
-  }
-);
+  pool: {
+    max: config.pool.max,
+    min: config.pool.min,
+    acquire: config.pool.acquire,
+    idle: config.pool.idle,
+  },
+});
 
 const db = {};
 
@@ -29,6 +24,7 @@ db.role = require("../../models/role.model.js")(sequelize, Sequelize);
 db.permiso = require("../../models/permiso.model.js")(sequelize, Sequelize);
 db.empleado = require("../../models/empleado.model.js")(sequelize, Sequelize);
 db.sesion = require("../../models/sesion.model.js")(sequelize, Sequelize);
+db.arqueo = require("../../models/arqueo.model.js")(sequelize, Sequelize);
 /////// RELACIÓN DE UNO A UNO /////////
 //// UN USUARIO PERTENECE A UN EMPLEADO, UN EMPLEADO TIENE UN USUARIO ////
 db.empleado.hasOne(db.user,{
@@ -72,5 +68,23 @@ db.role.belongsToMany(db.permiso, {
   foreignKey: "idRol",
   otherKey: "idPermiso"
 });
+////////////////////////////////////////////
+/////// RELACIÓN DE UNO A MUCHOS /////////
+//// UN ARQUEO TIENE UN USUARIO, UN USUARIO TIENE MUCHOS ARQUEO ////
+db.user.hasMany(db.arqueo, {
+  foreignKey: { name: "idUsuario", allowNull: false },
+});
+db.arqueo.belongsTo(db.user, {
+  foreignKey: { name: "idUsuario", allowNull: false },
+});
+////////////////////////////////////////////
+/////// RELACIÓN DE UNO A UNO /////////
+//// UN ARQUEO TIENE UNA SESION, UN SESION TIENE UN ARQUEO ////
+db.sesion.hasOne(db.arqueo, {
+  foreignKey: { name: "idSesion", allowNull: false },
+});
+db.arqueo.belongsTo(db.sesion, {
+  foreignKey: { name: "idSesion", allowNull: false },
+});
 
-module.exports = db;
+module.exports = db; 
