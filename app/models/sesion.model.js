@@ -14,6 +14,11 @@ module.exports = (sequelize, Sequelize) => {
         allowNull: false,
         defaultValue: false
       },
+      isActive: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+      },
     });
   
     return Sesion;
