@@ -32,9 +32,6 @@ db.empleado = require("../../models/empleado.model.js")(sequelize, Sequelize);
 db.sesion = require("../../models/sesion.model.js")(sequelize, Sequelize);
 db.tipopago = require("../../models/tipopago.model.js")(sequelize, Sequelize);
 db.factura = require("../../models/factura.model.js")(sequelize, Sequelize);
-db.venta = require("../../models/venta.model.js")(sequelize, Sequelize);
-db.cliente = require("../../models/cliente.model.js")(sequelize, Sequelize);
-db.talonario = require("../../models/talonario.model.js")(sequelize, Sequelize);
 db.arqueo = require("../../models/arqueo.model.js")(sequelize, Sequelize);
 /////// RELACIÓN DE UNO A UNO /////////
 //// UN USUARIO PERTENECE A UN EMPLEADO, UN EMPLEADO TIENE UN USUARIO ////

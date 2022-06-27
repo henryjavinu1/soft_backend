@@ -37,14 +37,30 @@ exports.insertFactura = async (req, res) => {
                 message: "No tienes permiso para realizar esta accion"
             });
         }
-        //Buscar numero de talonario y numero de factura
-        const talonario = await talonario.findOne({ where: { 
-            isDelete: false,
-            estado: true,
-         } ,
-
-            
+        //necesito generar numero factura evaluando el ultimo id de la tabla factura
+        const ultimoIdFactura = await Factura.findAll({
+            order: [["id", "DESC"]],
+            limit: 1,
+            where: {
+                isDelete: false,
+            },
         });
+        //Evaluar el numero de la factura
+        const numeroFacturaa = async () => {
+            if (ultimoIdFactura == null) {
+                const numeroFactura = talonario.rangoInicio;
+            } else {
+                //si el ultimo id de la tabla factura no es null, el numero de factura es el ultimo id de la tabla factura + 1 si es menor a rango final de talonario
+                const numeroFactura = ultimoIdFactura[0].id + 1;
+                if (numeroFactura > talonario.rangoFin) {
+                    return res.status(400).send({
+                        message: "No hay mas numeros de factura disponibles"
+                    });
+                }  }  }
+                ;
+        //si el ultimo id de la tabla factura es null, el numero de factura es rangoInicio de talonario
+               
+        
         //Fecha actual
         const hoy = new Date();
         const dia = hoy.getDate();
@@ -55,7 +71,7 @@ exports.insertFactura = async (req, res) => {
         const fechaa = anio + "/" + mes + "/" + dia;
         //Crear nueva factura, Ingresar datos
         const factura = await factura.create({
-            numerofactura: req.body.numerofactura, //necesito una función que me genere el numero de factura automaticamente
+            numerofactura: numeroFacturaa, //necesito una función que me genere el numero de factura automaticamente
             fechafactura: fechaa, //necesito una funcion para generar fecha del dia
             descuentototalfactura: req.body.descuentototalfactura,
             isvtotalfactura: req.body.isvtotalfactura,
