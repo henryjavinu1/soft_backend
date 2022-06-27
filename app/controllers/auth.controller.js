@@ -9,6 +9,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { sesion } = require("../models/generarfactura");
 
+
 exports.signup = async (req, res) => {
   // Save User to Database
   try {
@@ -86,8 +87,6 @@ exports.signin = async (req, res) => {
     }, config.secret, {
       expiresIn: 86400, // 24 horas de ducración de tokens
     });
-
-
 
     req.session.token = token;
     const ses = await Sesion.create({
