@@ -10,8 +10,9 @@ const cliente = db.cliente;
 const TipoPago = db.tipopago;
 const Venta = db.venta;
 const Op = db.Sequelize.Op;
-//crear funcion para generar factura
+//crear funcion para generar factura //Inserta datos en factura desde el cuerpo de la factura
 exports.insertFactura = async (req, res) => {
+    console.log(req.body.numfactura);
     try {
         //ver si un usuario 
         const user = await User.findOne({
@@ -31,43 +32,27 @@ exports.insertFactura = async (req, res) => {
                 message: "El usuario no existe"
             });
         }else{
-            const factura = await factura.create({
-                where: {
-                    idventa: venta.idVenta
-                },
-                include: [{
-                    model: db.venta,
-                        include: [{
-                        model: db.cliente,
-                    },
-                    ]}, {
-                    model: db.user,
-                }, {
-                 model: db.talonario,
-                }, {
-                    model: db.tipopago,
-                }],
-                numerofactura: req.body.numeroFactura, //necesito una función que me genere el numero de factura automaticamente
-                fechafactura: req.body.fechaFactura, //necesito una funcion para generar fecha del dia
-                descuentototalfactura: req.body.descuentoTotalFactura,
-                isvtotalfactura: req.body.isvTotalFactura,
-                totalfactura: req.body.totalFactura,
-                subtotalfactura: req.body.subTotalFactura,
-                cantidadletras: req.body.cantidadLetras, //necesito una funcion para generar cantidad de letras
+            const facturaa = await db.factura.create({
+                numeroFactura: req.body.numeroFactura, //necesito una función que me genere el numero de factura automaticamente
+                fechaFactura: req.body.fechaFactura, //necesito una funcion para generar fecha del dia get Date()
+                descuenTototalFactura: req.body.descuentoTotalFactura,
+                isvTotalFactura: req.body.isvTotalFactura,
+                totalFactura: req.body.totalFactura,
+                subtotalFactura: req.body.subTotalFactura,
+                cantidadLetras: req.body.cantidadLetras, //necesito una funcion para generar cantidad de letras
                 estado: true,
                 idTipoPago: req.body.idTipoPago,
                 idCliente: req.body.idCliente,
-                idUser: req.body.idUser,
+                idUsuario: req.body.userId,
                 idVenta: req.body.idVenta,
                 idTalonario: req.body.idTalonario,
-              
         });
         return res.status(200).send({
             message: "Factura creada"
         });}
     } catch (error) {
         return res.status(500).send({
-            message: "Ocurrio un error"
+            message: "Ocurrio un error" + error
         });
     }
 }
@@ -98,14 +83,14 @@ exports.findVenta = async (req, res) => {
             } else {
                 const venta = await db.venta.findOne({
                     where: {
-                        id: req.body.idVent,
+                        idVenta: req.body.idVent,
                         isDelete: false
                     }, 
                     include: [ {
                         model: db.cliente,
                     }, {
                         model: db.detalleventa,
-                        include: [ { model:db.venta }]
+                        
                     }]
                 });
                 if (!venta) {
@@ -122,20 +107,19 @@ exports.findVenta = async (req, res) => {
                                 message: "Los detallesventa no existe"
                             });
                         } else {
-                
-                        return res.status(200).send({
-                        message: "La venta Existe",
-                        empleado: user.empleado,
-                        nombrecliente: venta.nombreCliente,
-                        idCliente: venta.idCliente,
-                        idVenta: venta.id,
-                        isvventa: venta.isvVenta,
-                        totalfacturaventa: venta.totalFacturaVenta,
-                        descuentoaplicadoventa: venta.descuentoAplicadoVenta,
-                        detalleventa: detalleventa,
-                   
-    
-                });
+                           
+                                    return res.status(200).send({
+                                        message: "La venta Existe",
+                                        empleado: user.empleado,
+                                        nombrecliente: venta.nombreCliente,
+                                        idCliente: venta.idCliente, //Crear una funcion de busqueda cliente
+                                        idVenta: venta.idVent,
+                                        isvventa: venta.isvVenta,
+                                        totalfacturaventa: venta.totalFacturaVenta,
+                                        descuentoaplicadoventa: venta.descuentoAplicadoVenta,
+                                        detalleventa: detalleventa,
+                                });
+                        
                      
                  }
                // return res.status(200).send({
@@ -149,7 +133,7 @@ exports.findVenta = async (req, res) => {
             message: "Ocurrio un error" + error
         });
     }
-} 
+}
 //Buscar una talonario por activo //Funcion esta mala falta obtener ultimoNumeroFactura
 exports.findTalonario = async (req, res) => {
     try {
@@ -191,7 +175,7 @@ exports.findTalonario = async (req, res) => {
 //Buscar tipo de pago por tipo de pago
 exports.findTipoPago = async (req, res) => {
     try {
-        const tipopago = await tipopago.findOne({
+        const tipopago = await db.tipopago.findAll({
             where: {
                 isDelete: false,
             }
@@ -203,7 +187,7 @@ exports.findTipoPago = async (req, res) => {
         } else {
             return res.status(200).send({
                 message: "El tipo de pago existe",
-                tipopago: tipopago
+                tipoDePago: tipopago
             });
         }
     } catch (error) {
