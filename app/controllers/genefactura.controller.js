@@ -10,6 +10,9 @@ const cliente = db.cliente;
 const TipoPago = db.tipopago;
 const Venta = db.venta;
 const Op = db.Sequelize.Op;
+//Idea principal de la funcion generar factura: Datos previamente insertados en la tabla venta, 
+//talonario, tipo de pago, detalle venta, NECESITAMOS FUNCIONES CAPACES DE BUSCAR LOS DATOS E IMPRIMIRLOS
+// Y luego en la insertar solo se insertaria los datos previamente cargados en la factura req.body. 
 //crear funcion para generar factura //Inserta datos en factura desde el cuerpo de la factura
 exports.insertFactura = async (req, res) => {
     console.log(req.body.numfactura);
