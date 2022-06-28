@@ -57,7 +57,7 @@ exports.insertFactura = async (req, res) => {
     }
 }
 //Buscar una venta por el id
-exports.findVenta = async (req, res) => {
+exports.findVentaDetalle = async (req, res) => {
     try {
         const user = await db.user.findOne({
             where: {
@@ -134,15 +134,15 @@ exports.findVenta = async (req, res) => {
         });
     }
 }
-//Buscar una talonario por activo //Funcion esta mala falta obtener ultimoNumeroFactura
-exports.findTalonario = async (req, res) => {
+//Buscar una talonario por activo //Obtiene numero de la factura segun los rangos del talonario 
+//y el numero de factura anterior
+exports.findTalonarioFactura = async (req, res) => {
     try {
         const talonario = await db.talonario.findOne({
-            //verificar que estado de talonario sea activo
             where: {
                 active: true,
                 isDelete: false,
-            }
+            },
         });
         if (!talonario) {
             return res.status(404).send({
@@ -150,29 +150,37 @@ exports.findTalonario = async (req, res) => {
             });
         } else {
 
-                const numeroFinal = async () => {
-                    if (ultimoIdFactura == null) {
-                        const numeroFactura = talonario.rangoInicio;
-                    } else {
-                        //si el ultimo id de la tabla factura no es null, el numero de factura es el ultimo id de la tabla factura + 1 si es menor a rango final de talonario
-                        const numeroFactura = ultimoIdFactura[0].id + 1;
-                        if (numeroFactura > talonario.rangoFin) {
-                            return res.status(400).send({
-                                message: "No hay mas numeros de factura disponibles"
-                            });
-                        }  } 
-                       
-                    return numeroFactura;
-                };
+            const numeroFinal = await db.factura.max('numeroFactura');
+            if ( numeroFinal == null) {
+                message: "No hay facturas"
+                const numeroFactura = await talonario.rangoInicialFactura;
+                return res.status(500).send({
+                    numeroFactura: numeroFactura,
+                });
+            } else {
+                const numeroFactura = await numeroFinal + 1;
+                if (numeroFactura > talonario.rangoFinalFactura) {
+                    return res.status(400).send({
+                        message: "No hay mas numeros de factura disponibles"
+                    });
+                }else { 
+                return res.status(500).send({
+                    message: "El numero de factura es",
+                    numeroFactura: numeroFactura,
+            });
+            } 
+            //return res.status(500).send({
+               // numeroFactura: numeroFactura,
+           // });  
+        } 
             
-        }
-    } catch (error) {
+            } } catch (error) {
         return res.status(500).send({
             message: "Ocurrio un error" + error
         });
     }
-}
-//Buscar tipo de pago por tipo de pago
+}  
+//Buscar tipo de pago 
 exports.findTipoPago = async (req, res) => {
     try {
         const tipopago = await db.tipopago.findAll({
@@ -196,3 +204,21 @@ exports.findTipoPago = async (req, res) => {
         });
     }
 }
+//Buscar maximo en una tabla en un atributo especifico
+exports.buscar = async (req, res) => {
+    const numero = await db.factura.max('numeroFactura');
+    
+    return res.status(200).send({
+        numero: numero,
+    });
+}
+//Ejemplo traer datos de una tabla pero solo los de un atributo
+exports.facturasdisponibles = async (req, res) => {
+    const facturas = await db.factura.findAll({ 
+        attributes: ['numeroFactura']
+    });
+
+    return res.status(200).send({
+        facturas: facturas,
+    });
+} 
