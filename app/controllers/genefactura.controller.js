@@ -1,7 +1,7 @@
 const db = require("../models/generarfactura");
-const funciones = require("../config/funciones.js");
 const config = require("../config/auth.config");
-const { venta, talonario, tipopago } = require("../models/generarfactura");
+const { venta, talonario, tipopago, detalleventa } = require("../models/generarfactura");
+const detalleventaModel = require("../models/detalleventa.model");
 const User = db.user;
 const Role = db.role;
 const Sesion = db.sesion;
@@ -13,10 +13,10 @@ const Op = db.Sequelize.Op;
 //crear funcion para generar factura
 exports.insertFactura = async (req, res) => {
     try {
-        //ver si un usuario tiene permisos para realizar esta accion
+        //ver si un usuario 
         const user = await User.findOne({
             where: {
-                id: req.userId,
+                id: req.body.userId,
                 isDelete: false
             },
             include: [{
@@ -30,135 +30,184 @@ exports.insertFactura = async (req, res) => {
             return res.status(404).send({
                 message: "El usuario no existe"
             });
-        }
-        const permiso = user.roles[0].permisos.find(p => p.id == 1);
-        if (!permiso) {
-            return res.status(401).send({
-                message: "No tienes permiso para realizar esta accion"
-            });
-        }
-        //necesito generar numero factura evaluando el ultimo id de la tabla factura
-        const ultimoIdFactura = await Factura.findAll({
-            order: [["id", "DESC"]],
-            limit: 1,
-            where: {
-                isDelete: false,
-            },
-        });
-        //Evaluar el numero de la factura
-        const numeroFacturaa = async () => {
-            if (ultimoIdFactura == null) {
-                const numeroFactura = talonario.rangoInicio;
-            } else {
-                //si el ultimo id de la tabla factura no es null, el numero de factura es el ultimo id de la tabla factura + 1 si es menor a rango final de talonario
-                const numeroFactura = ultimoIdFactura[0].id + 1;
-                if (numeroFactura > talonario.rangoFin) {
-                    return res.status(400).send({
-                        message: "No hay mas numeros de factura disponibles"
-                    });
-                }  }  }
-                ;
-        //si el ultimo id de la tabla factura es null, el numero de factura es rangoInicio de talonario
-               
-        
-        //Fecha actual
-        const hoy = new Date();
-        const dia = hoy.getDate();
-        const mes = hoy.getMonth() + 1;
-        const anio = hoy.getFullYear();
-        dia = ('0' + dia).slice(-2);
-        mes = ('0' + mes).slice(-2);
-        const fechaa = anio + "/" + mes + "/" + dia;
-        //Crear nueva factura, Ingresar datos
-        const factura = await factura.create({
-            numerofactura: numeroFacturaa, //necesito una función que me genere el numero de factura automaticamente
-            fechafactura: fechaa, //necesito una funcion para generar fecha del dia
-            descuentototalfactura: req.body.descuentototalfactura,
-            isvtotalfactura: req.body.isvtotalfactura,
-            totalfactura: req.body.totalfactura,
-            subtotalfactura: req.body.subtotalfactura,
-            cantidadletras: req.body.cantidadletras, //necesito una funcion para generar cantidad de letras
-            idCliente: cliente.idCliente,
-            idVenta: venta.idVenta,
-            idUser: user.idUser,
-            idTalonario: talonario.idTalonario,
-            idTipoPago: tipopago.idTipoPago,
-            isDelete: false,
-            estado: true,
-            where: {
-                idventa: venta.idVenta
-            },
-            include: [{
-                model: db.venta,
-                    include: [{
-                    model: db.cliente,
-                  },
-                ]}, {
-                model: db.user,
-              }, {
-                model: db.talonario,
-              }, {
-                model: db.tipopago,
-              }]
+        }else{
+            const factura = await factura.create({
+                where: {
+                    idventa: venta.idVenta
+                },
+                include: [{
+                    model: db.venta,
+                        include: [{
+                        model: db.cliente,
+                    },
+                    ]}, {
+                    model: db.user,
+                }, {
+                 model: db.talonario,
+                }, {
+                    model: db.tipopago,
+                }],
+                numerofactura: req.body.numerofactura, //necesito una función que me genere el numero de factura automaticamente
+                fechafactura: req.body.fechafactura, //necesito una funcion para generar fecha del dia
+                descuentototalfactura: req.body.descuentototalfactura,
+                isvtotalfactura: req.body.isvtotalfactura,
+                totalfactura: req.body.totalfactura,
+                subtotalfactura: req.body.subtotalfactura,
+                cantidadletras: req.body.cantidadletras, //necesito una funcion para generar cantidad de letras
+                idCliente: req.body.idCliente,
+                idVenta: req.body.idVenta,
+                idUser: req.body.idUser,
+                idTalonario: req.body.idTalonario,
+                idTipoPago: req.body.idTipoPago,
+                estado: true,
         });
         return res.status(200).send({
             message: "Factura creada"
-        });
+        });}
     } catch (error) {
         return res.status(500).send({
             message: "Ocurrio un error"
         });
     }
 }
-//Buscar venta por id
+//Buscar una venta por el id
 exports.findVenta = async (req, res) => {
     try {
-       //ver si un usuario tiene permisos para realizar esta accion
-        const user = await User.findOne({
+        const user = await db.user.findOne({
             where: {
-                id: req.userId,
-                isDelete: false
+              id: req.body.idUsuario,
+              isDelete: false
             },
             include: [{
-                model: db.role,
-                include: [{
-                    model: db.permiso,
-                }]
+              model: db.role,
+              include: [{
+                model: db.permiso,
+              }]
+            }, {
+              model: db.empleado,
+            }, {
+              model: db.sesion,
             }]
-        });
-        if (!user) {
+          });
+      
+          if (!user) {
             return res.status(404).send({
-                message: "El usuario no existe"
+              message: "User Not found."
             });
-        }
-        const permiso = user.roles[0].permisos.find(p => p.id == 1);
-        if (!permiso) {
-            return res.status(401).send({
-                message: "No tienes permiso para realizar esta accion"
-            });
-        }
-        //Buscar idVenta o insertar un numero de venta en tabla venta
-        const venta = await venta.findAll({
-            where: {
-                idVent: req.params.id,
-                isDelete: false,
-            },
-            include: [{
-                model: db.detalleventa,
-            }]
-        });
-        if (!venta) {
-            return res.status(404).send({
-                message: "La venta no existe"
-            });
-        }
-        return res.status(200).send({
-            detalleventa,
-            Venta
-        });
+            } else {
+                const venta = await db.venta.findOne({
+                    where: {
+                        id: req.body.idVent,
+                        isDelete: false
+                    }, 
+                    include: [ {
+                        model: db.cliente,
+                    }, {
+                        model: db.detalleventa,
+                        include: [ { model:db.venta }]
+                    }]
+                });
+                if (!venta) {
+                    return res.status(404).send({
+                        message: "La venta no existe"
+                    });
+                } else {
+                    const detalleventa = await db.detalleventa.findAll({
+                        where: {
+                            idVenta: req.body.idVent,
+                            isDelete: false
+                        }}); if (!detalleventa) {
+                            return res.status(404).send({
+                                message: "Los detallesventa no existe"
+                            });
+                        } else {
+                
+                        return res.status(200).send({
+                        message: "La venta Existe",
+                        empleado: user.empleado,
+                        nombrecliente: venta.nombreCliente,
+                        idCliente: venta.idCliente,
+                        idVenta: venta.id,
+                        isvventa: venta.isvVenta,
+                        totalfacturaventa: venta.totalFacturaVenta,
+                        descuentoaplicadoventa: venta.descuentoAplicadoVenta,
+                        detalleventa: detalleventa,
+                   
+    
+                });
+                     
+                 }
+               // return res.status(200).send({
+                   // message: "User found.",
+                   // usuario: user.usuario });
+                }   } 
+           
+
     } catch (error) {
         return res.status(500).send({
-            message: "Ocurrio un error"
+            message: "Ocurrio un error" + error
+        });
+    }
+} 
+//Buscar una talonario por activo //Funcion esta mala falta obtener ultimoNumeroFactura
+exports.findTalonario = async (req, res) => {
+    try {
+        const talonario = await db.talonario.findOne({
+            //verificar que estado de talonario sea activo
+            where: {
+                active: true,
+                isDelete: false,
+            }
+        });
+        if (!talonario) {
+            return res.status(404).send({
+                message: "El talonario no existe"
+            });
+        } else {
+
+                const numeroFinal = async () => {
+                    if (ultimoIdFactura == null) {
+                        const numeroFactura = talonario.rangoInicio;
+                    } else {
+                        //si el ultimo id de la tabla factura no es null, el numero de factura es el ultimo id de la tabla factura + 1 si es menor a rango final de talonario
+                        const numeroFactura = ultimoIdFactura[0].id + 1;
+                        if (numeroFactura > talonario.rangoFin) {
+                            return res.status(400).send({
+                                message: "No hay mas numeros de factura disponibles"
+                            });
+                        }  } 
+                       
+                    return numeroFactura;
+                };
+            
+        }
+    } catch (error) {
+        return res.status(500).send({
+            message: "Ocurrio un error" + error
+        });
+    }
+}
+//Buscar tipo de pago por tipo de pago
+exports.findTipoPago = async (req, res) => {
+    try {
+        const tipopago = await tipopago.findOne({
+            where: {
+                isDelete: false,
+            }
+        });
+        if (!tipopago) {
+            return res.status(404).send({
+                message: "El tipo de pago no existe"
+            });
+        } else {
+            return res.status(200).send({
+                message: "El tipo de pago existe",
+                tipopago: tipopago
+            });
+        }
+    } catch (error) {
+        return res.status(500).send({
+            message: "Ocurrio un error" + error
         });
     }
 }
