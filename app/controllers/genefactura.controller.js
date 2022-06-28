@@ -57,7 +57,7 @@ exports.insertFactura = async (req, res) => {
     }
 }
 //Buscar una venta por el id
-exports.findVenta = async (req, res) => {
+exports.findVentaDetalle = async (req, res) => {
     try {
         const user = await db.user.findOne({
             where: {
@@ -136,7 +136,7 @@ exports.findVenta = async (req, res) => {
 }
 //Buscar una talonario por activo //Obtiene numero de la factura segun los rangos del talonario 
 //y el numero de factura anterior
-exports.findTalonario = async (req, res) => {
+exports.findTalonarioFactura = async (req, res) => {
     try {
         const talonario = await db.talonario.findOne({
             where: {
