@@ -47,19 +47,20 @@ exports.insertFactura = async (req, res) => {
                 }, {
                     model: db.tipopago,
                 }],
-                numerofactura: req.body.numerofactura, //necesito una función que me genere el numero de factura automaticamente
-                fechafactura: req.body.fechafactura, //necesito una funcion para generar fecha del dia
-                descuentototalfactura: req.body.descuentototalfactura,
-                isvtotalfactura: req.body.isvtotalfactura,
-                totalfactura: req.body.totalfactura,
-                subtotalfactura: req.body.subtotalfactura,
-                cantidadletras: req.body.cantidadletras, //necesito una funcion para generar cantidad de letras
-                idCliente: req.body.idCliente,
-                idVenta: req.body.idVenta,
-                idUser: req.body.idUser,
-                idTalonario: req.body.idTalonario,
-                idTipoPago: req.body.idTipoPago,
+                numerofactura: req.body.numeroFactura, //necesito una función que me genere el numero de factura automaticamente
+                fechafactura: req.body.fechaFactura, //necesito una funcion para generar fecha del dia
+                descuentototalfactura: req.body.descuentoTotalFactura,
+                isvtotalfactura: req.body.isvTotalFactura,
+                totalfactura: req.body.totalFactura,
+                subtotalfactura: req.body.subTotalFactura,
+                cantidadletras: req.body.cantidadLetras, //necesito una funcion para generar cantidad de letras
                 estado: true,
+                idTipoPago: req.body.idTipoPago,
+                idCliente: req.body.idCliente,
+                idUser: req.body.idUser,
+                idVenta: req.body.idVenta,
+                idTalonario: req.body.idTalonario,
+              
         });
         return res.status(200).send({
             message: "Factura creada"
