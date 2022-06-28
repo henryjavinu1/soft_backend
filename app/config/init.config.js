@@ -1,4 +1,4 @@
-const db = require("../models/generarfactura");
+const db = require("../models/arqueo");
 const bcrypt = require("bcryptjs");
 const config = require("../config/auth.config.js");
 const Role = db.role;

@@ -1,4 +1,4 @@
-const db = require("../models/generarfactura");
+const db = require("../models/arqueo");
 const ROLES = db.ROLES;
 const User = db.user;
 
