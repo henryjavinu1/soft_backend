@@ -10,9 +10,9 @@ module.exports = function(app) {
     next();
   });
 
-  app.post("/api/gene/verventa", controller.findVenta);
+  app.post("/api/gene/traerventa", controller.findVentaDetalle);
   app.post("/api/gene/vertipopago", controller.findTipoPago);
-  app.post("/api/gene/vertalonario", controller.findTalonario);
+  app.post("/api/gene/generarnumerofactura", controller.findTalonarioFactura);
   app.post("/api/gene/insertfact", controller.insertFactura);
 
 };
