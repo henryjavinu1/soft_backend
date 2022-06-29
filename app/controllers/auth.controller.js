@@ -9,7 +9,6 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { sesion } = require("../models/arqueo");
 
-
 exports.signup = async (req, res) => {
   // Save User to Database
   try {
