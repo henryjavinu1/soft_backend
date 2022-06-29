@@ -9,7 +9,7 @@ module.exports = function(app) {
       next();
     });
   
-    app.get("/api/manipularfactura", traerFacturas)
+    app.get("/api/traerFacturas", traerFacturas)
     app.put("/api/manipularfactura/:id", editarFactura)
   
   };
