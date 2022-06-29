@@ -22,11 +22,7 @@ app.use(
 );
 
 // database
-<<<<<<< HEAD
-const db = require("./app/models/producto/");
-=======
 const db = require("./app/models/arqueo/");
->>>>>>> main
 db.sequelize.sync();
 // force: true will drop the table if it already exists
 db.sequelize.sync({force: false}).then(() => {
