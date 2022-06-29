@@ -24,4 +24,4 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-db.user = require("../../models/usexo.model.js")(sequelize, Sequelize);
+db.user = require("../../models/sexo.model.js")(sequelize, Sequelize);
