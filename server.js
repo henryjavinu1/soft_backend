@@ -22,7 +22,7 @@ app.use(
 );
 
 // database
-const db = require("./app/models/user/");
+const db = require("./app/models/arqueo/");
 db.sequelize.sync();
 // force: true will drop the table if it already exists
 db.sequelize.sync({force: false}).then(() => {
