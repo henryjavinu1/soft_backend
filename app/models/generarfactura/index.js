@@ -76,7 +76,7 @@ db.role.belongsToMany(db.permiso, {
   foreignKey: "idRol",
   otherKey: "idPermiso"
 });
-//KATIA
+/////////////////KATIA/////////////////////////////
 /////// RELACIÓN DE MUCHOS A UNO /////////
 //// UNA FACTURA TIENE UN TIPOPAGO, UN TIPOPAGO TIENE MUCHOS FACTURAS(M:1)////
 db.tipopago.hasMany(db.factura,{
@@ -118,25 +118,4 @@ db.talonario.hasMany(db.factura,{
 db.factura.belongsTo(db.talonario,{
   foreignKey: { name:'idTalonario', allowNull: false }
 });
-////////////////////////////////////////////
-
-////////////////////////////////////////////
-/////// RELACIÓN DE UNO A MUCHOS /////////
-//// UN ARQUEO TIENE UN USUARIO, UN USUARIO TIENE MUCHOS ARQUEO ////
-db.user.hasMany(db.arqueo, {
-  foreignKey: { name: "idUsuario", allowNull: false },
-});
-db.arqueo.belongsTo(db.user, {
-  foreignKey: { name: "idUsuario", allowNull: false },
-});
-/////////////////////WILLIAN///////////////////////
-/////// RELACIÓN DE UNO A UNO /////////
-//// UN ARQUEO TIENE UNA SESION, UN SESION TIENE UN ARQUEO ////
-db.sesion.hasOne(db.arqueo, {
-  foreignKey: { name: "idSesion", allowNull: false },
-});
-db.arqueo.belongsTo(db.sesion, {
-  foreignKey: { name: "idSesion", allowNull: false },
-});
-
 module.exports = db; 
