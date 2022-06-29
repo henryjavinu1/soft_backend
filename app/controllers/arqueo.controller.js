@@ -8,7 +8,7 @@ const Op = db.Sequelize.Op;
 
 //crear un procedimiento almacenado que al iniciar sesion cree un arqueo y lo guarde en la base de datos
 //y validar el rol que tiene el usuario para saber si tiene permiso para crear un arqueo
-exports.signin = async (req, res) => {
+exports.createArqueo = async (req, res) => {
     try {
         const user = await User.findOne({
             where: {
@@ -78,7 +78,7 @@ exports.signin = async (req, res) => {
 
 //crear un procedimiento almacenado que al cerrar la sesion modifique los datos del arqueo que la sesion este activa
 // y que el id del usuario sea el mismo de la sesion activa
-exports.signout = async (req, res) => {
+exports.actualizacionCerrandoSesion = async (req, res) => {
     try {
         const sesion = await Sesion.findOne({
             where: {
@@ -133,7 +133,7 @@ exports.signout = async (req, res) => {
 
 //crear un procedimiento almacenado que permita cambiar el estado isDelete de un arqueo 
 
-exports.delete = async (req, res) => {
+exports.deleteArqueo = async (req, res) => {
     try {
         //verificar si el usuario que ejecutara la accion tenga los permisos necesarios
         const user = await User.findOne({
@@ -188,7 +188,7 @@ exports.delete = async (req, res) => {
 }
 
 //crear un procedimiento almacenado que permita mostrar todos los arqueos que su isDelete sea false
-exports.findAll = async (req, res) => {
+exports.mostrarArqueo = async (req, res) => {
     try {
         //validar que el usuario tenga los permisos para mostrar los arqueos
         const user = await User.findOne({
@@ -235,7 +235,7 @@ exports.findAll = async (req, res) => {
 }
 
 //crear un procedimiento almacenado que permita buscar un arqueo por su idUsuario o por fecha de inicio
-exports.findOne = async (req, res) => {
+exports.buscarPorUsuarioYFecha = async (req, res) => {
     try {
         //validar que el usuario tenga los permisos para buscar los arqueos
         const user = await User.findOne({
