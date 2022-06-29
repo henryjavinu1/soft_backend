@@ -9,7 +9,6 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { sesion } = require("../models/arqueo");
 
-
 exports.signup = async (req, res) => {
   // Save User to Database
   try {
@@ -30,7 +29,7 @@ exports.signup = async (req, res) => {
 
       const result = user.setRoles(roles);
       if (result) res.send({
-        message: "User registered successfully!"
+        message: "Usuario registrado satisfactoriamente!"
       });
     } else {
       // user has role = 1
@@ -78,7 +77,7 @@ exports.signin = async (req, res) => {
 
     if (!passwordIsValid) {
       return res.status(401).send({
-        message: "Invalid Password!",
+        message: "Warning! Invalid Password!",
       });
     }
 
