@@ -1,4 +1,4 @@
-const db = require("../models/user");
+const db = require("../models/arqueo");
 const config = require("../config/auth.config");
 const User = db.user;
 const Role = db.role;
@@ -7,7 +7,7 @@ const Op = db.Sequelize.Op;
 
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-const { sesion } = require("../models/user");
+const { sesion } = require("../models/arqueo");
 
 exports.signup = async (req, res) => {
   // Save User to Database
@@ -77,7 +77,7 @@ exports.signin = async (req, res) => {
 
     if (!passwordIsValid) {
       return res.status(401).send({
-        message: "Invalid Password!",
+        message: "Warning! Invalid Password!",
       });
     }
 
@@ -86,8 +86,6 @@ exports.signin = async (req, res) => {
     }, config.secret, {
       expiresIn: 86400, // 24 horas de ducración de tokens
     });
-
-
 
     req.session.token = token;
     const ses = await Sesion.create({
