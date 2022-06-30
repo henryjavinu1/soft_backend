@@ -8,6 +8,32 @@ const Op = db.Sequelize.Op;
 
 //crear un procedimiento almacenado que al iniciar sesion cree un arqueo y lo guarde en la base de datos
 //y validar el rol que tiene el usuario para saber si tiene permiso para crear un arqueo
+exports.createArqueo = (req, res) => {
+    try{
+        //verificar si el usuario tiene permiso para crear un arqueo
+        const user = await User.findByPk(req.user.id);
+        const sesion = await Sesion.findByPk(req.user.id);
+        if(user.rol === "admin" || user.rol === "cajero"){
+            //crear un arqueo
+            const arqueo = await arqueo.create({
+                fechaInicio: req.body.fechaInicio,
+                efectivoApertura: req.body.efectivoApertura,
+                isDelete: false
+            });
+            //guardar el arqueo en la base de datos
+            await arqueo.save();
+            //enviar una respuesta al cliente
+            res.status(200).json({
+                message: "Arqueo creado correctamente"
+            });
+        }
+    } catch (error) {
+        res.status(401).json({
+            message: "Error al crear el arqueo"
+        });
+    }
+}
+//crear un procedimiento almacenado que permita actualizar un arqueo al cerrar la sesion
 exports.actualizacionCerrandoSesion = async (req, res) => {
     try {
         //obtener datos de usuario y permisos de la sesion iniciada
@@ -30,16 +56,13 @@ exports.actualizacionCerrandoSesion = async (req, res) => {
         res.status(200).json({
             message: "Arqueo actualizado correctamente"
         });
-        res.status(401).json({
-            message: "No tiene permisos para crear un arqueo"
-        });
         //actualizar el estado de la sesion actualmente activa
         await Sesion.update({
             isActive: false
         });
     } catch (error) {
         //enviar respuesta al cliente
-        res.status(500).json({
+        res.status(401).json({
             message: "Error al actualizar arqueo"
         });
     }
