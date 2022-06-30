@@ -1,4 +1,4 @@
-const { editarFactura, traerFacturas } = require("../controllers/editfactura.controller");
+const { editarFactura, traerFacturas, buscarfactura, buscarFacturaCliente, buscarFacturaFecha, buscarFacturaEmpleado } = require("../controllers/editfactura.controller");
 
 module.exports = function(app) {
     app.use(function(req, res, next) {
@@ -9,7 +9,11 @@ module.exports = function(app) {
       next();
     });
   
-    app.get("/api/traerFacturas", traerFacturas)
-    app.put("/api/manipularfactura/:id", editarFactura)
+    app.get("/api/traerFacturas", traerFacturas);
+    app.get("/api/buscarfactura/:id?", buscarfactura);
+    app.get("/api/buscarfacturaporcliente/:cliente?", buscarFacturaCliente);
+    app.get("/api/buscarfacturaporfecha/:fecha?", buscarFacturaFecha)
+    app.get("/api/buscarfacturaporempleado/:empleado?", buscarFacturaEmpleado)
+    app.put("/api/manipularfactura/:id", editarFactura);
   
   };

@@ -29,6 +29,7 @@ db.tipopago = require("../../models/tipopago.model.js")(sequelize, Sequelize);
 db.cliente = require("../../models/cliente.model.js")(sequelize, Sequelize);
 db.user = require("../../models/user.model.js")(sequelize, Sequelize);
 db.venta = require("../../models/ventas.model.js")(sequelize, Sequelize);
+db.empleado = require("../../models/empleado.model.js")(sequelize, Sequelize);
 
 // Tipo pago 
 db.tipopago.hasMany(db.factura,{
