@@ -9,5 +9,5 @@ module.exports = function(app) {
     );
     next();
   });
-  app.get("/api/permisos/",[authJwt.verifyToken], permisos.create);
+  app.get("/api/permisos/",[authJwt.verifyToken], controller.create);
 };
