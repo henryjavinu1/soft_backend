@@ -14,28 +14,25 @@ const Op = db.Sequelize.Op;
 exports.insertFactura = async (req, res) => {
     console.log(req.body.numfactura);
     try {
-        //ver si un usuario 
-        const user = await User.findOne({
+      /*  const factura = await db.factura.findAll({
             where: {
-                id: req.body.userId,
-                isDelete: false
-            },
-            include: [{
-                model: db.role,
+                idVenta: req.body.idVent,
+            }, include: [{
+                model: db.venta,
                 include: [{
-                    model: db.permiso,
-                }]
-            }]
-        });
-        if (!user) {
-            return res.status(404).send({
-                message: "El usuario no existe"
-            });
-        }else{
-            const facturaa = await db.factura.create({
+                  model: db.cliente,
+                },{
+                    model: db.empleado, },{
+                     model: db.detalleventa, }
+                  ] }]
+        });*/
+        //SoloPara ejemplo no funcionan porque no existen los atributos en modelo ventas
+        const totalFactura = await db.detalleventa.sum('precio'); //Falta agg estos atributos en el modelo detalleVenta
+        const descuentoVentas = await db.detalleventa.sum('descuentoAplicadoVenta'); //Falta agg atributos en modelo
+            const insertfactura = await db.factura.create({
                 numeroFactura: req.body.numeroFactura, //necesito una función que me genere el numero de factura automaticamente
                 fechaFactura: req.body.fechaFactura, //necesito una funcion para generar fecha del dia
-                descuenTototalFactura: req.body.descuentoTotalFactura,
+                descuenTototalFactura: descuentoVentas,
                 isvTotalFactura: req.body.isvTotalFactura,
                 totalFactura: req.body.totalFactura,
                 subtotalFactura: req.body.subTotalFactura,
@@ -48,8 +45,9 @@ exports.insertFactura = async (req, res) => {
                 idTalonario: req.body.idTalonario,
         });
         return res.status(200).send({
-            message: "Factura creada"
-        });}
+            message: "Factura creada",
+            factura: factura
+        });
     } catch (error) {
         return res.status(500).send({
             message: "Ocurrio un error" + error
