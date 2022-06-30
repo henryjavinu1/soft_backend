@@ -29,6 +29,9 @@ db.role = require("../../models/role.model.js")(sequelize, Sequelize);
 db.permiso = require("../../models/permiso.model.js")(sequelize, Sequelize);
 db.empleado = require("../../models/empleado.model.js")(sequelize, Sequelize);
 db.sesion = require("../../models/sesion.model.js")(sequelize, Sequelize);
+db.producto = require("../../models/producto.model.js")(sequelize, Sequelize);
+db.tipoproducto = require("../../models/tipoproducto.model.js")(sequelize, Sequelize);
+
 /////// RELACIÓN DE UNO A UNO /////////
 //// UN USUARIO PERTENECE A UN EMPLEADO, UN EMPLEADO TIENE UN USUARIO ////
 db.empleado.hasOne(db.user,{
@@ -72,5 +75,17 @@ db.role.belongsToMany(db.permiso, {
   foreignKey: "idRol",
   otherKey: "idPermiso"
 });
+/////////////////////////////////////////////////
+////////// Relacion de 1 a 1 ////////////////////
+// El produto tiene un tipo de producto//////////
+/////////////////////////////////////////////////
+
+db.tipoproducto.hasOne(db.producto, {
+  foreignKey: { name: "idTipoProducto", allowNull: false },
+});
+db.producto.belongsTo(db.tipoproducto, {
+  foreignKey: { name: "idTipoProducto", allowNull: false },
+});
+
 
 module.exports = db;
