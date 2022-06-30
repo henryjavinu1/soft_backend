@@ -58,12 +58,12 @@ const buscarFacturaCliente = async (req, res) => {
                 msg: `El cliente ingresado no existe`
             });
         }
-        const facturasBuscadas = await Factura.findOne({
+        const facturasBuscadas = await Factura.findAll({
             where: {
                 idCliente: clienteBuscado.id,
             }
         });
-        if (!facturasBuscadas) {
+        if (facturasBuscadas.length === 0) {
             return res.status(404).json({
                 msg: `El cliente: ${clienteBuscado.nombreCliente} no tiene facturas`
             })
