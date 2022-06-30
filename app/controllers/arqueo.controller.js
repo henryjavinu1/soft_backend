@@ -1,4 +1,4 @@
-const db = require("../models/arqueo");
+const db = require("../models/puntoDeVentas");
 const config = require("../config/auth.config");
 const e = require("express");
 const User = db.user;

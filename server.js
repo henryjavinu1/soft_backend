@@ -22,7 +22,7 @@ app.use(
 );
 
 // database
-const db = require("./app/models/arqueo/");
+const db = require("./app/models/puntoDeVentas/");
 db.sequelize.sync();
 // force: true will drop the table if it already exists
 db.sequelize.sync({force: false}).then(() => {
@@ -38,7 +38,11 @@ app.get("/", (req, res) => {
 // routes
 require("./app/routes/auth.routes")(app);
 require("./app/routes/user.routes")(app);
+require("./app/routes/generarfactura.routes")(app);
 require("./app/routes/manipularfactura.routes")(app);
+require("./app/routes/arqueo.routes")(app);
+require("./app/routes/permisos.routes")(app);
+
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;

@@ -1,6 +1,6 @@
-const db = require("../models/user");
+const db = require("../models/puntoDeVentas");
 const config = require("../config/auth.config");
-const { user } = require("../models/user");
+const { user } = require("../models/puntoDeVentas");
 const User = db.user;
 const Role = db.role;
 const Sesion = db.sesion;

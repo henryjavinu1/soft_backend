@@ -1,4 +1,4 @@
-const db = require("../models/arqueo");
+const db = require("../models/puntoDeVentas");
 const config = require("../config/auth.config");
 const User = db.user;
 const Role = db.role;
@@ -7,7 +7,7 @@ const Op = db.Sequelize.Op;
 
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-const { sesion } = require("../models/arqueo");
+const { sesion } = require("../models/puntoDeVentas");
 
 exports.signup = async (req, res) => {
   // Save User to Database

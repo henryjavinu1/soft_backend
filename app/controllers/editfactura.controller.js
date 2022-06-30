@@ -1,7 +1,7 @@
 const { request, response } = require('express');
 const  Op  = require("sequelize").Op;
 
-const db = require('../models/manipularfactura');
+const db = require('../models/puntoDeVentas');
 const Factura = db.factura;
 const Cliente = db.cliente;
 
