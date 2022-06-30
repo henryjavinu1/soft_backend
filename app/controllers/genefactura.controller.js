@@ -1,6 +1,6 @@
-const db = require("../models/generarfactura");
+const db = require("../models/puntoDeVentas");
 const config = require("../config/auth.config");
-const { venta, talonario, tipopago, detalleventa } = require("../models/generarfactura");
+const { venta, talonario, tipopago, detalleventa } = require("../models/puntoDeVentas");
 const detalleventaModel = require("../models/detalleventa.model");
 const User = db.user;
 const Role = db.role;

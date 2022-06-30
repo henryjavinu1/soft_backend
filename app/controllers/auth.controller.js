@@ -1,4 +1,4 @@
-const db = require("../models/arqueo");
+const db = require("../models/puntoDeVentas");
 const config = require("../config/auth.config");
 const User = db.user;
 const Role = db.role;
@@ -7,7 +7,7 @@ const Op = db.Sequelize.Op;
 
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-const { sesion } = require("../models/arqueo");
+const { sesion } = require("../models/puntoDeVentas");
 
 exports.signup = async (req, res) => {
   // Save User to Database
@@ -29,7 +29,7 @@ exports.signup = async (req, res) => {
 
       const result = user.setRoles(roles);
       if (result) res.send({
-        message: "User registered successfully!"
+        message: "Usuario registrado satisfactoriamente!"
       });
     } else {
       // user has role = 1
@@ -77,7 +77,7 @@ exports.signin = async (req, res) => {
 
     if (!passwordIsValid) {
       return res.status(401).send({
-        message: "Invalid Password!",
+        message: "Warning! Invalid Password!",
       });
     }
 
