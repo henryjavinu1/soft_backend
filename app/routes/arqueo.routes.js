@@ -1,3 +1,5 @@
+const { authJwt } = require("../middleware");
+const arqueo = require("../controllers/arqueo.controller")
 //crear una ruta para el arqueo
 module.exports = function(app) {
     app.use(function(req, res, next) {
@@ -6,5 +8,5 @@ module.exports = function(app) {
             "Origin, Content-Type, Accept"
         );
         next();
-    }).post("/api/arqueo/", [authJwt.verifyToken], arqueo.create);
+    }).post("/api/arqueo/", [authJwt.verifyToken], arqueo.createArqueo);
 }

@@ -1,4 +1,4 @@
-const db = require("../models/arqueo");
+const db = require("../models/puntoDeVentas");
 const config = require("../config/auth.config");
 const e = require("express");
 const User = db.user;
@@ -8,7 +8,7 @@ const Op = db.Sequelize.Op;
 
 //crear un procedimiento almacenado que al iniciar sesion cree un arqueo y lo guarde en la base de datos
 //y validar el rol que tiene el usuario para saber si tiene permiso para crear un arqueo
-exports.createArqueo = (req, res) => {
+exports.createArqueo = async(req, res) => {
     try{
         //verificar si el usuario tiene permiso para crear un arqueo
         const user = await User.findByPk(req.user.id);

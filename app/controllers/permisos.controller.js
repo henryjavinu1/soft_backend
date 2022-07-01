@@ -1,12 +1,13 @@
-const db = require("../models/permisos");
+const db = require("../models/puntoDeVentas");
 const config = require("../config/auth.config");
-const { permiso } = require("../models/user");
+const { permiso } = require("../models/puntoDeVentas");
+const { permiso } = require("../models/puntoDeVentas");
 const Role = db.role;
 const Op = db.Sequelize.Op;
 
-//Creando un rool de usuario 
+//Creando un permiso
 
-exports.crearol = async (req, res) => {
+exports.creapremiso = async (req, res) => {
     try {
         const user = await user.findOne({
             where: {
@@ -25,7 +26,7 @@ exports.crearol = async (req, res) => {
                 message: "El usuario no existe"
         });
         }
-        const rol = await Role.create({
+        const permiso = await permiso.create({
             permiso: req.body.permiso,
             descripcion: req.body.descripcion, 
         });
