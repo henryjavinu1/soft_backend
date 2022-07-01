@@ -4,6 +4,7 @@ const  Op  = require("sequelize").Op;
 const db = require('../models/puntoDeVentas');
 const Factura = db.factura;
 const Cliente = db.cliente;
+const Talonario = db.talonario; 
 
 const traerFacturas = async (req = request, res = response) => { 
     try {
@@ -38,9 +39,8 @@ const buscarfactura = async (req = request, res = response) => {
 const buscarFacturaCliente = async (req, res) => {
     const {nombreCliente, rtn} = req.query;
     let clienteBuscado;
-    console.log(nombreCliente);
     try {
-        if (nombreCliente) {
+        if (nombreCliente.trim()) {
             clienteBuscado = await Cliente.findOne({
                 where: {
                     nombreCliente: nombreCliente
@@ -131,6 +131,45 @@ const buscarFacturaEmpleado = async (req = request, res = response) => {
     }
 }
 
+const buscarPorTalonario = async (req = request, res = response) => {
+    const {idTalonario, cai} = req.query;
+    let talonarioBuscado;
+
+    // await Talonario.create({
+    //     idTalonario: 1,	
+    //     rangoInicialFactura: 100,	
+    //     rangoFinalFactura: 3000,
+    //     cai: '35BD6A-0195F4-B34BAA-8B7D13-37791A-2D',	
+    //     fechaLimiteEmision: "2022-12-24",	
+    // })
+
+    try {
+        console.log(idTalonario);
+        if (idTalonario) {
+            talonarioBuscado = await Talonario.findOne({
+                where: {idTalonario : idTalonario}
+            })
+        } else if (cai) {
+            talonarioBuscado = await Talonario.findOne({
+                where: {cai: cai}
+            })
+        }
+        if (!talonarioBuscado) {
+            return res.status(404).json({
+                msg: `No existe el talonario con ${(idTalonario)?`el cai: ${idTalonario}`:`el id: ${cai}`}. Por favor verifique bien los datos del talonario a buscar.` 
+            })
+        }
+        const facturaBuscada = await Factura.findAll({
+            where: {idTalonario: talonarioBuscado.idTalonario},
+        })
+        return res.status(200).json({
+            facturaBuscada
+        });
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 const editarFactura = async (req = request, res = response) => {
     const  numeroFactura  = req.params.id;
     const {fechaFactura, descuentoTotalFactura, isvTotalFactura, totalFactura, subTotalFactura, cantidadLetras, isDelete, estado} = req.body;
@@ -212,5 +251,6 @@ module.exports = {
     buscarfactura,
     buscarFacturaCliente,
     buscarFacturaFecha,
-    buscarFacturaEmpleado
+    buscarFacturaEmpleado,
+    buscarPorTalonario
 }
