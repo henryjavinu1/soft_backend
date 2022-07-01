@@ -12,9 +12,14 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.DECIMAL,
             allowNull: false, //no permite nulos
         },
-        totalDetalleVenta: {
+        descuentoAplicado: {
+            type: Sequelize.DECIMAL,
+            allowNull: false, //no permite nulos
+        },
+        totalDetalleVenta: { // multiplicacion (cantidad* precioUnitario) +ISV -DESC
             type: Sequelize.DECIMAL,
         },
+
         isDelete: {
             type: Sequelize.BOOLEAN,
             allowNull: false,  //no permite valores nulos

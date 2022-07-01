@@ -5,7 +5,7 @@ module.exports = (sequelize, Sequelize) => {
         primaryKey: true,
         autoIncrement: true
       },
-      numeroFactura: {
+      numeroFactura: { /// numero que se asigna del talonario
         type: Sequelize.INTEGER,
         allowNull: false 
       },

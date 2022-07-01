@@ -1,8 +1,17 @@
 module.exports = (sequelize, Sequelize) => {
     const Cliente = sequelize.define("clientes", {
+        dni: {
+            type: Sequelize.STRING,
+            allowNull: false,
+        },
+        email: {
+            type: Sequelize.STRING,
+            allowNull: true,
+            unique: true
+        },
         rtn: {
             type: Sequelize.STRING,
-            allowNull: false, //no permite nulos
+            allowNull: true, //no permite nulos
         },
         nombreCliente:{
             type: Sequelize.STRING,

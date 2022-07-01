@@ -38,7 +38,7 @@ db.factura = require("../../models/factura.model.js")(sequelize, Sequelize);
 db.talonario = require("../../models/talonario.model.js")(sequelize, Sequelize);
 db.tipopago = require("../../models/tipopago.model.js")(sequelize, Sequelize);
 db.tipoproducto = require("../../models/tipoproducto.model.js")(sequelize, Sequelize);
-
+db.numero = require("../../models/numerosFactura.model.js")(sequelize, Sequelize);
 ///////////////////////////////index.user.js//////////////////////////////
 /////// RELACIÓN DE UNO A UNO /////////
 //// UN USUARIO PERTENECE A UN EMPLEADO, UN EMPLEADO TIENE UN USUARIO ////
@@ -203,5 +203,14 @@ db.tipopago.hasMany(db.factura,{
   db.detalleventa.belongsTo(db.producto, {
     foreignKey: { name: 'idProducto', allowNull: false }
   });
+
+  //// UN USUARIO TIENE UN ROL, UN ROL TIENE MUCHOS USUARIOS(1:N)////
+  db.numero.hasMany(db.talonario,{
+    foreignKey: { name:'idTalonario', allowNull: false }
+  });
+  db.talonario.belongsTo(db.numero,{
+    foreignKey: { name:'idTalonario', allowNull: false }
+  });
+  ////////////////////////////////////////////
   
 module.exports = db;
