@@ -73,8 +73,29 @@ const validarCamposFecha = (req, res, next) => {
     next();
 }
 
+const validarCamposNumeroFactura = (req, res, next) => {
+    const numeroFactura = req.query.numeroFactura;
+
+    if(!numeroFactura) return res.status(400).json({
+        error: 'Debe indicar el número de factura para realizar la búsqueda.'
+    });
+
+    next();
+}
+
+const validarCamposIdEmpleado = (req, res, next) => {
+    const idEmpleado = req.query.idEmpleado;
+
+    if (!idEmpleado) return res.status(400).json({
+        error: 'Debe indicar el id de empleado para realizar la búsqueda.'
+    });
+    next();
+}
+
 module.exports = {
     validarCamposCliente,
     validarCamposTalonario,
     validarCamposFecha,
+    validarCamposNumeroFactura,
+    validarCamposIdEmpleado
 }
