@@ -1,6 +1,4 @@
-const { authJwt } = require("../middleware");
 const arqueo = require("../controllers/arqueo.controller")
-//crear una ruta para el arqueo
 module.exports = function(app) {
     app.use(function(req, res, next) {
         res.header(
@@ -8,5 +6,11 @@ module.exports = function(app) {
             "Origin, Content-Type, Accept"
         );
         next();
-    }).post("/api/arqueo/", [authJwt.verifyToken], arqueo.createArqueo);
+    });
+    app.post("/api/arqueo/createArqueo", arqueo.createArqueo);
+    app.post("/api/arqueo/actualizacionCerrandoSesion", arqueo.actualizacionCerrandoSesion);
+    app.post("/api/arqueo/deleteArqueo", arqueo.deleteArqueo);
+    app.post("/api/arqueo/mostrarArqueo", arqueo.mostrarArqueo);
+    app.post("/api/arqueo/buscarPorFechaInicioFechaFinal", arqueo.buscarPorFechaInicioFechaFinal);
+    app.post("/api/arqueo/buscarPorUsuario", arqueo.buscarPorUsuario);
 }

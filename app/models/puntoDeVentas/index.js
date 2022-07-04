@@ -124,6 +124,13 @@ db.tipopago.hasMany(db.factura,{
   db.factura.belongsTo(db.user,{
     foreignKey: { name:'idUsuario', allowNull: false }
   });
+  //  UN EMPLEADO TIENE VARIAS FACTURAS //
+  db.empleado.hasMany(db.factura,{
+    foreignKey: {name: 'idEmpleado', allowNull: false}
+  });
+  db.factura.belongsTo(db.empleado,{
+    foreignKey: {name: 'idEmpleado', allowNull: false}
+  });
   //// UNA factura PERTENECE A UNA venta, UNA venta TIENE UNA factura 1:1 ////
   db.ventas.hasOne(db.factura,{
     foreignKey: {
