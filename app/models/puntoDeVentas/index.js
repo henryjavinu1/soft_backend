@@ -86,7 +86,7 @@ db.empleado.hasOne(db.user,{
 //////////////////index.arqueo.js////////////////////////
 /////// RELACIÓN DE UNO A MUCHOS /////////
 //// UN ARQUEO TIENE UN USUARIO, UN USUARIO TIENE MUCHOS ARQUEO ////
-db.user.hasMany(db.arqueo, {
+  db.user.hasMany(db.arqueo, {
     foreignKey: { name: "idUsuario", allowNull: false },
   });
   db.arqueo.belongsTo(db.user, {

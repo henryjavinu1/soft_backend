@@ -28,7 +28,7 @@ module.exports =(sequelize, Sequelize) => {
             type: Sequelize.DECIMAL(10,2),
             allowNull: true
         },
-        EfectivoTotal: {
+        efectivoTotal: {
             type: Sequelize.DECIMAL(10,2),
             allowNull: true
         },

@@ -8,125 +8,125 @@ const Op = db.Sequelize.Op;
 
 exports.createArqueo = async(req, res) => {
     try{
-        const sesion = await Sesion.findByPk(req.user.id);
-        const user = await User.findByPk(req.user.id);
-        //crear un arqueo
-        const arqueo = await arqueo.create({
-            fechaInicio: new Date(),
-            efectivoInicio: req.body.efectivoInicio,
-            isDelete: false,
-            idSesion: sesion.id,
-            idUsuario: req.user.id            
+        //consultar si el id del usuario y la sesion iniciada estan en la base de datos
+        const consult = await db.user.findOne({
+            where: {
+                id: req.body.idUsuario,
+                isDelete: false
+            }
         });
-        const resp ={
-            id: arqueo.id,
-            fechaInicio: arqueo.fechaInicio,
-            efectivoInicio: arqueo.efectivoInicio,
-            isDelete: arqueo.isDelete,
-            idSesion: arqueo.idSesion,
-            idUsuario: arqueo.idUsuario
+        const consult2 = await db.sesion.findOne({
+            where: {
+                id: req.body.idSesion,
+                isActive: true
+            }
+        });
+        //si el id del usuario y la sesion iniciada estan en la base de datos
+        if (consult) {
+            if(consult2){
+                 //insertar un nuevo arqueo
+                const arqueo = await db.arqueo.create({   
+                idUsuario: req.body.idUsuario,
+                idSesion: req.body.idSesion,
+                fechaInicio: new Date(),
+                efectivoApertura: req.body.efectivoApertura,
+                isDelete: false,
+                });
+                //validar que el arqueo se creo correctamente
+                    if(arqueo){
+                        res.status(200).json({
+                        message: "Arqueo creado correctamente",
+                         data: arqueo    
+                        });
+                    }
+            }
         }
-        return res.status(200).send(resp);
-    } catch (error) {
-        res.status(401).send({
-            message: "Error al crear el arqueo"
+    }catch(error){
+        res.status(401).json({
+            message: "Error al crear arqueo" + error.message
         });
-    }
+    }   
 }
 
 exports.actualizacionCerrandoSesion = async (req, res) => {
     try {
-        //obtener datos de usuario y permisos de la sesion iniciada
-        const user = await User.findByPk(req.user.id);
-        const sesion = await Sesion.findByPk(req.user.id);
-        //hacer un inner join con tabla user y tabla factura
-        const arqueos = await arqueo.findAll({
+        //consultar si el id del usuario y la sesion iniciada estan en la base de datos
+        const consult = await db.user.findOne({
             where: {
-                idUsuario: req.user.id,
-            },
-            include: [{
-                model: db.user,
-                include: [{
-                    model: db.factura,
-                }]
-            }]
+                id: req.body.idUsuario,
+                isDelete: false
+            }
         });
-        //actualizar el arqueo
-        const arqueo = await arqueo.update({
-            fechaFinal: new Date(),
-            //sumar todas las facturas que su tipo de pago sea efectivo y que sean de la sesion iniciada
-            efectivoCierre: arqueos.reduce((total, arqueo) => {
-                if (arqueo.facturas.tipoPago === "Efectivo") {
-                    return total + arqueo.facturas.totalFactura;
-                } else {
-                    return total;
-                }
-            }, 0),
-            //sumar todas las facturas que su tipo de pago sea tarjeta y que sean de la sesion iniciada
-            otrosPagos: arqueos.reduce((total, arqueo) => {
-                if (arqueo.facturas.tipoPago === "Tarjeta") {
-                    return total + arqueo.facturas.totalFactura;
-                } else {
-                    return total;
-                }
-            }, 0),
-            //sumar todas las facturas que su tipo de pago sea credito y que sean de la sesion iniciada
-            ventaCredito: arqueos.reduce((total, arqueo) => {
-                if (arqueo.facturas.tipoPago === "Credito") {
-                    return total + arqueo.facturas.totalFactura;
-                } else {
-                    return total;
-                }
-            }, 0),
-            //sumar las facturas que su tipo de pago sea Efectivo, Tarjeta
-            ventaTotal: arqueos.reduce((total, arqueo) => {
-                if (arqueo.facturas.tipoPago === "Efectivo" || arqueo.facturas.tipoPago === "Tarjeta" || arqueo.facturas.tipoPago === "Credito") {
-                    return total + arqueo.facturas.totalFactura + arqueo.efectivoInicio + arqueo.efectivoCierre;
-                } else {
-                    return total;
-                }
-            }, 0),
-            //sumar las facturas que su tipo de pago sea Efectivo
-            efectivoTotal: arqueos.reduce((total, arqueo) => {
-                if (arqueo.facturas.tipoPago === "Efectivo") {
-                    return total + arqueo.facturas.totalFactura + arqueo.efectivoInicio + arqueo.efectivoCierre;
-                } else {
-                    return total;
-                }
-            }, 0),
-            isDelete: false,
+        const consult2 = await db.sesion.findOne({
+            where: {
+                id: req.body.idSesion,
+                isActive: true,
+                isDelete: false
+            }
         });
-        //enviar respuesta al cliente
-        res.status(200).json({
-            message: "Sesion cerrada correctamente",
-            arqueo: arqueo
-        });
-        //actualizar el estado de la sesion
-        await sesion.update({
-            isActive: false
-        });
+        //si el id del usuario y la sesion iniciada estan en la base de datos
+        if (consult) {
+            if(consult2){
+                //actualizar el arqueo
+                const arqueo = await db.arqueo.update({
+                    fechaFinal: new Date(),
+                    efectivoCierre: req.body.efectivoCierre,
+                    otrosPagos: req.body.otrosPagos,
+                    ventaCredito: req.body.ventaCredito,
+                    ventaTotal: req.body.ventaTotal,
+                    efectivoTotal: req.body.efectivoTotal,
+                }, {
+                        where: {
+                            id: req.body.idArqueo
+                        }
+                    });
+                //validar que el arqueo se actualizo correctamente
+                if(arqueo){
+                    res.status(200).json({
+                        message: "Arqueo actualizado correctamente",
+                        data: 
+                        await db.arqueo.findOne({
+                            where: {
+                                id: req.body.idArqueo
+                            }
+                        })
+                    });
+                }
+                //actualizar la sesion
+                const sesion = await db.sesion.update({
+                    isActive: false
+                }, {
+                    where: {
+                        id: req.body.idSesion
+                    }
+                });
+            }
+        } 
     } catch (error) {
         res.status(401).json({
-            message: "Error al cerrar sesion"
+            message: "Error al cerrar sesion" + error.message
         });
     }
 }
 
 exports.deleteArqueo = async (req, res) => {
     try {
-        const arqueo = await arqueo.update({
+        const arqueo = await db.arqueo.update({
             isDelete: true
         }, {
             where: {
-                id: req.params.id
+                id: req.body.idArqueo
             }
         });
-        res.status(200).json({
-            message: "Arqueo eliminado correctamente"
-        });
+        //validar que el arqueo se elimino correctamente
+        if(arqueo){
+            res.status(200).json({
+                message: "Arqueo eliminado correctamente"
+            });
+        }
     } catch (error) {
         res.status(401).json({
-            message: "Error al eliminar arqueo"
+            message: "Error al eliminar arqueo" + error.message
         });
     }
 }
@@ -139,37 +139,66 @@ exports.mostrarArqueo = async (req, res) => {
                 isDelete: false
             }
         });
-        res.status(200).json({
-            message: "Arqueos mostrados correctamente",
-            arqueos: arqueos
-        });
+        //validar que el arqueo se mostro correctamente
+        if(arqueos){
+            res.status(200).json({
+                message: "Arqueos mostrados correctamente",
+                data: arqueos
+            });
+        }
     } catch (error) {
         res.status(401).json({
-            message: "Error al mostrar arqueos"
+            message: "Error al mostrar arqueos" + error.message
         });
     }
 }
 
-exports.buscarPorUsuarioYFecha = async (req, res) => {
+exports.buscarPorFechaInicioFechaFinal = async (req, res) => {
     try {
-        //obtener datos de usuario
-        const user = await User.findByPk(req.user.id);
-        //buscar arqueos por fecha de inicio que su isdelete sea false o por usuario que su isdelete sea false
+        //mostrar los arqueos que esten entre las fechas de inicio y final
         const arqueos = await arqueo.findAll({
             where: {
-                fechaInicio: req.params.fecha,
-                idUsuario: user,
+                fechaInicio: {
+                    [Op.between]: [`${fechaInicio}`, `${fechaFinal}`]
+                },
                 isDelete: false
             }
         });
-        res.status(200).json({
-            message: "Arqueos mostrados correctamente",
-            arqueos: arqueos
-        });
+        //validar que el arqueo se mostro correctamente
+        if(arqueos){        
+            res.status(200).json({
+                message: "Arqueos mostrados correctamente",
+                data: arqueos
+            });
+        } 
     } catch (error) {
         //enviar respuesta al cliente
         res.status(401).json({
-            message: "Error al buscar arqueos"
+            message: "Error al buscar arqueos entre las fechas" + error.message
+        });
+    }
+}//pendiente de terminar
+
+exports.buscarPorUsuario = async (req, res) => {
+    try{
+        //buscar arqueos por usuario
+        const arqueos = await db.arqueo.findAll({
+            where: {
+                idUsuario: req.body.idUsuario,
+                isDelete: false
+            }
+        });
+        //validar que el arqueo se mostro correctamente
+        if(arqueos){
+            res.status(200).json({
+                message: "Arqueos mostrados correctamente",
+                data: arqueos
+            });
+        }
+    } catch (error) {
+        //enviar respuesta al cliente
+        res.status(401).json({
+            message: "Error al buscar arqueos por usuario" + error.message
         });
     }
 }
