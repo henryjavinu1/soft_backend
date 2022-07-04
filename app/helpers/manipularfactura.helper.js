@@ -127,35 +127,39 @@ const validarCampos = (factura, numeroFactura, fechaFactura, descuentoTotalFactu
 }
 
 const filtrarFacturasPorFechaQuery = async (Op, Factura, fecha1, fecha2, Empleado, TipoPago, Talonario, Cliente) => {
-    const facturaBuscada = await Factura.findAll({
-        where: {
-            [Op.and]: [
-                { isDelete: false },
+    try {
+        const facturaBuscada = await Factura.findAll({
+            where: {
+                [Op.and]: [
+                    { isDelete: false },
+                    {
+                        fechaFactura: {
+                            [Op.between]: [fecha1, fecha2]
+                        }
+                    }]
+            },
+            include: [
                 {
-                    fechaFactura: {
-                        [Op.between]: [fecha1, fecha2]
-                    }
-                }]
-        },
-        include: [
-            {
-                model: Empleado,
-                attributes: ['id', 'nombre', 'apellido'],
-            },
-            {
-                model: TipoPago,
-                attributes: ['tipoDePago']
-            },
-            {
-                model: Talonario,
-                attributes: ['cai']
-            },
-            {
-                model: Cliente,
-                attributes: ['nombreCliente', 'direccion', 'dni', 'email', 'rtn', 'telefonoCliente']
-            }
-        ]
-    });
+                    model: Empleado,
+                    attributes: ['id', 'nombre', 'apellido'],
+                },
+                {
+                    model: TipoPago,
+                    attributes: ['tipoDePago']
+                },
+                {
+                    model: Talonario,
+                    attributes: ['cai']
+                },
+                {
+                    model: Cliente,
+                    attributes: ['nombreCliente', 'direccion', 'dni', 'email', 'rtn', 'telefonoCliente']
+                }
+            ]
+        });  
+    } catch (error) {
+        console.log(error);
+    }
     return facturaBuscada;
 }
 

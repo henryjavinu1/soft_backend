@@ -46,19 +46,22 @@ const traerFacturas = async (req = request, res = response) => {
 const buscarfactura = async (req = request, res = response) => {
     const numeroFactura = req.query.numeroFactura;
     // const numReq = Object.keys(req.query).length
-
-    const facturaBuscada = await Factura.findOne({
-        where: { 
-            [Op.and] : [{numeroFactura: numeroFactura}, {isDelete: false}]
-            },
-    });
-    if (!facturaBuscada){
-        return res.status(404).json({
-            msg: "La factura que intenta buscar no existe"
-        })
+    try {
+        const facturaBuscada = await Factura.findOne({
+            where: { 
+                [Op.and] : [{numeroFactura: numeroFactura}, {isDelete: false}]
+                },
+        });
+        if (!facturaBuscada){
+            return res.status(404).json({
+                msg: "La factura que intenta buscar no existe"
+            })
+        }
+        return res.status(200).json({
+            facturaBuscada});
+    } catch (error) {
+        console.log(error);
     }
-    return res.status(200).json({
-        facturaBuscada});
 }
 
 const buscarFacturaCliente = async (req, res) => {
