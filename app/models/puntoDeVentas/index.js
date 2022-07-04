@@ -39,6 +39,7 @@ db.talonario = require("../../models/talonario.model.js")(sequelize, Sequelize);
 db.tipopago = require("../../models/tipopago.model.js")(sequelize, Sequelize);
 db.tipoproducto = require("../../models/tipoproducto.model.js")(sequelize, Sequelize);
 db.numero = require("../../models/numerosFactura.model.js")(sequelize, Sequelize);
+db.roles_permisos = require("../../models/rolpermiso.model")(sequelize, Sequelize);
 ///////////////////////////////index.user.js//////////////////////////////
 /////// RELACIÓN DE UNO A UNO /////////
 //// UN USUARIO PERTENECE A UN EMPLEADO, UN EMPLEADO TIENE UN USUARIO ////
@@ -74,12 +75,12 @@ db.empleado.hasOne(db.user,{
   /////// RELACIÓN DE MUCHOS A MUCHOS /////////
   //// UN ROL TIENE MUCHOS PERMISOS, UN PERMISO ESTA EN MUCHOS ROLES(N:M)////
   db.permiso.belongsToMany(db.role, {
-    through: "roles_permisos",
+    through: db.roles_permisos,
     foreignKey: "idRol",
     otherKey: "idPermiso"
   });
   db.role.belongsToMany(db.permiso, {
-    through: "roles_permisos",
+    through: db.roles_permisos,
     foreignKey: "idRol",
     otherKey: "idPermiso"
   });
