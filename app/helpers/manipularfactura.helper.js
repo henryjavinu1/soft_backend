@@ -157,10 +157,10 @@ const filtrarFacturasPorFechaQuery = async (Op, Factura, fecha1, fecha2, Emplead
                 }
             ]
         });  
+        return facturaBuscada;
     } catch (error) {
         console.log(error);
     }
-    return facturaBuscada;
 }
 
 module.exports = {

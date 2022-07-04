@@ -4,7 +4,7 @@ const validarCamposCliente = (req, res, next) => {
 
     if (!nombreCliente && !rtn && !dni) {
         return res.status(400).json({
-            error: 'Los campos nombreCliente, rtn y DNI están vacios. Por favor ingrese uno de ambos para realizar la búsqueda.'
+            error: 'Los campos para realizar la búsqueda por cliente son: nombreCliente, rtn y DNI. Por favor ingrese uno de ellos para relizar la búsqueda.'
         })
     }
 
@@ -60,6 +60,9 @@ const validarCamposFecha = (req, res, next) => {
 
     if(!fecha1 && !fecha2) return res.status(400).json({
         message: 'Debe indicar al menos una fecha para aplicar el filtro.'
+    })
+    if (!fecha1 && fecha2) return res.status(400).json({
+        message: 'Debe indicar la fecha 1 para aplicar el filtro.'
     })
     if (!fecha2) {
         if (!regexFecha.test(fecha1.trim())) return res.status(400).json({
