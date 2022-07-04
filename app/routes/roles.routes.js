@@ -9,5 +9,5 @@ module.exports = function(app) {
     );
     next();
   });
-  app.get("/api/roles/",[authJwt.verifyToken], roles.create);
+  app.post("/api/roles/create",[authJwt.verifyToken,], controller.crearol);
 };

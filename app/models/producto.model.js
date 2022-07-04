@@ -16,9 +16,19 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.INTEGER,
         allowNull: false
       },
-      isvProducto: {
-        type: Sequelize.STRING,
+      isvProducto: { /// de define en porcentaje 10 -> 10%
+        type: Sequelize.DECIMAL,
         allowNull: false
+      },
+      descProducto: { /// se define en porcentaje 0 -> 0%
+        type: Sequelize.DECIMAL,
+        allowNull: false,
+        defaultValue: 0
+      },
+      isExcento: { // falso para los productos que pagan ISV, true NO pagan ISV
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
       },
       isDelete: {
         type: Sequelize.BOOLEAN,
