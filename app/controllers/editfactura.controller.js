@@ -12,6 +12,9 @@ const TipoPago = db.tipopago;
 const traerFacturas = async (req = request, res = response) => { 
     try {
         const todasLasFacturas = await Factura.findAll({
+            where: {
+                isDelete: false,
+            },
             include: [
                 {
                     model: Empleado,
@@ -44,10 +47,9 @@ const buscarfactura = async (req = request, res = response) => {
     const numeroFactura = req.query.numeroFactura;
     // const numReq = Object.keys(req.query).length
 
-    console.log("me estoy ejecutando yo")
     const facturaBuscada = await Factura.findOne({
         where: { 
-            numeroFactura: numeroFactura
+            [Op.and] : [{numeroFactura: numeroFactura}, {isDelete: false}]
             },
     });
     if (!facturaBuscada){
@@ -66,19 +68,19 @@ const buscarFacturaCliente = async (req, res) => {
         if (nombreCliente) {
             clienteBuscado = await Cliente.findOne({
                 where: {
-                    nombreCliente: nombreCliente
+                    [Op.and] : [{isDelete: false}, {nombreCliente: nombreCliente}]
                 }
             });
         } else if (rtn) {
             clienteBuscado = await Cliente.findOne({
                 where: {
-                    rtn: rtn
+                    [Op.and] : [{isDelete: false}, {rtn: rtn}]
                 }
             });
         } else if (dni) {
             clienteBuscado = await Cliente.findOne({
                 where: {
-                    dni: dni
+                    [Op.and] : [{isDelete: false}, {dni: dni}]
                 }
             });
         }
@@ -89,7 +91,7 @@ const buscarFacturaCliente = async (req, res) => {
         }
         const facturasBuscadas = await Factura.findAll({
             where: {
-                idCliente: clienteBuscado.id,
+                [Op.and] : [{idCliente: clienteBuscado.id}, {isDelete: false}]
             },
             include: [
                 {

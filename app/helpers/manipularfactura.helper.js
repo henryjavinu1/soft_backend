@@ -1,30 +1,30 @@
-// const filtrarFacturas = async (Factura, parametroBuscado = Factura, valorBuscado, Empleado, TipoPago, Talonario, Cliente) => {
-//     atributo = parametroBuscado;
-//     const facturas = await Factura.findAll({
-//         where: {
-//             parametroBuscado: valorBuscado,
-//         },
-//         include: [
-//             {
-//                 model: Empleado,
-//                 attributes: ['id', 'nombre', 'apellido'],
-//             },
-//             {
-//                 model: TipoPago,
-//                 attributes: ['tipoDePago']
-//             },
-//             {
-//                 model: Talonario,
-//                 attributes: ['cai']
-//             },
-//             {
-//                 model: Cliente,
-//                 attributes: ['dni','email','rtn']
-//             }
-//         ]
-//     });
-//     return facturas;
-// } 
+const filtrarFacturas = async (Factura, parametroBuscado = Factura, valorBuscado, Empleado, TipoPago, Talonario, Cliente) => {
+    atributo = parametroBuscado;
+    const facturasBuscadas = await Factura.findAll({
+        where: {
+            [Op.and]: [{ idCliente: clienteBuscado.id }, { isDelete: false }]
+        },
+        include: [
+            {
+                model: Empleado,
+                attributes: ['id', 'nombre', 'apellido'],
+            },
+            {
+                model: TipoPago,
+                attributes: ['idTipoPago', 'tipoDePago']
+            },
+            {
+                model: Talonario,
+                attributes: ['idTalonario', 'cai']
+            },
+            {
+                model: Cliente,
+                attributes: ['id', 'nombreCliente', 'direccion', 'dni', 'email', 'rtn', 'telefonoCliente']
+            }
+        ]
+    });
+    return facturasBuscadas;
+}
 
 const impresionDeFacturas = (facturasBuscadas) => {
     const facturas = facturasBuscadas.map((factura) => {
