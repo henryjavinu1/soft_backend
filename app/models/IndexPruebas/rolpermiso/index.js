@@ -38,7 +38,8 @@ db.factura = require("../../models/factura.model.js")(sequelize, Sequelize);
 db.talonario = require("../../models/talonario.model.js")(sequelize, Sequelize);
 db.tipopago = require("../../models/tipopago.model.js")(sequelize, Sequelize);
 db.tipoproducto = require("../../models/tipoproducto.model.js")(sequelize, Sequelize);
-db.numero = require("../../models/numerosFactura.model.js")(sequelize, Sequelize);
+db.roles_permisos = require("../../models/rolpermiso.model")(sequelize, Sequelize);
+
 ///////////////////////////////index.user.js//////////////////////////////
 /////// RELACIÓN DE UNO A UNO /////////
 //// UN USUARIO PERTENECE A UN EMPLEADO, UN EMPLEADO TIENE UN USUARIO ////
@@ -74,19 +75,19 @@ db.empleado.hasOne(db.user,{
   /////// RELACIÓN DE MUCHOS A MUCHOS /////////
   //// UN ROL TIENE MUCHOS PERMISOS, UN PERMISO ESTA EN MUCHOS ROLES(N:M)////
   db.permiso.belongsToMany(db.role, {
-    through: "roles_permisos",
+    through: db.roles_permisos,
     foreignKey: "idRol",
     otherKey: "idPermiso"
   });
   db.role.belongsToMany(db.permiso, {
-    through: "roles_permisos",
+    through: db.roles_permisos,
     foreignKey: "idRol",
     otherKey: "idPermiso"
   });
 //////////////////index.arqueo.js////////////////////////
 /////// RELACIÓN DE UNO A MUCHOS /////////
 //// UN ARQUEO TIENE UN USUARIO, UN USUARIO TIENE MUCHOS ARQUEO ////
-  db.user.hasMany(db.arqueo, {
+db.user.hasMany(db.arqueo, {
     foreignKey: { name: "idUsuario", allowNull: false },
   });
   db.arqueo.belongsTo(db.user, {
@@ -203,14 +204,5 @@ db.tipopago.hasMany(db.factura,{
   db.detalleventa.belongsTo(db.producto, {
     foreignKey: { name: 'idProducto', allowNull: false }
   });
-
-  //// UN USUARIO TIENE UN ROL, UN ROL TIENE MUCHOS USUARIOS(1:N)////
-  db.numero.hasMany(db.talonario,{
-    foreignKey: { name:'idTalonario', allowNull: false }
-  });
-  db.talonario.belongsTo(db.numero,{
-    foreignKey: { name:'idTalonario', allowNull: false }
-  });
-  ////////////////////////////////////////////
   
 module.exports = db;
