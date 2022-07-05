@@ -78,11 +78,11 @@ exports.buscarxcodigo = async (req, res) =>{
         });
         if (!producto) {
             return res.status(404).send({
-                message: "El producto no existe"
+                message: "El producto no existe."
             });
         } else {
             return res.status(200).send({
-                message: "El producto existe",
+                message: "El producto existe.",
                 producto: producto
             });
         }
