@@ -21,3 +21,52 @@ exports.crearol = async (req, res) => {
     }
 }
 
+//Dando de Baja a Rol
+exports.bajarol = async (req, res) => {
+    try {
+        const bajarol = await Role.update({
+            IsDelete: true,
+        });
+        if (!bajarol){
+            return res.status(404).send({
+              message: "No se pudo dar de baja al rol"
+            })
+          }else {
+            return res.send({
+              message: "Se le dio de baja exitosamente"
+            })
+          }
+    }
+    catch (error) {
+        return res.status(500).send({
+            message: "Ocurrio un error"
+        });
+    }
+}
+
+exports.updaterol = async (req, res) => {
+    try {
+        const updaterol = await Role.update({
+            rol: req.body.rol,
+            descripcion: req.body.descripcion,
+        },{
+           where:
+            id = req.body.id, 
+        });
+        if (!updaterol){
+            return res.status(404).send({
+              message: "Error al actualizar el rol"
+            })
+          }else {
+            return res.send({
+              message: "Actualizacion exitosa"
+            })
+          }
+    }
+    catch (error) {
+        return res.status(500).send({
+            message: "Ocurrio un error"
+        });
+    }
+}
+
