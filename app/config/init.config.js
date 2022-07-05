@@ -40,9 +40,12 @@ exports.initial = async () => {
             email: "root@soft.com",
             idEmpleado: 1,
             idRol: 1
-        })
+        });
+        numero.create({ puntoEmision: '001', establecimiento: '01', tipo: '001', 
+    correlativo: numeroFactura, numero: '001-'+ correlativo ,idTalonario: talonario.idTalonario });
     } catch (error) {
         console.log(error);
     }
+    
 
 }

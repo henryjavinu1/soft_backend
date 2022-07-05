@@ -8,7 +8,7 @@ module.exports = (sequelize, Sequelize) => {
         autoIncrement: true
       },
       numeroFactura: { /// numero que se asigna del talonario
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: false 
       },
       fechaFactura: {

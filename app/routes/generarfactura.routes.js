@@ -10,9 +10,10 @@ module.exports = function(app) {
     next();
   });
 
-  app.post("/api/gene/traerventa", controller.findVentaDetalle);
+  app.post("/api/gene/traerventa", controller.findVentaDetalle); //Busca la venta y retorna los datos relevantes para la
   app.post("/api/gene/vertipopago", controller.findTipoPago);
-  app.post("/api/gene/generarnumerofactura", controller.findTalonarioFactura);
   app.post("/api/gene/insertfact", controller.insertFactura);
+  app.post("/api/gene/convertirString", controller.convertirString); //Genera numumero factura y lo ingresa en tabla numero
+  app.post("/api/gene/buscar", controller.buscar); // Apoyo
 
 };

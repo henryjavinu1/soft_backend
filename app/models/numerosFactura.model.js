@@ -1,9 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
     const Numero = sequelize.define("numerosFactura", {
-      numero: {
-        type: Sequelize.STRING,
-        allowNull: false 
-      },
       puntoEmision: {
         type: Sequelize.STRING,
         allowNull: false
@@ -19,6 +15,10 @@ module.exports = (sequelize, Sequelize) => {
       correlativo: {
         type: Sequelize.STRING,
         allowNull: false
+      },
+      numero: {
+        type: Sequelize.STRING,
+        allowNull: false 
       },
       isDelete: {
         type: Sequelize.BOOLEAN,

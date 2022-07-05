@@ -1,6 +1,6 @@
 const db = require("../models/puntoDeVentas");
 const config = require("../config/auth.config");
-const { venta, talonario, tipopago, detalleventa } = require("../models/puntoDeVentas");
+const { venta, talonario, tipopago, detalleventa, numero } = require("../models/puntoDeVentas");
 const detalleventaModel = require("../models/detalleventa.model");
 const User = db.user;
 const Role = db.role;
@@ -8,178 +8,104 @@ const Sesion = db.sesion;
 const Factura = db.factura;
 const cliente = db.cliente;
 const TipoPago = db.tipopago;
+const Numero = db.numero;
 const Venta = db.venta;
 const Op = db.Sequelize.Op;
 //crear funcion para generar factura //Inserta datos en factura desde el cuerpo de la factura
+//Pensar como unir findVentaDetalle con insertFactura
 exports.insertFactura = async (req, res) => {
     console.log(req.body.numfactura);
     try {
-        //ver si un usuario 
-        const user = await User.findOne({
-            where: {
-                id: req.body.userId,
-                isDelete: false
-            },
-            include: [{
-                model: db.role,
-                include: [{
-                    model: db.permiso,
-                }]
-            }]
-        });
-        if (!user) {
-            return res.status(404).send({
-                message: "El usuario no existe"
-            });
-        }else{
-            const facturaa = await db.factura.create({
-                numeroFactura: req.body.numeroFactura, //necesito una función que me genere el numero de factura automaticamente
-                fechaFactura: req.body.fechaFactura, //necesito una funcion para generar fecha del dia
-                descuenTototalFactura: req.body.descuentoTotalFactura,
-                isvTotalFactura: req.body.isvTotalFactura,
-                totalFactura: req.body.totalFactura,
-                subtotalFactura: req.body.subTotalFactura,
+        const numero = await db.numero.findOne({ order: [["numero", "DESC"]], });
+        //SoloPara ejemplo no funcionan porque no existen los atributos en modelo ventas
+        const isvTotal = await db.detalleventa.sum('isvAplicado'); //Falta agg estos atributos en el modelo detalleVenta
+        const descuentoVentas = await db.detalleventa.sum('descuentoAplicado'); //Falta agg atributos en modelo
+         //Subtotal + isv - descuento
+        const totalFacturaa = await db.detalleventa.sum('totalDetalleVenta');
+        //Falta conectar bien ventas para generar calculos dependiendo de los atributos de ventas
+        const insertfactura = await db.factura.create({
+                numeroFactura: numero.numero,
+                fechaFactura: new Date(),
+                descuentoTotalFactura: descuentoVentas,
+                isvTotalFactura: isvTotal,
+                totalFactura: totalFacturaa,
+                //Subtotal exonerado o excento
+                subTotalFactura: req.body.subTotalFactura,
                 cantidadLetras: req.body.cantidadLetras, //necesito una funcion para generar cantidad de letras
                 estado: true,
                 idTipoPago: req.body.idTipoPago,
                 idCliente: req.body.idCliente,
                 idUsuario: req.body.userId,
                 idVenta: req.body.idVenta,
-                idTalonario: req.body.idTalonario,
+                idTalonario: numero.idTalonario,
+                idNumero: numero.id,
         });
         return res.status(200).send({
-            message: "Factura creada"
-        });}
+            message: "Factura creada",
+            factura: factura
+        });
     } catch (error) {
         return res.status(500).send({
             message: "Ocurrio un error" + error
         });
     }
 }
-//Buscar una venta por el id
+//Buscar una venta por el id de venta
 exports.findVentaDetalle = async (req, res) => {
     try {
-        const user = await db.user.findOne({
+        const ventas = await db.ventas.findOne({
             where: {
-              id: req.body.idUsuario,
-              isDelete: false
-            },
-            include: [{
-              model: db.role,
-              include: [{
-                model: db.permiso,
-              }]
-            }, {
-              model: db.empleado,
-            }, {
-              model: db.sesion,
-            }]
-          });
-      
-          if (!user) {
-            return res.status(404).send({
-              message: "User Not found."
-            });
-            } else {
-                const venta = await db.venta.findOne({
-                    where: {
-                        idVenta: req.body.idVent,
-                        isDelete: false
+                id: req.body.idVent,
+                isDelete: false
                     }, 
                     include: [ {
                         model: db.cliente,
                     }, {
-                        model: db.detalleventa,
-                        
+                        model: db.detalleventa,  
+                    }, {
+                        model: db.user, 
+                        include: [{
+                            model: db.empleado,
+                          }]  
                     }]
                 });
-                if (!venta) {
+                if (!ventas) {
                     return res.status(404).send({
                         message: "La venta no existe"
                     });
                 } else {
-                    const detalleventa = await db.detalleventa.findAll({
-                        where: {
-                            idVenta: req.body.idVent,
-                            isDelete: false
-                        }}); if (!detalleventa) {
-                            return res.status(404).send({
+			        const detalleventa = await db.detalleventa.findAll({
+                        	where: {
+                            		idVentas: req.body.idVent,
+                            		isDelete: false
+                        	}}); 
+                            if (!detalleventa) {
+                            	return res.status(404).send({
                                 message: "Los detallesventa no existe"
                             });
-                        } else {
-                           
-                                    return res.status(200).send({
-                                        message: "La venta Existe",
-                                        empleado: user.empleado,
-                                        nombrecliente: venta.nombreCliente,
-                                        idCliente: venta.idCliente, //Crear una funcion de busqueda cliente
-                                        idVenta: venta.idVent,
-                                        isvventa: venta.isvVenta,
-                                        totalfacturaventa: venta.totalFacturaVenta,
-                                        descuentoaplicadoventa: venta.descuentoAplicadoVenta,
-                                        detalleventa: detalleventa,
-                                });
-                        
-                     
-                 }
-               // return res.status(200).send({
-                   // message: "User found.",
-                   // usuario: user.usuario });
-                }   } 
-           
-
+                            } else {
+                                return res.status(200).send({
+                                //Como obtener datos especificos de un modelo
+                                message: "La venta Existe",
+                                usuario: ventas.usuario,
+                                empleado: ventas.empleado,
+                                cliente: ventas.cliente,
+                                //nombrecliente: cliente.nombreCliente,
+                                idCliente: ventas.idCliente, 
+                                id: ventas.id,
+                                totalVenta: ventas.totalVenta,
+                                totalISV: ventas.totalISV,
+                                totalDescuentoVenta: ventas.totalDescuentoVenta,
+                                detalleventa: detalleventa,
+                                });            
+                 } 
+                }
     } catch (error) {
         return res.status(500).send({
             message: "Ocurrio un error" + error
         });
     }
-}
-//Buscar una talonario por activo //Obtiene numero de la factura segun los rangos del talonario 
-//y el numero de factura anterior
-exports.findTalonarioFactura = async (req, res) => {
-    try {
-        const talonario = await db.talonario.findOne({
-            where: {
-                active: true,
-                isDelete: false,
-            },
-        });
-        if (!talonario) {
-            return res.status(404).send({
-                message: "El talonario no existe"
-            });
-        } else {
-
-            const numeroFinal = await db.factura.max('numeroFactura');
-            if ( numeroFinal == null) {
-                message: "No hay facturas"
-                const numeroFactura = await talonario.rangoInicialFactura;
-                return res.status(500).send({
-                    numeroFactura: numeroFactura,
-                });
-            } else {
-                const numeroFactura = await numeroFinal + 1;
-                if (numeroFactura > talonario.rangoFinalFactura) {
-                    return res.status(400).send({
-                        message: "No hay mas numeros de factura disponibles"
-                    });
-                }else { 
-                return res.status(500).send({
-                    message: "El numero de factura es",
-                    numeroFactura: numeroFactura,
-            });
-            } 
-            //return res.status(500).send({
-               // numeroFactura: numeroFactura,
-           // });  
-        } 
-            
-            } } catch (error) {
-        return res.status(500).send({
-            message: "Ocurrio un error" + error
-        });
-    }
-}  
+}   
 //Buscar tipo de pago 
 exports.findTipoPago = async (req, res) => {
     try {
@@ -204,15 +130,20 @@ exports.findTipoPago = async (req, res) => {
         });
     }
 }
-//Buscar maximo en una tabla en un atributo especifico
+//Buscar maximo en una tabla en un atributo especifico apoyp
 exports.buscar = async (req, res) => {
-    const numero = await db.factura.max('numeroFactura');
-    
+   // const numero1 = await db.factura.max('numeroFactura');
+    //const numero2 = await db.numero.max('numero');
+    //const idDelTalonario = await db.numero.max('idTalonario');
+    const numero = await db.numero.findOne({
+        order: [["numero", "DESC"]],
+    });
+
     return res.status(200).send({
-        numero: numero,
+        numero: numero.numero,
     });
 }
-//Ejemplo traer datos de una tabla pero solo los de un atributo
+//Ejemplo traer datos de una tabla pero solo los de un atributo appoyo
 exports.facturasdisponibles = async (req, res) => {
     const facturas = await db.factura.findAll({ 
         attributes: ['numeroFactura']
@@ -222,3 +153,114 @@ exports.facturasdisponibles = async (req, res) => {
         facturas: facturas,
     });
 } 
+//Funcion para generar correlativo de factura e inserta en la tabla numero
+// Dependiendo rangos de talonarios, si esta activo o no y fecha limite
+// Errores dato manuales solo hay que modificar req.body.numero dependiendo el caso
+// Concatenar en la funcion de insertar
+exports.convertirString = async (req, res) => {
+        const talonario = await db.talonario.findOne({
+            where: {
+                active: true,
+                isDelete: false,
+                //Fecha sea mayor a la de hoy
+                fechaLimiteEmision: {
+                    [Op.gt]: new Date()
+                }
+            },
+        });
+        if (!talonario) {
+            return res.status(404).send({
+                message: "No hay talonarios activos"
+            });
+        } else {
+            const idDelTalonario = await db.numero.max('idTalonario');
+            const numero = await db.numero.max('correlativo');
+            if ( numero == null) {
+                message: "No hay facturas"
+                const numeroFactura = await talonario.rangoInicialFactura;
+                //Ingresar por defecto o manualmente... Solo colocar req.body.numero o lo que
+                const insert = await db.numero.create({ puntoEmision: '001', establecimiento: '01', 
+                tipo: '001', correlativo: numeroFactura, 
+                //concatenar puntoEmision , establecimiento , tipo y correlativo
+                numero: '001'+'-' + '01' +'-'+ '001'+'-' + numeroFactura,
+                idTalonario: talonario.idTalonario });
+                return res.status(200).send({
+                    numeroFactura: numeroFactura,
+                    hola: "se inserto",
+                    insert: insert,
+                });
+            } else {
+                const idDelTalonario = await db.numero.max('idTalonario');
+                if( talonario.idTalonario  == idDelTalonario){
+                    //const numero = req.body.numero;
+                    const numeroFa = parseInt(numero);
+                    const num = numeroFa + 1;
+                    //ver si num es MENOR que 10
+                    if (num < 10) {
+                        const numeroFactura = "0000000" + num;
+                        const insert = await db.numero.create({ puntoEmision: '001', establecimiento: '01', 
+                        tipo: '001', correlativo: numeroFactura,  numero: '001'+'-' + '01' +'-'+ '001'+'-' + numeroFactura,
+                        idTalonario: talonario.idTalonario });
+                        return res.status(200).send(numeroFactura)
+                    }else{
+                        if(num < 100){
+                            const numeroFactura = "000000" + num;
+                            const insert = await db.numero.create({ puntoEmision: '001', establecimiento: '01', tipo: '001', correlativo: numeroFactura, numero: '001'+'-' + '01' +'-'+ '001'+'-' + numeroFactura,idTalonario: talonario.idTalonario });
+                            return res.status(200).send(numeroFactura)
+                        }else{
+                            if(num < 999){
+                                const numeroFactura = "00000" + num;
+                                const insert = await db.numero.create({ puntoEmision: '001', establecimiento: '01', tipo: '001', correlativo: numeroFactura,  numero: '001'+'-' + '01' +'-'+ '001'+'-' + numeroFactura,idTalonario: talonario.idTalonario });
+                                return res.status(200).send(numeroFactura)
+                            }else{
+                                if(num < 9999){
+                                    const numeroFactura = "0000" + num;
+                                    const insert = await db.numero.create({ puntoEmision: '001', establecimiento: '01', tipo: '001', correlativo: numeroFactura,  numero: '001'+'-' + '01' +'-'+ '001'+'-' + numeroFactura,idTalonario: talonario.idTalonario });
+                                    return res.status(200).send(numeroFactura)
+                                }else{
+                                    if(num < 99999){
+                                        const numeroFactura = "000" + num;
+                                        const insert = await db.numero.create({ puntoEmision: '001', establecimiento: '01', tipo: '001', correlativo: numeroFactura,  numero: '001'+'-' + '01' +'-'+ '001'+'-' + numeroFactura,idTalonario: talonario.idTalonario });
+                                        return res.status(200).send(numeroFactura)
+                                    }else{
+                                        if(num < 999999){
+                                            const numeroFactura = "00" + num;
+                                            const insert = await db.numero.create({ puntoEmision: '001', establecimiento: '01', tipo: '001', correlativo: numeroFactura,  numero: '001'+'-' + '01' +'-'+ '001'+'-' + numeroFactura,idTalonario: talonario.idTalonario });
+                                            return res.status(200).send(numeroFactura)
+                                        }else {
+                                            if(num < 9999999){
+                                                const numeroFactura = "0" + num;
+                                                const insert = await db.numero.create({ puntoEmision: '001', establecimiento: '01', tipo: '001', correlativo: numeroFactura,  numero: '001'+'-' + '01' +'-'+ '001'+'-' + numeroFactura,idTalonario: talonario.idTalonario });
+                                            return res.status(200).send(numeroFactura)
+                                            }else{
+                                                const numeroFactura =  num;
+                                                const insert = await db.numero.create({ puntoEmision: '001', establecimiento: '01', tipo: '001', correlativo: numeroFactura,  numero: '001'+'-' + '01' +'-'+ '001'+'-' + numeroFactura,idTalonario: talonario.idTalonario });
+                                                return res.status(200).send(numeroFactura)
+                        } 
+                    }
+                }
+            }
+        }
+
+    }
+}
+            } else {
+                message: "hi"
+                const numeroFactura = await talonario.rangoInicialFactura;
+                //Ingresar por defecto o manualmente... Solo colocar req.body.numero o lo que
+                const insert = await db.numero.create({ puntoEmision: '001', establecimiento: '01', 
+                tipo: '001', correlativo: numeroFactura, 
+                //concatenar puntoEmision , establecimiento , tipo y correlativo
+                numero: '001'+'-' + '01' +'-'+ '001'+'-' + numeroFactura,
+                idTalonario: talonario.idTalonario });
+                return res.status(200).send({
+                    numeroFactura: numeroFactura,
+                    hola: "se inserto",
+                    insert: insert,
+                });
+                
+            }
+        }  }   
+    } 
+ 
+                
