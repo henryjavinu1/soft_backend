@@ -22,7 +22,7 @@ app.use(
 );
 
 // database
-const db = require("./app/models/producto/");
+const db = require("./app/models/puntoDeVentas/");
 db.sequelize.sync();
 // force: true will drop the table if it already exists
 db.sequelize.sync({force: false}).then(() => {
@@ -32,7 +32,7 @@ db.sequelize.sync({force: false}).then(() => {
 
 // simple route
 app.get("/", (req, res) => {
-  res.json({ message: "Bienvenido." });
+  res.json({ message: "¡Bienvenido!" });
 });
 
 // routes

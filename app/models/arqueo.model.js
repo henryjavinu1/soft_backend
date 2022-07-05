@@ -28,6 +28,10 @@ module.exports =(sequelize, Sequelize) => {
             type: Sequelize.DECIMAL(10,2),
             allowNull: true
         },
+        efectivoTotal: {
+            type: Sequelize.DECIMAL(10,2),
+            allowNull: true
+        },
         isDelete: {
             type: Sequelize.BOOLEAN,
             allowNull: false,

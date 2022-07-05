@@ -1,4 +1,4 @@
-const db = require("../models/arqueo");
+const db = require("../models/puntoDeVentas");
 const bcrypt = require("bcryptjs");
 const config = require("../config/auth.config.js");
 const Role = db.role;
@@ -40,9 +40,12 @@ exports.initial = async () => {
             email: "root@soft.com",
             idEmpleado: 1,
             idRol: 1
-        })
+        });
+        numero.create({ puntoEmision: '001', establecimiento: '01', tipo: '001', 
+    correlativo: numeroFactura, numero: '001-'+ correlativo ,idTalonario: talonario.idTalonario });
     } catch (error) {
         console.log(error);
     }
+    
 
 }

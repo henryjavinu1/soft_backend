@@ -16,8 +16,8 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.INTEGER,
         allowNull: false
       },
-      isvProducto: {
-        type: Sequelize.STRING,
+      isvProducto: { /// de define en porcentaje 10 -> 10%
+        type: Sequelize.DECIMAL,
         allowNull: false
       },
       descProducto: { /// se define en porcentaje 0 -> 0%
