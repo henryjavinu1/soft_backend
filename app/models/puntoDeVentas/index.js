@@ -211,14 +211,27 @@ db.tipopago.hasMany(db.factura,{
   db.detalleventa.belongsTo(db.producto, {
     foreignKey: { name: 'idProducto', allowNull: false }
   });
-
-  //// UN USUARIO TIENE UN ROL, UN ROL TIENE MUCHOS USUARIOS(1:N)////
-  db.numero.hasMany(db.talonario,{
-    foreignKey: { name:'idTalonario', allowNull: false }
-  });
-  db.talonario.belongsTo(db.numero,{
-    foreignKey: { name:'idTalonario', allowNull: false }
-  });
   ////////////////////////////////////////////
-  
+  //UN numero TIENE UN talonaro, UN talonario TIENE MUCHOS numero(1:N)
+  //REVISAR ESTA RELACION
+  db.talonario.hasMany(db.numero,{
+    foreignKey: { name:'idTalonario', allowNull: false }
+  });
+  db.numero.belongsTo(db.talonario,{
+    foreignKey: { name:'idTalonario', allowNull: false }
+  });
+// Factura-Numero
+//una factuta tiene un numero, un numero tiene una factura
+db.numero.hasOne(db.factura,{
+  foreignKey: {
+    name: 'idNumero', allowNull: false 
+  }
+});
+db.factura.belongsTo(db.numero,{
+  foreignKey: {
+    name: 'idNumero', allowNull: false 
+  }
+});
 module.exports = db;
+
+
