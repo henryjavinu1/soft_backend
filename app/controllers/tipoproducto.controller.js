@@ -1,4 +1,4 @@
-db = require("../models/producto");
+db = require("../models/puntoDeVentas");
 const config = require("../config/auth.config");
 const e = require("express");
 const { response } = require("express");

@@ -1,4 +1,4 @@
-//db = require("../models/producto");
+//db = require("../models/produ");
 const config = require("../config/auth.config");
 const db = require("../models/producto");
 const e = require("express");
@@ -7,7 +7,7 @@ const Producto = db.producto;
 const TipoProducto = db.tipoProducto;
 //const Op = db.Sequelize.Op;
 const { Op } = require("sequelize");
-const { tipoproducto } = require("../models/producto");
+const { tipoproducto } = require("../models/puntoDeVentas");
 
 
 // Pucha

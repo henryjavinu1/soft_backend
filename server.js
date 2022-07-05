@@ -38,8 +38,14 @@ app.get("/", (req, res) => {
 // routes
 require("./app/routes/auth.routes")(app);
 require("./app/routes/user.routes")(app);
-require("./app/routes/tipoproducto.routes")(app);
-require("./app/routes/producto.routes")(app);
+require("./app/routes/generarfactura.routes")(app);
+require("./app/routes/manipularfactura.routes")(app);
+require("./app/routes/arqueo.routes")(app);
+require("./app/routes/detalleventa.routes")(app);
+require("./app/routes/ventas.routes")(app);
+//require("./app/routes/tipopago.routes")(app);
+require("./app/routes/cliente.routes")(app);
+// require("./app/routes/permisos.routes")(app);
 
 
 
