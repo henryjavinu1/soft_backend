@@ -41,7 +41,8 @@ require("./app/routes/user.routes")(app);
 require("./app/routes/generarfactura.routes")(app);
 require("./app/routes/manipularfactura.routes")(app);
 require("./app/routes/arqueo.routes")(app);
-// require("./app/routes/permisos.routes")(app);
+require("./app/routes/detalleventa.routes")(app);
+require("./app/routes/ventas.routes")(app);
 
 
 // set port, listen for requests
