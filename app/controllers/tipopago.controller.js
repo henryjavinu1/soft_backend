@@ -1,6 +1,5 @@
-const db = require("../models/generarfactura");
+const db = require("../models/puntoDeVentas");
 const config = require("../config/auth.config");
-const { venta, talonario, tipopago, detalleventa } = require("../models/generarfactura");
 const detalleventaModel = require("../models/detalleventa.model");
 const TipoPago = db.tipopago;
 const Op = db.Sequelize.Op;
@@ -82,8 +81,8 @@ exports.deleteTipoPago = async (req, res) => {
         const tipopago = await db.tipopago.findOne({
            
             where: {
-                [Op.and]: [{ idTipoPago: req.body.idTipoPago}, 
-                           { isDelete: false}], 
+                idTipoPago: req.body.idTipoPago, 
+                isDelete: false 
             }
         });
         if (!tipopago) {
@@ -91,9 +90,14 @@ exports.deleteTipoPago = async (req, res) => {
                 message: "El tipo de pago no existe"
             });
         } else {
-            return res.status(200).send({
-                isDelete: true,
-                
+            const updatedTipoPago = await db.tipopago.update(
+                {
+                  isDelete: true,
+                },
+
+              );
+              return res.status(200).send({
+                message: "Se elimino correctamente"
             });
         }
     } catch (error) {
@@ -103,3 +107,4 @@ exports.deleteTipoPago = async (req, res) => {
         });
     }
 }
+

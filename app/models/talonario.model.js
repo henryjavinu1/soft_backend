@@ -2,14 +2,15 @@ module.exports = (sequelize, Sequelize) => {
     const Talonario = sequelize.define("talonarios", {
         idTalonario: {
             type: Sequelize.INTEGER,
-            primaryKey: true
+            primaryKey: true,
+            autoIncrement: true
         },
         rangoInicialFactura: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.STRING,
             unique:true
         },
         rangoFinalFactura: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.STRING,
             unique:true
         },
         cai: {
@@ -17,6 +18,13 @@ module.exports = (sequelize, Sequelize) => {
         },
         fechaLimiteEmision: {
             type: Sequelize.DATE,
+        },
+        active: {
+            type: Sequelize.BOOLEAN,
+        },
+        isDelete: {
+            type: Sequelize.BOOLEAN,
+            defaultValue: false
         }
     });
 
