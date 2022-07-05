@@ -14,4 +14,5 @@ module.exports = function(app) {
     app.get("/api/cliente/buscarClientePorNombre", controller.buscarClientePorNombre);
     app.get("/api/cliente/traerTodosLosClientes", controller.traerTodosLosClientes); 
     app.put("/api/cliente/actualizarCliente", controller.actualizarCliente); 
+    app.post("/api/cliente/eliminarCliente", controller.eliminarCliente);
 };

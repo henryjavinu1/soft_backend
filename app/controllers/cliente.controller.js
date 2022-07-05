@@ -132,6 +132,26 @@ exports.actualizarCliente = async (req = request, res = response) => {
     }
 }
 //Eliminar
-
+exports.eliminarCliente = async (req, res) => {
+    try {
+        const eliminarCliente = await Cliente.update({
+            isDelete: true
+        },{
+            where: {
+                id: req.body.id
+            }
+        });
+        if(eliminarCliente){
+            res.status(200).json({
+                message: "Cliente eliminado correctamente"
+            });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(401).json({
+            message: "Error al eliminar cliente: " + error.message
+        });
+    }
+}
 
 
