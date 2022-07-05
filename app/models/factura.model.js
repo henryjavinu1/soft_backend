@@ -1,3 +1,5 @@
+const DataTypes = require('sequelize').DataTypes;
+
 module.exports = (sequelize, Sequelize) => {
     const Factura = sequelize.define("facturas", {
       idFactura: {
@@ -5,12 +7,12 @@ module.exports = (sequelize, Sequelize) => {
         primaryKey: true,
         autoIncrement: true
       },
-      numeroFactura: {
+      numeroFactura: { /// numero que se asigna del talonario
         type: Sequelize.INTEGER,
         allowNull: false 
       },
       fechaFactura: {
-        type: Sequelize.DATE,
+        type: DataTypes.DATEONLY,
         allowNull: false
       },
       descuentoTotalFactura: {
