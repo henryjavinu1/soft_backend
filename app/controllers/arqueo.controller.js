@@ -1,21 +1,20 @@
 const db = require("../models/puntoDeVentas");
-const config = require("../config/auth.config");
-const e = require("express");
-const User = db.user;
+const Arqueo = db.arqueo;
 const Sesion = db.sesion;
-const arqueo = db.arqueo;
+const User = db.user;
 const Op = db.Sequelize.Op;
+
 
 exports.createArqueo = async(req, res) => {
     try{
         //consultar si el id del usuario y la sesion iniciada estan en la base de datos
-        const consult = await db.user.findOne({
+        const consult = await User.findOne({
             where: {
                 id: req.body.idUsuario,
                 isDelete: false
             }
         });
-        const consult2 = await db.sesion.findOne({
+        const consult2 = await Sesion.findOne({
             where: {
                 id: req.body.idSesion,
                 isActive: true
@@ -25,7 +24,7 @@ exports.createArqueo = async(req, res) => {
         if (consult) {
             if(consult2){
                  //insertar un nuevo arqueo
-                const arqueo = await db.arqueo.create({   
+                const arqueo = await Arqueo.create({   
                 idUsuario: req.body.idUsuario,
                 idSesion: req.body.idSesion,
                 fechaInicio: new Date(),
@@ -51,13 +50,13 @@ exports.createArqueo = async(req, res) => {
 exports.actualizacionCerrandoSesion = async (req, res) => {
     try {
         //consultar si el id del usuario y la sesion iniciada estan en la base de datos
-        const consult = await db.user.findOne({
+        const consult = await User.findOne({
             where: {
                 id: req.body.idUsuario,
                 isDelete: false
             }
         });
-        const consult2 = await db.sesion.findOne({
+        const consult2 = await Sesion.findOne({
             where: {
                 id: req.body.idSesion,
                 isActive: true,
@@ -68,24 +67,41 @@ exports.actualizacionCerrandoSesion = async (req, res) => {
         if (consult) {
             if(consult2){
                 //actualizar el arqueo
-                const arqueo = await db.arqueo.update({
+                const arqueo = await Arqueo.update({
                     fechaFinal: new Date(),
-                    efectivoCierre: req.body.efectivoCierre,
-                    otrosPagos: req.body.otrosPagos,
-                    ventaCredito: req.body.ventaCredito,
-                    ventaTotal: req.body.ventaTotal,
-                    efectivoTotal: req.body.efectivoTotal,
-                }, {
+                    //sumar las ventas que su idSesion sea igual al idSesion que se esta cerrando
+                    efectivoCierre: db.factura.sum('totalFactura', {
                         where: {
-                            id: req.body.idArqueo
+                            idTipoPago: 1
                         }
-                    });
+                    }),
+                    otrosPagos: db.factura.sum('totalFactura', {
+                        where: {
+                            idTipoPago: 2
+                        }
+                    }),
+                    ventaCredito: db.factura.sum('totalFactura', {
+                        where: {
+                            idTipoPago: 3
+                        }
+                    }),
+                    ventaTotal: db.factura.sum('totalFactura', {
+                        where: {
+                            idTipoPago: 1 || 2 || 3 || 4
+                        }
+                    }),
+                    efectivoTotal: arqueo.efectivoApertura + arqueo.efectivoCierre
+                }, {
+                    where: {
+                        idSesion: req.body.idSesion
+                    }
+                });//termina el update
                 //validar que el arqueo se actualizo correctamente
                 if(arqueo){
                     res.status(200).json({
                         message: "Arqueo actualizado correctamente",
                         data: 
-                        await db.arqueo.findOne({
+                        await Arqueo.findOne({
                             where: {
                                 id: req.body.idArqueo
                             }
@@ -93,7 +109,7 @@ exports.actualizacionCerrandoSesion = async (req, res) => {
                     });
                 }
                 //actualizar la sesion
-                const sesion = await db.sesion.update({
+                const sesion = await sesion.update({
                     isActive: false
                 }, {
                     where: {
@@ -111,7 +127,7 @@ exports.actualizacionCerrandoSesion = async (req, res) => {
 
 exports.deleteArqueo = async (req, res) => {
     try {
-        const arqueo = await db.arqueo.update({
+        const arqueo = await Arqueo.update({
             isDelete: true
         }, {
             where: {
@@ -133,30 +149,30 @@ exports.deleteArqueo = async (req, res) => {
 
 exports.mostrarArqueo = async (req, res) => {
     try {
-        //mostrar arqueos que su isDelete sea false
-        const arqueos = await arqueo.findAll({
+        //mostrar arqueo que su isDelete sea false
+        const arqueo = await arqueo.findAll({
             where: {
                 isDelete: false
             }
         });
         //validar que el arqueo se mostro correctamente
-        if(arqueos){
+        if(arqueo){
             res.status(200).json({
-                message: "Arqueos mostrados correctamente",
-                data: arqueos
+                message: "arqueo mostrados correctamente",
+                data: arqueo
             });
         }
     } catch (error) {
         res.status(401).json({
-            message: "Error al mostrar arqueos" + error.message
+            message: "Error al mostrar arqueo" + error.message
         });
     }
 }
 
 exports.buscarPorFechaInicioFechaFinal = async (req, res) => {
     try {
-        //mostrar los arqueos que esten entre las fechas de inicio y final
-        const arqueos = await arqueo.findAll({
+        //mostrar los arqueo que esten entre las fechas de inicio y final
+        const arqueo = await arqueo.findAll({
             where: {
                 fechaInicio: {
                     [Op.between]: [`${fechaInicio}`, `${fechaFinal}`]
@@ -165,40 +181,40 @@ exports.buscarPorFechaInicioFechaFinal = async (req, res) => {
             }
         });
         //validar que el arqueo se mostro correctamente
-        if(arqueos){        
+        if(arqueo){        
             res.status(200).json({
-                message: "Arqueos mostrados correctamente",
-                data: arqueos
+                message: "arqueo mostrados correctamente",
+                data: arqueo
             });
         } 
     } catch (error) {
         //enviar respuesta al cliente
         res.status(401).json({
-            message: "Error al buscar arqueos entre las fechas" + error.message
+            message: "Error al buscar arqueo entre las fechas" + error.message
         });
     }
 }//pendiente de terminar
 
 exports.buscarPorUsuario = async (req, res) => {
     try{
-        //buscar arqueos por usuario
-        const arqueos = await db.arqueo.findAll({
+        //buscar arqueo por usuario
+        const arqueo = await Arqueo.findAll({
             where: {
                 idUsuario: req.body.idUsuario,
                 isDelete: false
             }
         });
         //validar que el arqueo se mostro correctamente
-        if(arqueos){
+        if(arqueo){
             res.status(200).json({
-                message: "Arqueos mostrados correctamente",
-                data: arqueos
+                message: "arqueo mostrados correctamente",
+                data: arqueo
             });
         }
     } catch (error) {
         //enviar respuesta al cliente
         res.status(401).json({
-            message: "Error al buscar arqueos por usuario" + error.message
+            message: "Error al buscar arqueo por usuario" + error.message
         });
     }
 }
