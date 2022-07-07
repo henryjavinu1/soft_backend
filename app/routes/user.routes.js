@@ -9,5 +9,5 @@ module.exports = function(app) {
     );
     next();
   });
-  app.get("/api/user/",[authJwt.verifyToken],controller.bajauser);
+  app.post("/api/user/bajauser",[authJwt.verifyToken],controller.bajauser);
 };

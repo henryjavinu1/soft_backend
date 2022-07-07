@@ -43,7 +43,8 @@ require("./app/routes/manipularfactura.routes")(app);
 require("./app/routes/arqueo.routes")(app);
 require("./app/routes/detalleventa.routes")(app);
 require("./app/routes/ventas.routes")(app);
-require("./app/routes/tipopago.routes")(app);
+//require("./app/routes/tipopago.routes")(app);
+require("./app/routes/cliente.routes")(app);
 // require("./app/routes/permisos.routes")(app);
 
 
