@@ -12,6 +12,18 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.DECIMAL,
             allowNull: false,
         },
+        puntoDeEmision: { 
+            type: Sequelize.STRING,
+            allowNull: false,
+        },
+        establecimiento: { 
+            type: Sequelize.STRING,
+            allowNull: false,
+        },
+        tipo: { 
+            type: Sequelize.STRING,
+            allowNull: false,
+        },
         isDelete: {
             type: Sequelize.BOOLEAN,
             allowNull: false,  //no permite valores nulos

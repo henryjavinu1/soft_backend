@@ -173,16 +173,18 @@ exports.convertirString = async (req, res) => {
                 message: "No hay talonarios activos"
             });
         } else {
+            //redirigir venta de generar venta
             const idDelTalonario = await db.numero.max('idTalonario');
             const numero = await db.numero.max('correlativo');
             if ( numero == null) {
                 message: "No hay facturas"
                 const numeroFactura = await talonario.rangoInicialFactura;
+                var pEmision = '001';	
                 //Ingresar por defecto o manualmente... Solo colocar req.body.numero o lo que
-                const insert = await db.numero.create({ puntoEmision: '001', establecimiento: '01', 
+                const insert = await db.numero.create({ puntoEmision: pEmision, establecimiento: '01', 
                 tipo: '001', correlativo: numeroFactura, 
                 //concatenar puntoEmision , establecimiento , tipo y correlativo
-                numero: '001'+'-' + '01' +'-'+ '001'+'-' + numeroFactura,
+                numero: pEmision+'-' + '01' +'-'+ '001'+'-' + numeroFactura,
                 idTalonario: talonario.idTalonario });
                 return res.status(200).send({
                     numeroFactura: numeroFactura,
@@ -203,46 +205,14 @@ exports.convertirString = async (req, res) => {
                         idTalonario: talonario.idTalonario });
                         return res.status(200).send(numeroFactura)
                     }else{
-                        if(num < 100){
-                            const numeroFactura = "000000" + num;
-                            const insert = await db.numero.create({ puntoEmision: '001', establecimiento: '01', tipo: '001', correlativo: numeroFactura, numero: '001'+'-' + '01' +'-'+ '001'+'-' + numeroFactura,idTalonario: talonario.idTalonario });
-                            return res.status(200).send(numeroFactura)
-                        }else{
-                            if(num < 999){
-                                const numeroFactura = "00000" + num;
-                                const insert = await db.numero.create({ puntoEmision: '001', establecimiento: '01', tipo: '001', correlativo: numeroFactura,  numero: '001'+'-' + '01' +'-'+ '001'+'-' + numeroFactura,idTalonario: talonario.idTalonario });
-                                return res.status(200).send(numeroFactura)
-                            }else{
-                                if(num < 9999){
-                                    const numeroFactura = "0000" + num;
-                                    const insert = await db.numero.create({ puntoEmision: '001', establecimiento: '01', tipo: '001', correlativo: numeroFactura,  numero: '001'+'-' + '01' +'-'+ '001'+'-' + numeroFactura,idTalonario: talonario.idTalonario });
-                                    return res.status(200).send(numeroFactura)
-                                }else{
-                                    if(num < 99999){
-                                        const numeroFactura = "000" + num;
-                                        const insert = await db.numero.create({ puntoEmision: '001', establecimiento: '01', tipo: '001', correlativo: numeroFactura,  numero: '001'+'-' + '01' +'-'+ '001'+'-' + numeroFactura,idTalonario: talonario.idTalonario });
-                                        return res.status(200).send(numeroFactura)
-                                    }else{
-                                        if(num < 999999){
-                                            const numeroFactura = "00" + num;
-                                            const insert = await db.numero.create({ puntoEmision: '001', establecimiento: '01', tipo: '001', correlativo: numeroFactura,  numero: '001'+'-' + '01' +'-'+ '001'+'-' + numeroFactura,idTalonario: talonario.idTalonario });
-                                            return res.status(200).send(numeroFactura)
-                                        }else {
-                                            if(num < 9999999){
-                                                const numeroFactura = "0" + num;
-                                                const insert = await db.numero.create({ puntoEmision: '001', establecimiento: '01', tipo: '001', correlativo: numeroFactura,  numero: '001'+'-' + '01' +'-'+ '001'+'-' + numeroFactura,idTalonario: talonario.idTalonario });
-                                            return res.status(200).send(numeroFactura)
-                                            }else{
-                                                const numeroFactura =  num;
-                                                const insert = await db.numero.create({ puntoEmision: '001', establecimiento: '01', tipo: '001', correlativo: numeroFactura,  numero: '001'+'-' + '01' +'-'+ '001'+'-' + numeroFactura,idTalonario: talonario.idTalonario });
-                                                return res.status(200).send(numeroFactura)
-                        } 
-                    }
-                }
-            }
-        }
 
-    }
+                        var numeroString = num.toString();
+                        for(var i =numeroString.length; i<8; i++){
+                            numeroString = "0" + numeroString;
+                        }
+                        numeroFactura = numeroString;
+                        const insert = await db.numero.create({ puntoEmision: '001', establecimiento: '01', tipo: '001', correlativo: numeroFactura, numero: '001'+'-' + '01' +'-'+ '001'+'-' + numeroFactura,idTalonario: talonario.idTalonario });
+                        return res.status(200).send(numeroFactura);
 }
             } else {
                 message: "hi"
