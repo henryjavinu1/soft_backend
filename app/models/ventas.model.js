@@ -12,6 +12,7 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.DECIMAL,
             allowNull: false,
         },
+        
         isDelete: {
             type: Sequelize.BOOLEAN,
             allowNull: false,  //no permite valores nulos

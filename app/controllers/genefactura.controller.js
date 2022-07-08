@@ -1,6 +1,6 @@
 const db = require("../models/puntoDeVentas");
 const config = require("../config/auth.config");
-const { venta, talonario, tipopago, detalleventa, numero } = require("../models/puntoDeVentas");
+const { venta, talonario, tipopago, detalleventa, numero, user, empleado } = require("../models/puntoDeVentas");
 const detalleventaModel = require("../models/detalleventa.model");
 const User = db.user;
 const Role = db.role;
@@ -16,33 +16,59 @@ const Op = db.Sequelize.Op;
 exports.insertFactura = async (req, res) => {
     console.log(req.body.numfactura);
     try {
+        const ventas = await db.ventas.findOne({
+            where: {
+                id: req.body.idVenta,
+                isDelete: false
+                },
+                include: [ {
+                    model: db.cliente,
+                }, {
+                    model: db.detalleventa,  
+                }, {
+                    model: db.user, 
+                    include: [{
+                        model: db.empleado,
+                      }]  
+                }]
+            });              
+        const isvTotal = await ventas.totalISV;
+        const descuentoVentas = await ventas.totalDescuentoVenta;
+        const totalventaa = await ventas.totalVenta;
         const numero = await db.numero.findOne({ order: [["numero", "DESC"]], });
-        //SoloPara ejemplo no funcionan porque no existen los atributos en modelo ventas
-        const isvTotal = await db.detalleventa.sum('isvAplicado'); //Falta agg estos atributos en el modelo detalleVenta
-        const descuentoVentas = await db.detalleventa.sum('descuentoAplicado'); //Falta agg atributos en modelo
-         //Subtotal + isv - descuento
-        const totalFacturaa = await db.detalleventa.sum('totalDetalleVenta');
+        //crear condicion para saber cuando generar un subTotal 0 o Float vistas
+       /* if(subTotalExoneradoSistema==0){
+            const subTotalExoneradoo = 0.00
+            const subTotal = parseFloat(isvTotal) + parseFloat(totalventaa) - parseFloat(descuentoVentas);
+            
+        }else{
+            const subTotalExoneradoo = parseFloat(totalventaa) - parseFloat(descuentoVentas);
+            const subTotal = 0.00
+        }*/
         //Falta conectar bien ventas para generar calculos dependiendo de los atributos de ventas
+        const subTotalExoneradoo = 0.00
+        const subTotal = parseFloat(isvTotal) + parseFloat(totalventaa) - parseFloat(descuentoVentas);
         const insertfactura = await db.factura.create({
                 numeroFactura: numero.numero,
                 fechaFactura: new Date(),
                 descuentoTotalFactura: descuentoVentas,
                 isvTotalFactura: isvTotal,
-                totalFactura: totalFacturaa,
+                totalFactura: totalventaa,
+                subTotalExonerado: subTotalExoneradoo,
                 //Subtotal exonerado o excento
-                subTotalFactura: req.body.subTotalFactura,
+                subTotalFactura: subTotal, //HACER QUE EL SUBTOTAL SEA EXONERADO o no desde el front 0 o float
                 cantidadLetras: req.body.cantidadLetras, //necesito una funcion para generar cantidad de letras
                 estado: true,
                 idTipoPago: req.body.idTipoPago,
-                idCliente: req.body.idCliente,
-                idUsuario: req.body.userId,
-                idVenta: req.body.idVenta,
+                idCliente: ventas.idCliente,
+                idUsuario: ventas.idUsuario,
+                idEmpleado: req.body.idEmpleado,
+                idVenta: ventas.id,
                 idTalonario: numero.idTalonario,
                 idNumero: numero.id,
         });
         return res.status(200).send({
             message: "Factura creada",
-            factura: factura
         });
     } catch (error) {
         return res.status(500).send({
@@ -84,6 +110,7 @@ exports.findVentaDetalle = async (req, res) => {
                                 message: "Los detallesventa no existe"
                             });
                             } else {
+                                
                                 return res.status(200).send({
                                 //Como obtener datos especificos de un modelo
                                 message: "La venta Existe",
@@ -96,8 +123,11 @@ exports.findVentaDetalle = async (req, res) => {
                                 totalVenta: ventas.totalVenta,
                                 totalISV: ventas.totalISV,
                                 totalDescuentoVenta: ventas.totalDescuentoVenta,
+                                puntoDeEmision: ventas.puntoDeEmision,
+                                establecimiento: ventas.establecimiento,
+                                tipo: ventas.tipo,
                                 detalleventa: detalleventa,
-                                });            
+                                });           
                  } 
                 }
     } catch (error) {
@@ -130,17 +160,35 @@ exports.findTipoPago = async (req, res) => {
         });
     }
 }
-//Buscar maximo en una tabla en un atributo especifico apoyp
+//Buscar maximo en una tabla en un atributo especifico apoyo
 exports.buscar = async (req, res) => {
    // const numero1 = await db.factura.max('numeroFactura');
     //const numero2 = await db.numero.max('numero');
     //const idDelTalonario = await db.numero.max('idTalonario');
-    const numero = await db.numero.findOne({
+    //const subtotaluno = db.ventas.totalVenta + db.ventas.isvTotal
+    const ventas = await db.ventas.findOne({
+        where: {
+            id: req.body.idVenta,
+            isDelete: false
+            },
+                    });
+                    const isvTotal = await ventas.totalISV;
+        const descuentoVentas = await ventas.totalDescuentoVenta;
+        const totalventaa = await ventas.totalVenta;
+    const subtotaluno = parseFloat(isvTotal) + parseFloat(totalventaa) -parseFloat(descuentoVentas)/*
+const pEmision = await ventas.puntoDeEmision;
+const estableci = await ventas.establecimiento;
+const tipoo = await ventas.tipo;*/
+   /* const numero = await db.numero.findOne({
         order: [["numero", "DESC"]],
-    });
+    });*/
 
     return res.status(200).send({
-        numero: numero.numero,
+       // numero: numero.numero,
+       isvTotal:parseFloat(isvTotal) ,
+       
+        subtotaluno: subtotaluno
+
     });
 }
 //Ejemplo traer datos de una tabla pero solo los de un atributo appoyo
@@ -173,16 +221,26 @@ exports.convertirString = async (req, res) => {
                 message: "No hay talonarios activos"
             });
         } else {
+            //redirigir venta de generar venta
             const idDelTalonario = await db.numero.max('idTalonario');
             const numero = await db.numero.max('correlativo');
+            const ventas = await db.ventas.findOne({
+                    where: {
+                        id: req.body.idVenta,
+                        isDelete: false
+                        },
+                                });
+            const pEmision = await ventas.puntoDeEmision;
+            const estableci = await ventas.establecimiento;
+            const tipoo = await ventas.tipo;
             if ( numero == null) {
                 message: "No hay facturas"
                 const numeroFactura = await talonario.rangoInicialFactura;
                 //Ingresar por defecto o manualmente... Solo colocar req.body.numero o lo que
-                const insert = await db.numero.create({ puntoEmision: '001', establecimiento: '01', 
-                tipo: '001', correlativo: numeroFactura, 
+                const insert = await db.numero.create({ puntoEmision: pEmision, establecimiento: estableci, 
+                tipo: tipoo, correlativo: numeroFactura, 
                 //concatenar puntoEmision , establecimiento , tipo y correlativo
-                numero: '001'+'-' + '01' +'-'+ '001'+'-' + numeroFactura,
+                numero: pEmision +'-' + estableci  +'-'+  tipoo +'-' + numeroFactura,
                 idTalonario: talonario.idTalonario });
                 return res.status(200).send({
                     numeroFactura: numeroFactura,
@@ -195,64 +253,42 @@ exports.convertirString = async (req, res) => {
                     //const numero = req.body.numero;
                     const numeroFa = parseInt(numero);
                     const num = numeroFa + 1;
-                    //ver si num es MENOR que 10
-                    if (num < 10) {
-                        const numeroFactura = "0000000" + num;
-                        const insert = await db.numero.create({ puntoEmision: '001', establecimiento: '01', 
-                        tipo: '001', correlativo: numeroFactura,  numero: '001'+'-' + '01' +'-'+ '001'+'-' + numeroFactura,
-                        idTalonario: talonario.idTalonario });
-                        return res.status(200).send(numeroFactura)
-                    }else{
-                        if(num < 100){
-                            const numeroFactura = "000000" + num;
-                            const insert = await db.numero.create({ puntoEmision: '001', establecimiento: '01', tipo: '001', correlativo: numeroFactura, numero: '001'+'-' + '01' +'-'+ '001'+'-' + numeroFactura,idTalonario: talonario.idTalonario });
+                    if (num <= talonario.rangoFinalFactura) {
+                                  //ver si num es MENOR que 10
+                        if (num < 10) {
+                            const numeroFactura = "0000000" + num;
+                            const insert = await db.numero.create({ puntoEmision: pEmision, establecimiento: estableci, 
+                                tipo: tipoo, correlativo: numeroFactura, 
+                            //concatenar puntoEmision , establecimiento , tipo y correlativo
+                                numero: pEmision +'-' + estableci  +'-'+  tipoo +'-' + numeroFactura,
+                                idTalonario: talonario.idTalonario });
                             return res.status(200).send(numeroFactura)
                         }else{
-                            if(num < 999){
-                                const numeroFactura = "00000" + num;
-                                const insert = await db.numero.create({ puntoEmision: '001', establecimiento: '01', tipo: '001', correlativo: numeroFactura,  numero: '001'+'-' + '01' +'-'+ '001'+'-' + numeroFactura,idTalonario: talonario.idTalonario });
-                                return res.status(200).send(numeroFactura)
-                            }else{
-                                if(num < 9999){
-                                    const numeroFactura = "0000" + num;
-                                    const insert = await db.numero.create({ puntoEmision: '001', establecimiento: '01', tipo: '001', correlativo: numeroFactura,  numero: '001'+'-' + '01' +'-'+ '001'+'-' + numeroFactura,idTalonario: talonario.idTalonario });
-                                    return res.status(200).send(numeroFactura)
-                                }else{
-                                    if(num < 99999){
-                                        const numeroFactura = "000" + num;
-                                        const insert = await db.numero.create({ puntoEmision: '001', establecimiento: '01', tipo: '001', correlativo: numeroFactura,  numero: '001'+'-' + '01' +'-'+ '001'+'-' + numeroFactura,idTalonario: talonario.idTalonario });
-                                        return res.status(200).send(numeroFactura)
-                                    }else{
-                                        if(num < 999999){
-                                            const numeroFactura = "00" + num;
-                                            const insert = await db.numero.create({ puntoEmision: '001', establecimiento: '01', tipo: '001', correlativo: numeroFactura,  numero: '001'+'-' + '01' +'-'+ '001'+'-' + numeroFactura,idTalonario: talonario.idTalonario });
-                                            return res.status(200).send(numeroFactura)
-                                        }else {
-                                            if(num < 9999999){
-                                                const numeroFactura = "0" + num;
-                                                const insert = await db.numero.create({ puntoEmision: '001', establecimiento: '01', tipo: '001', correlativo: numeroFactura,  numero: '001'+'-' + '01' +'-'+ '001'+'-' + numeroFactura,idTalonario: talonario.idTalonario });
-                                            return res.status(200).send(numeroFactura)
-                                            }else{
-                                                const numeroFactura =  num;
-                                                const insert = await db.numero.create({ puntoEmision: '001', establecimiento: '01', tipo: '001', correlativo: numeroFactura,  numero: '001'+'-' + '01' +'-'+ '001'+'-' + numeroFactura,idTalonario: talonario.idTalonario });
-                                                return res.status(200).send(numeroFactura)
-                        } 
-                    }
-                }
-            }
-        }
 
-    }
+                            var numeroString = num.toString();
+                            for(var i =numeroString.length; i<8; i++){
+                                numeroString = "0" + numeroString;
+                            }
+                            numeroFactura = numeroString;
+                            const insert = await db.numero.create({ puntoEmision: pEmision, establecimiento: estableci, 
+                                tipo: tipoo, correlativo: numeroFactura, 
+                                numero: pEmision +'-' + estableci  +'-'+  tipoo +'-' + numeroFactura,
+                                idTalonario: talonario.idTalonario });                        return res.status(200).send(numeroFactura);
 }
+                    } else {
+                        return res.status(404).send({
+                            message: "No hay mas numeros de talonario disponibles"
+                        });
+                    }
             } else {
                 message: "hi"
                 const numeroFactura = await talonario.rangoInicialFactura;
                 //Ingresar por defecto o manualmente... Solo colocar req.body.numero o lo que
-                const insert = await db.numero.create({ puntoEmision: '001', establecimiento: '01', 
-                tipo: '001', correlativo: numeroFactura, 
-                //concatenar puntoEmision , establecimiento , tipo y correlativo
-                numero: '001'+'-' + '01' +'-'+ '001'+'-' + numeroFactura,
-                idTalonario: talonario.idTalonario });
+                const insert = await db.numero.create({ puntoEmision: pEmision, establecimiento: estableci, 
+                    tipo: tipoo, correlativo: numeroFactura, 
+                    //concatenar puntoEmision , establecimiento , tipo y correlativo
+                    numero: pEmision +'-' + estableci  +'-'+  tipoo +'-' + numeroFactura,
+                    idTalonario: talonario.idTalonario });
                 return res.status(200).send({
                     numeroFactura: numeroFactura,
                     hola: "se inserto",
