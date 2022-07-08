@@ -21,34 +21,27 @@ exports.insertarTipoPago = async (req, res) => {
     }
 }
 //Actualizar TipoPago
-exports.actualizarTipoPago = async (req, res)=> {
-    try {
-        const actualizarTipoPago = await TipoPago.update( {
-            where: {
-                [Op.and]: [{ idTipoPago: req.body.idTipoPago}, 
-                           { isDelete: false}], 
-            } ,
-            tipoDePago : req.body.tipoDePago,
-            descripcionTipoPago: req.body.descripcionTipoPago 
-        });
+exports.updateTipoPago = async (req, res) => {
+            try {
+                const tipopago = await TipoPago.update({
+                    tipoDePago: req.body.tipoDePago,
+                    descripcionTipoPago: req.body.descripcionTipoPago,
+                    isDelete: false
+                } , {
+                    where: {
+                        idTipoPago: req.body.idTipoPago
+                    }
+                });
+                return res.status(200).send({
+                    message: "Tipo de pago actualizado."
+                });
         
-        if (!actualizarTipoPago) {
-            return res.status(404).send({
-                message: "El tipo de pago no existe"
-            });
-        } else {
-            return res.status(404).send({
-                message: "El tipo de pago fue actualizado",
-                actualizarTipoPago : actualizarTipoPago
-            });
-        }
-    } catch (error) {
-       
-        return res.status(500).send({
-            message: "Ocurrio un error" + error
-        });
-    }
-}
+            } catch (error) {
+                return res.status(500).send({
+                    message: "Ocurrio un error "  + error
+                });
+            }
+            } 
 
 //Buscar tipo de pago MostrarTipo de pagos 
 exports.findTipoPago = async (req, res) => {
@@ -75,14 +68,13 @@ exports.findTipoPago = async (req, res) => {
         });
     }
 }
-//Eliminar Tipo Pago isDelete: false == isDelete: true
-exports.deleteTipoPago = async (req, res) => {
+//Buscar por id  revisar
+exports.findTipoPagoid = async (req, res) => {
     try {
-        const tipopago = await db.tipopago.findOne({
-           
+        const tipopago = await db.tipopago.findAll({
             where: {
-                idTipoPago: req.body.idTipoPago, 
-                isDelete: false 
+                idTipoPago: req.body.idTipoPago,
+                isDelete: false,
             }
         });
         if (!tipopago) {
@@ -90,14 +82,9 @@ exports.deleteTipoPago = async (req, res) => {
                 message: "El tipo de pago no existe"
             });
         } else {
-            const updatedTipoPago = await db.tipopago.update(
-                {
-                  isDelete: true,
-                },
-
-              );
-              return res.status(200).send({
-                message: "Se elimino correctamente"
+            return res.status(200).send({
+                message: "El tipo de pago existe",
+                tipoDePago: tipopago
             });
         }
     } catch (error) {
@@ -107,4 +94,23 @@ exports.deleteTipoPago = async (req, res) => {
         });
     }
 }
+//Eliminar Tipo Pago isDelete: false == isDelete: true
+exports.deleteTipoPago = async (req, res) => {
+    try {
+        const tipopago = await TipoPago.update({
+            isDelete: true
+        } , {
+            where: {
+                idTipoPago: req.body.idTipoPago
+            }
+        });
+        return res.status(200).send({
+            message: "Tipo de pago eliminado."
+        });
 
+    } catch (error) {
+        return res.status(500).send({
+            message: "Ocurrio un error "  + error
+        });
+    }
+}
