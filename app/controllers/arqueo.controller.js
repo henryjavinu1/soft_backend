@@ -74,8 +74,9 @@ exports.actualizacionCerrandoSesion = async (req, res) => {
         //si el id del usuario y la sesion iniciada estan en la base de datos
         if (consult) {
             if(consult2){
-                //actualizar el arqueo
-                const arqueo = await sequelize.query(`UPDATE Arqueos SET    efectivoCierre = (SELECT SUM(totalFactura) 
+                if(consult3){
+                  //actualizar el arqueo
+                  const arqueo = await sequelize.query(`UPDATE Arqueos SET    efectivoCierre = (SELECT SUM(totalFactura) 
                                                                                              FROM facturas 
                                                                                              WHERE idTipoPago = 1),
                                                                             otrosPagos = (SELECT SUM(totalFactura)
@@ -89,33 +90,39 @@ exports.actualizacionCerrandoSesion = async (req, res) => {
                                                                                           WHERE idTipoPago = 1 OR idTipoPago = 2 OR idTipoPago = 3 OR idTipoPago = 4),
                                                                             efectivoTotal = (SELECT SUM(efectivoApertura + efectivoCierre)
                                                                                              FROM Arqueos)
-                                            WHERE id = ${req.body.idArqueo}`)
-                const fe = await Arque.update({
-                    fechaFinal: new Date()
-                }, {
-                    where: {
-                        id: req.body.idArqueo
+                                            WHERE id = ${req.body.idArqueo}`);
+                  const fe = await Arque.update(
+                    {
+                      fechaFinal: new Date(),
+                    },
+                    {
+                      where: {
+                        id: req.body.idArqueo,
+                      },
                     }
-                });
-                //validar que el arqueo se actualizo correctamente
-                if(arqueo && fe){
+                  );
+                  //validar que el arqueo se actualizo correctamente
+                  if (arqueo && fe) {
                     res.status(200).json({
-                        message: "Arqueo actualizado correctamente",
-                        data: 
-                        await Arque.findOne({
-                            where: {
-                                id: req.body.idArqueo
-                            }
-                        })
+                      message: "Arqueo actualizado correctamente",
+                      data: await Arque.findOne({
+                        where: {
+                          id: req.body.idArqueo,
+                        },
+                      }),
                     });
                     //actualizar la sesion
-                     Sesi.update({
-                        isActive: false
-                    }, {
+                    Sesi.update(
+                      {
+                        isActive: false,
+                      },
+                      {
                         where: {
-                            id: req.body.idSesion
-                        }
-                    });
+                          id: req.body.idSesion,
+                        },
+                      }
+                    );
+                  }
                 }
             }
         }
