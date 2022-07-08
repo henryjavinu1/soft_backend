@@ -72,6 +72,5 @@ db.role.belongsToMany(db.permiso, {
   foreignKey: "idRol",
   otherKey: "idPermiso"
 });
-////////////////////////////////////////////
 
 module.exports = db;
