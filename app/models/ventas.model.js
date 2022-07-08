@@ -17,7 +17,19 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.BOOLEAN,
             allowNull: false,  //no permite valores nulos
             defaultValue: false //establece el valor por defecto en false
-        }
+        },
+        puntoDeEmision: {       //donde se esta emitiendo
+            type: Sequelize.STRING,
+          //  allowNull: false,
+        },
+        establecimiento: {  //establecimiento en que se genera la venta
+            type: Sequelize.STRING,
+        //    allowNull: false, 
+        },
+        tipo: {         //tipo de documento que se va a generar por esa venta
+            type: Sequelize.STRING,
+            allowNull: false,
+        } 
     });
     return Venta;
 };
