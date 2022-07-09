@@ -26,7 +26,7 @@ const isPermisos = (permisos) => {
         raw: true,
         where: {
           idRol : user.idRol,
-          idPermiso: 2
+          idPermiso: permisos
         }
       })
   
