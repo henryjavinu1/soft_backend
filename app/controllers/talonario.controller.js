@@ -1,15 +1,14 @@
+const { request, response } = require('express');
 const db = require("../models/puntoDeVentas");
-const config = require("../config/auth.config");
 const Talonario = db.talonario;
-const Op = db.Sequelize.Op;
 
-exports.getTalonarios = async (req, res) => {
+exports.getTalonarios = async (req = request, res = response) => {
     try {
-        const talonarios = Talonario.findAll({
+        const talonarios = await Talonario.findAll({
             
         });
         return res.status(200).send({
-            talonarios: talonarios,
+            talonarios,
         });
     } catch (error) {
         return res.status(500).send({
@@ -18,15 +17,16 @@ exports.getTalonarios = async (req, res) => {
     }
 }
 
-exports.createTalonario = async (req, res) => {
+exports.createTalonario = async (req = request, res = response) => {
     try {
         const talonario = await Talonario.create({
-            rangoInicialFactura: req.body.rangoInicialFactura,
-            rangoFinalFactura: req.body.rangoFinalFactura,
-            cai: req.body.cai,
-            fechaLimiteEmision: req.body.fechaLimiteEmision,
-            active: req.body.active
+            rangoInicialFactura: req.query.rangoInicialFactura,
+            rangoFinalFactura: req.query.rangoFinalFactura,
+            cai: req.query.cai,
+            fechaLimiteEmision: req.query.fechaLimiteEmision,
+            active: req.query.active
         });
+        console.log(talonario);
         return res.status(200).send(talonario);
     } catch (error) {
         return res.status(500).send({
@@ -35,18 +35,19 @@ exports.createTalonario = async (req, res) => {
     }
 }
 
-exports.updateTalonario = async (req, res) => {
+exports.updateTalonario = async (req = request, res = response) => {
     try {
         const talonario = await Talonario.update({
-            rangoInicialFactura: req.body.rangoInicialFactura,
-            rangoFinalFactura: req.body.rangoFinalFactura,
-            cai: req.body.cai,
-            fechaLimiteEmision: req.body.fechaLimiteEmision,
-            active: req.body.active
+            rangoInicialFactura: req.query.rangoInicialFactura,
+            rangoFinalFactura: req.query.rangoFinalFactura,
+            cai: req.query.cai,
+            fechaLimiteEmision: req.query.fechaLimiteEmision,
+            active: req.query.active
         },{
-            where:
-             idTalonario = req.body.idTalonario, 
-         });
+            where: {
+                idTalonario: req.query.idTalonario,
+            }
+        });
         return res.status(200).send(talonario);
     } catch (error) {
         return res.status(500).send({
@@ -55,14 +56,15 @@ exports.updateTalonario = async (req, res) => {
     }
 }
 
-exports.deleteTalonario = async (req, res) => {
+exports.deleteTalonario = async (req = request, res = response) => {
     try {
         const talonario = await Talonario.update({
             isDelete: true
         },{
-            where:
-             idTalonario = req.body.idTalonario, 
-         });
+            where: {
+                idTalonario: req.query.idTalonario,
+            }
+        });
         return res.status(200).send(talonario);
     } catch (error) {
         return res.status(500).send({
