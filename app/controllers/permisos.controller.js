@@ -9,7 +9,7 @@ const Op = db.Sequelize.Op;
 
 exports.creapermiso = async (req, res) => {
     try {
-        const permiso = await Permiso.create({
+        const permiso = await db.permiso.create({
             permiso: req.body.permiso,
             descripcion: req.body.descripcion, 
         });
@@ -25,7 +25,7 @@ exports.creapermiso = async (req, res) => {
 //BAJA PERMISO
 exports.bajapermiso = async (req, res) => {
     try {
-        const bajapermiso = await Permiso.update({
+        const bajapermiso = await db.permiso.update({
             IsDelete: true,
         });
         if (!bajapermiso){
@@ -48,7 +48,7 @@ exports.bajapermiso = async (req, res) => {
 //ACTUALIZACION DE PERMISO
 exports.updatepermiso = async (req, res) => {
     try {
-        const updatepermiso = await Permiso.update({
+        const updatepermiso = await db.permiso.update({
             permiso: req.body.rol,
             descripcion: req.body.descripcion,
         },{
@@ -68,6 +68,60 @@ exports.updatepermiso = async (req, res) => {
     catch (error) {
         return res.status(500).send({
             message: "Ocurrio un error"
+        });
+    }
+}
+
+// Consulta que me trae todos los permisos activos
+exports.buscapermiso = async (req, res) => {
+    try {
+        const buscapermiso = await db.permiso.findAll({
+            where: {
+                IsDelete: false,
+            }
+        });
+        if (!buscapermiso){
+            return res.status(404).send({
+                message: "No se encontraron permisos"
+            });
+        } else {
+            return res.status.send ({
+                message: "permisos encontrados",
+                permisos: buscapermiso
+            });
+        }
+
+
+    } catch (error){
+        return res.status(500).send({
+            message: "Error al intentar conectar al servidor"
+        });
+    }
+}
+
+// Consulta busca por nombre permiso
+exports.buscapermisoname = async (req, res) => {
+    try {
+        const buscapermisoname = await db.permiso.findAll({
+            where: {
+                IsDelete: false,
+            }
+        });
+        if (!buscapermisoname){
+            return res.status(404).send({
+                message: "No se encontro permiso"
+            });
+        } else {
+            return res.status.send ({
+                message: "permiso encontrado",
+                permisos: buscapermisoname
+            });
+        }
+
+
+    } catch (error){
+        return res.status(500).send({
+            message: "Error al intentar conectar al servidor"
         });
     }
 }
