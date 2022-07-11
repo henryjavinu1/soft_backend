@@ -1,5 +1,5 @@
 const { request, response } = require('express');
-const { Op, DataTypes } = require("sequelize");
+const { Op, DataTypes, Model } = require("sequelize");
 const db = require('../models/puntoDeVentas');
 const { validarCamposCliente } = require('../helpers/cliente.helper');
 const Cliente = db.cliente;
@@ -38,13 +38,25 @@ exports.buscarCliente = async (req = request, res = response) => {
                 }
             },
         });
+        const resp = {
+            id: clienteBuscado.id,
+            dni: clienteBuscado.dni,
+            email: clienteBuscado.email,
+            rtn: clienteBuscado.rtn,
+            nombreCliente: clienteBuscado.nombreCliente,
+            direccion: clienteBuscado.direccion,
+            telefonoCliente: clienteBuscado.telefonoCliente,
+            isDelete: clienteBuscado.isDelete,
+            createdAt: clienteBuscado.createdAt,
+            updatedAt: clienteBuscado.updatedAt
+        }
         if (!clienteBuscado) {
             return res.status(404).json({
                 msg: "El Dni del cliente no existe"
             })
         } else {
             return res.status(200).json({
-                clienteBuscado
+                resp
             });
         }
     } catch (error) {
@@ -71,8 +83,20 @@ exports.buscarClientePorNombre = async (req = request, res = response) => {
                 msg: "El cliente no existe"
             })
         }
+        const resp = {
+            id: clienteBuscado.id,
+            dni: clienteBuscado.dni,
+            email: clienteBuscado.email,
+            rtn: clienteBuscado.rtn,
+            nombreCliente: clienteBuscado.nombreCliente,
+            direccion: clienteBuscado.direccion,
+            telefonoCliente: clienteBuscado.telefonoCliente,
+            isDelete: clienteBuscado.isDelete,
+            createdAt: clienteBuscado.createdAt,
+            updatedAt: clienteBuscado.updatedAt
+        }
         return res.status(200).json({
-            clienteBuscado
+            resp
         });
     } catch (error) {
         console.log(error);
@@ -92,8 +116,20 @@ exports.traerTodosLosClientes = async (req = request, res = response) => {
                 msg: "No hay ningun cliente creado"
             })
         }
+        const resp = {
+            id: clienteBuscado.id,
+            dni: clienteBuscado.dni,
+            email: clienteBuscado.email,
+            rtn: clienteBuscado.rtn,
+            nombreCliente: clienteBuscado.nombreCliente,
+            direccion: clienteBuscado.direccion,
+            telefonoCliente: clienteBuscado.telefonoCliente,
+            isDelete: clienteBuscado.isDelete,
+            createdAt: clienteBuscado.createdAt,
+            updatedAt: clienteBuscado.updatedAt
+        }
         return res.status(200).json({
-            todoslosClientes
+            resp
         })
     } catch (error) {
         console.log(error);
