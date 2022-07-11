@@ -1,28 +1,29 @@
+const DataTypes = require('sequelize').DataTypes;
 module.exports = (sequelize, Sequelize) => {
     const Empleado = sequelize.define("empleados", {
       nombre: {
         type: Sequelize.STRING,
-        allowNull: false 
+        allowNull: false, 
       },
       apellido: {
         type: Sequelize.STRING,
-        allowNull: false 
+        allowNull: false, 
       },
       direccion: {
         type: Sequelize.STRING,
-        allowNull: true
+        allowNull: true,
       },
       telefono: {
         type: Sequelize.STRING,
-        allowNull: true
+        allowNull: true,
       },
       fechaNacimiento: {
-        type: Sequelize.STRING,
-        allowNull: true
+        type: DataTypes.DATEONLY,
+        allowNull: true,
       },
       sexo: {
         type: Sequelize.STRING(1),
-        allowNull: false
+        allowNull: false,
       },
       isDelete: {
         type: Sequelize.BOOLEAN,
