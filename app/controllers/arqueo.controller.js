@@ -76,7 +76,7 @@ exports.actualizacionCerrandoSesion = async (req, res) => {
             if(consult2){
                 if(consult3){
                     //actualizar el arqueo
-                    const arqueo = await sequelize.query(`UPDATE Arqueos SET    efectivoCierre = (SELECT SUM(totalFactura) 
+                    const arqueo = await sequelize.query(`UPDATE arqueos SET    efectivoCierre = (SELECT SUM(totalFactura) 
                                                                                                   FROM facturas 
                                                                                                   WHERE idTipoPago = 1),
                                                                                 otrosPagos = (SELECT SUM(totalFactura)
@@ -87,10 +87,13 @@ exports.actualizacionCerrandoSesion = async (req, res) => {
                                                                                                 WHERE idTipoPago = 3),
                                                                                 ventaTotal = (SELECT SUM(totalFactura)
                                                                                               FROM facturas
-                                                                                              WHERE idTipoPago = 1 OR idTipoPago = 2 OR idTipoPago = 3 OR idTipoPago = 4),
-                                                                                efectivoTotal = (SELECT SUM(efectivoApertura + efectivoCierre)
-                                                                                                 FROM Arqueos)
-                                                        WHERE id = ${req.body.idArqueo}`);
+                                                                                              WHERE idTipoPago = 1 OR idTipoPago = 2 OR idTipoPago = 3 OR idTipoPago = 4)
+                                                        WHERE arqueos.id = ${req.body.idArqueo} , AND arqueos.idSesion = ${req.body.idSesion}`);
+                    const arqueo2 = await sequelize.query(`UPDATE arqueos SET efectivoTotal = (SELECT SUM(efectivoApertura + efectivoCierre)
+                                                                                                FROM arqueos
+                                                                                                WHERE arqueos.id = ${req.body.idArqueo})
+                                                                                                WHERE arqueos.id = ${req.body.idArqueo}`);
+
                     const fe = await Arque.update({
                       fechaFinal: new Date(),
                     },{

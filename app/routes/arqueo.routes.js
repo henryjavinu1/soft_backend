@@ -13,7 +13,5 @@ module.exports = function(app) {
     app.post("/api/arqueo/mostrarArqueo", arqueo.mostrarArqueo);
     app.post("/api/arqueo/buscarPorFechaInicioFechaFinal", arqueo.buscarPorFechaInicioFechaFinal);
     app.post("/api/arqueo/buscarPorUsuario", arqueo.buscarPorUsuario);
-    app.get("/api/arqueo/createArqueo", arqueo.createArqueo);
-    app.get("/api/arqueo/mostrarArqueo", arqueo.mostrarArqueo);
 
 }
