@@ -12,4 +12,6 @@ module.exports = function(app) {
   app.post("/api/permisos/create",[authJwt.verifyToken], controller.creapermiso);//crea permiso agrega permiso y descripcion
   app.post("/api/permisos/baja",[authJwt.verifyToken], controller.bajapermiso);//baja permiso cambio el valor IsDelete a true
   app.post("/api/permisos/update",[authJwt.verifyToken], controller.updatepermiso);//Actualiza informacion permiso y descripcion 
+  app.post("/api/permisos/buscapermiso",[authJwt.verifyToken], controller.buscapermiso);//Trae todos los permisos
+  app.post("/api/permisos/buscapermisoname",[authJwt.verifyToken], controller.updatepermisoname);//Trae un permiso por nombre permiso 
 };
