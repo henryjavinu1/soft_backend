@@ -1,6 +1,5 @@
 const db = require("../models/puntoDeVentas");
 const config = require("../config/auth.config");
-const { permiso } = require("../models/puntoDeVentas");
 const Role = db.role;
 const Op = db.Sequelize.Op;
 
@@ -8,7 +7,7 @@ const Op = db.Sequelize.Op;
 
 exports.crearol = async (req, res) => {
     try {
-        const rol = await db.role.create({
+        const rol = await Role.create({
             rol: req.body.rol,
             descripcion: req.body.descripcion,
         });
@@ -24,7 +23,7 @@ exports.crearol = async (req, res) => {
 //Dando de Baja a Rol
 exports.bajarol = async (req, res) => {
     try {
-        const bajarol = await db.role.update({
+        const bajarol = await Role.update({
             IsDelete: true,
         });
         if (!bajarol){
@@ -46,7 +45,7 @@ exports.bajarol = async (req, res) => {
 
 exports.updaterol = async (req, res) => {
     try {
-        const updaterol = await db.role.update({
+        const updaterol = await Role.update({
             rol: req.body.rol,
             descripcion: req.body.descripcion,
         },{
@@ -73,7 +72,7 @@ exports.updaterol = async (req, res) => {
 // Consulta que me trae todos los roles activos
 exports.buscarol = async (req, res) => {
     try {
-        const buscarol = await db.role.findAll({
+        const buscarol = await Role.findAll({
             where: {
                 IsDelete: false,
             }
@@ -83,13 +82,11 @@ exports.buscarol = async (req, res) => {
                 message: "No se encontraron roles"
             });
         } else {
-            return res.status.send ({
+            return res.status(200).json({
                 message: "Roles encontrados",
-                Roles: buscarol
+                data: buscarol
             });
         }
-
-
     } catch (error){
         return res.status(500).send({
             message: "Error al intentar conectar al servidor"
@@ -100,10 +97,10 @@ exports.buscarol = async (req, res) => {
 // Consulta que me trae busqueda por nombre de rol
 exports.buscarolname = async (req, res) => {
     try {
-        const buscarolname = await db.role.findAll({
+        const buscarolname = await Role.findAll({
             where: {
+                rol: req.body.RolName,
                 IsDelete: false,
-                rol: req.body.rol,
             }
         });
         if (!buscarolname){
@@ -111,9 +108,9 @@ exports.buscarolname = async (req, res) => {
                 message: "No se encontraron roles"
             });
         } else {
-            return res.status.send ({
+            return res.status(200).json({
                 message: "Roles encontrados",
-                Roles: buscarolname
+                data: buscarolname
             });
         }
     } catch (error){

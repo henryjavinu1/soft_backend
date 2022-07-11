@@ -1,7 +1,5 @@
 const db = require("../models/puntoDeVentas");
 const config = require("../config/auth.config");
-const { permiso } = require("../models/puntoDeVentas");
-const { permiso } = require("../models/puntoDeVentas");
 const Permiso = db.permiso;
 const Op = db.Sequelize.Op;
 
@@ -9,7 +7,7 @@ const Op = db.Sequelize.Op;
 
 exports.creapermiso = async (req, res) => {
     try {
-        const permiso = await db.permiso.create({
+        const permiso = await Permiso.create({
             permiso: req.body.permiso,
             descripcion: req.body.descripcion, 
         });
@@ -25,7 +23,7 @@ exports.creapermiso = async (req, res) => {
 //BAJA PERMISO
 exports.bajapermiso = async (req, res) => {
     try {
-        const bajapermiso = await db.permiso.update({
+        const bajapermiso = await Permiso.update({
             IsDelete: true,
         });
         if (!bajapermiso){
@@ -48,7 +46,7 @@ exports.bajapermiso = async (req, res) => {
 //ACTUALIZACION DE PERMISO
 exports.updatepermiso = async (req, res) => {
     try {
-        const updatepermiso = await db.permiso.update({
+        const updatepermiso = await Permiso.update({
             permiso: req.body.rol,
             descripcion: req.body.descripcion,
         },{
@@ -75,7 +73,7 @@ exports.updatepermiso = async (req, res) => {
 // Consulta que me trae todos los permisos activos
 exports.buscapermiso = async (req, res) => {
     try {
-        const buscapermiso = await db.permiso.findAll({
+        const buscapermiso = await Permiso.findAll({
             where: {
                 IsDelete: false,
             }
@@ -85,13 +83,11 @@ exports.buscapermiso = async (req, res) => {
                 message: "No se encontraron permisos"
             });
         } else {
-            return res.status.send ({
+            return res.status(200).json ({
                 message: "permisos encontrados",
-                permisos: buscapermiso
+                data: buscapermiso
             });
         }
-
-
     } catch (error){
         return res.status(500).send({
             message: "Error al intentar conectar al servidor"
@@ -102,8 +98,9 @@ exports.buscapermiso = async (req, res) => {
 // Consulta busca por nombre permiso
 exports.buscapermisoname = async (req, res) => {
     try {
-        const buscapermisoname = await db.permiso.findAll({
+        const buscapermisoname = await Permiso.findAll({
             where: {
+                permiso: req.body.PermisoName,
                 IsDelete: false,
             }
         });
@@ -112,13 +109,11 @@ exports.buscapermisoname = async (req, res) => {
                 message: "No se encontro permiso"
             });
         } else {
-            return res.status.send ({
+            return res.status(200).json({
                 message: "permiso encontrado",
-                permisos: buscapermisoname
+                data: buscapermisoname
             });
         }
-
-
     } catch (error){
         return res.status(500).send({
             message: "Error al intentar conectar al servidor"
