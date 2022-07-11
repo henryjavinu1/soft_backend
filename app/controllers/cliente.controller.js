@@ -55,9 +55,7 @@ exports.buscarCliente = async (req = request, res = response) => {
                 msg: "El Dni del cliente no existe"
             })
         } else {
-            return res.status(200).json({
-                resp
-            });
+            return res.status(200).send(resp);
         }
     } catch (error) {
         console.log(error);
@@ -95,9 +93,7 @@ exports.buscarClientePorNombre = async (req = request, res = response) => {
             createdAt: clienteBuscado.createdAt,
             updatedAt: clienteBuscado.updatedAt
         }
-        return res.status(200).json({
-            resp
-        });
+        return res.status(200).send(resp);
     } catch (error) {
         console.log(error);
         return res.status(500).send({
@@ -117,16 +113,16 @@ exports.traerTodosLosClientes = async (req = request, res = response) => {
             })
         }
         const resp = {
-            id: clienteBuscado.id,
-            dni: clienteBuscado.dni,
-            email: clienteBuscado.email,
-            rtn: clienteBuscado.rtn,
-            nombreCliente: clienteBuscado.nombreCliente,
-            direccion: clienteBuscado.direccion,
-            telefonoCliente: clienteBuscado.telefonoCliente,
-            isDelete: clienteBuscado.isDelete,
-            createdAt: clienteBuscado.createdAt,
-            updatedAt: clienteBuscado.updatedAt
+            id: todoslosClientes.id,
+            dni: todoslosClientes.dni,
+            email: todoslosClientes.email,
+            rtn: todoslosClientes.rtn,
+            nombreCliente: todoslosClientes.nombreCliente,
+            direccion: todoslosClientes.direccion,
+            telefonoCliente: todoslosClientes.telefonoCliente,
+            isDelete: todoslosClientes.isDelete,
+            createdAt: todoslosClientes.createdAt,
+            updatedAt: todoslosClientes.updatedAt
         }
         return res.status(200).json({
             resp
