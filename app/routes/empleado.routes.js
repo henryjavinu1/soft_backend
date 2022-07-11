@@ -12,7 +12,7 @@ module.exports = function(app) {
     app.post("/api/empleado/crearempleado", controller.crearEmpleado);
     app.post("/api/empleado/buscarempleado", controller.buscarEmpleado);
     app.post("/api/empleado/buscarEmpleadoPorNombre", controller.buscarEmpleadoPorNombre);
-    app.get("/api/empleado/traerTodosLosEmpleados", controller.traerTodosLosEmpleados); 
+    app.post("/api/empleado/traerTodosLosEmpleados", controller.traerTodosLosEmpleados); 
     app.put("/api/empleado/actualizarEmpleado", controller.actualizarEmpleado); 
     app.post("/api/empleado/eliminarEmpleado", controller.eliminarEmpleado);
 };

@@ -12,7 +12,7 @@ module.exports = function(app) {
     app.post("/api/cliente/crearcliente", controller.crearCliente);
     app.post("/api/cliente/buscarcliente", controller.buscarCliente);
     app.post("/api/cliente/buscarClientePorNombre", controller.buscarClientePorNombre);
-    app.get("/api/cliente/traerTodosLosClientes", controller.traerTodosLosClientes); 
+    app.post("/api/cliente/traerTodosLosClientes", controller.traerTodosLosClientes); 
     app.put("/api/cliente/actualizarCliente", controller.actualizarCliente); 
     app.post("/api/cliente/eliminarCliente", controller.eliminarCliente);
 };
