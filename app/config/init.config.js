@@ -128,6 +128,9 @@ exports.initial = async () => {
             totalISV: 0,
             totalVenta: 5432.23,
             totalDescuentoVenta: 0,
+            puntoDeEmision: "001",
+            establecimiento: "001",
+            tipo: "01",
             idSesion: 1,
             idUsuario: 1,
             idCliente: 1
@@ -136,6 +139,9 @@ exports.initial = async () => {
             totalISV: 500,
             totalVenta: 50000,
             totalDescuentoVenta: 5076.23,
+            puntoDeEmision: "001",
+            establecimiento: "001",
+            tipo: "01",
             idSesion: 1,
             idUsuario: 1,
             idCliente: 2
@@ -144,6 +150,9 @@ exports.initial = async () => {
             totalISV: 2300,
             totalVenta: 23000,
             totalDescuentoVenta: 2376.23,
+            puntoDeEmision: "001",
+            establecimiento: "001",
+            tipo: "01",
             idSesion: 1,
             idUsuario: 1,
             idCliente: 3
@@ -152,6 +161,9 @@ exports.initial = async () => {
             totalISV: 0,
             totalVenta: 5765.23,
             totalDescuentoVenta: 0,
+            puntoDeEmision: "001",
+            establecimiento: "001",
+            tipo: "01",
             idSesion: 1,
             idUsuario: 1,
             idCliente: 4
@@ -160,6 +172,9 @@ exports.initial = async () => {
             totalISV: 0,
             totalVenta: 5654.23,
             totalDescuentoVenta: 0,
+            puntoDeEmision: "001",
+            establecimiento: "001",
+            tipo: "01",
             idSesion: 1,
             idUsuario: 1,
             idCliente: 4
@@ -168,6 +183,9 @@ exports.initial = async () => {
             totalISV: 0,
             totalVenta: 4564.23,
             totalDescuentoVenta: 0,
+            puntoDeEmision: "001",
+            establecimiento: "001",
+            tipo: "01",
             idSesion: 1,
             idUsuario: 1,
             idCliente: 1
@@ -176,6 +194,9 @@ exports.initial = async () => {
             totalISV: 0,
             totalVenta: 2345.53,
             totalDescuentoVenta: 0,
+            puntoDeEmision: "001",
+            establecimiento: "001",
+            tipo: "01",
             idSesion: 1,
             idUsuario: 1,
             idCliente: 2
@@ -184,6 +205,9 @@ exports.initial = async () => {
             totalISV: 0,
             totalVenta: 45000.23,
             totalDescuentoVenta: 0,
+            puntoDeEmision: "001",
+            establecimiento: "001",
+            tipo: "01",
             idSesion: 1,
             idUsuario: 1,
             idCliente: 3
