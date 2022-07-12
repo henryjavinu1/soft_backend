@@ -47,7 +47,8 @@ require("./app/routes/ventas.routes")(app);
 require("./app/routes/talonario.routes")(app);
 require("./app/routes/cliente.routes")(app);
 require("./app/routes/empleado.routes")(app);
-// require("./app/routes/permisos.routes")(app);
+require("./app/routes/permisos.routes")(app);
+require("./app/routes/roles.routes")(app);
 
 
 

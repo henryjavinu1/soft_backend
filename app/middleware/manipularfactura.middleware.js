@@ -4,7 +4,7 @@ const validarCamposCliente = (req, res, next) => {
 
     if (!nombreCliente && !rtn && !dni) {
         return res.status(400).json({
-            error: 'Los campos para realizar la búsqueda por cliente son: nombreCliente, rtn y DNI. Por favor ingrese uno de ellos para relizar la búsqueda.'
+            msg: 'Los campos para realizar la búsqueda por cliente son: nombreCliente, rtn y DNI. Por favor ingrese uno de ellos para relizar la búsqueda.'
         })
     }
 
@@ -12,13 +12,13 @@ const validarCamposCliente = (req, res, next) => {
         if (!rtn) {
             if (!regexNum.test(dni.trim())) {
                 return res.status(400).json({
-                    error: 'El DNI debe ser de tipo numérico y no debe contener espacios.'
+                    msg: 'El DNI debe ser de tipo numérico y no debe contener espacios.'
                 })
             }
         }else{
             if (!regexNum.test(rtn.trim())) {
             return res.status(400).json({
-                error: 'El RTN debe ser de tipo numérico y no debe contener espacios.'
+                msg: 'El RTN debe ser de tipo numérico y no debe contener espacios.'
                 })
             }
         }
@@ -32,14 +32,14 @@ const validarCamposTalonario = (req, res, next) => {
 
     if (!idTalonario && !cai) {
         return res.status(400).json({
-            error: 'Los campos idTalonario y cai están vacios. Por favor ingrese uno de ambos para realizar la búsqueda.'
+            msg: 'Los campos idTalonario y cai están vacios. Por favor ingrese uno de ambos para realizar la búsqueda.'
         })
     }
 
     if (!cai) {
         if (!regexId.test(idTalonario.trim())) {
             return res.status(400).json({
-                error: 'El idTalonario debe ser de tipo numérico y no debe contener espacios.'
+                msg: 'El idTalonario debe ser de tipo numérico y no debe contener espacios.'
             })
         }
     }
@@ -47,7 +47,7 @@ const validarCamposTalonario = (req, res, next) => {
     if (cai && idTalonario) {
         if (!regexId.test(idTalonario.trim())) {
             return res.status(400).json({
-                error: 'El idTalonario debe ser de tipo numérico y no debe contener espacios.'
+                msg: 'El idTalonario debe ser de tipo numérico y no debe contener espacios.'
             })
         }
     }
@@ -66,12 +66,12 @@ const validarCamposFecha = (req, res, next) => {
     })
     if (!fecha2) {
         if (!regexFecha.test(fecha1.trim())) return res.status(400).json({
-            Error: 'Formato de fecha inválido, ingrese la fecha en formato AAAA-MM-DD'});
+            msg: 'Formato de fecha inválido, ingrese la fecha en formato AAAA-MM-DD'});
     } else {
         if (!regexFecha.test(fecha1.trim())) return res.status(400).json({
-            Error: 'Formato de fecha inválido, ingrese la fecha en formato AAAA-MM-DD'});
+            msg: 'Formato de fecha inválido, ingrese la fecha en formato AAAA-MM-DD'});
         if (!regexFecha.test(fecha2.trim())) return res.status(400).json({
-            Error: 'Formato de fecha inválido, ingrese la fecha en formato AAAA-MM-DD'});
+            msg: 'Formato de fecha inválido, ingrese la fecha en formato AAAA-MM-DD'});
     }
     next();
 }
@@ -80,7 +80,7 @@ const validarCamposNumeroFactura = (req, res, next) => {
     const numeroFactura = req.query.numeroFactura;
 
     if(!numeroFactura) return res.status(400).json({
-        error: 'Debe indicar el número de factura para realizar la búsqueda.'
+        msg: 'Debe indicar el número de factura para realizar la búsqueda.'
     });
 
     next();
@@ -90,7 +90,7 @@ const validarCamposIdEmpleado = (req, res, next) => {
     const idEmpleado = req.query.idEmpleado;
 
     if (!idEmpleado) return res.status(400).json({
-        error: 'Debe indicar el id de empleado para realizar la búsqueda.'
+        msg: 'Debe indicar el id de empleado para realizar la búsqueda.'
     });
     next();
 }
