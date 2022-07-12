@@ -8,10 +8,14 @@ const Op = db.Sequelize.Op;
 exports.crearol = async (req, res) => {
     try {
         const rol = await Role.create({
-            rol: req.body.rol,
-            descripcion: req.body.descripcion,
+            rol: req.body.Rol,
+            descripcion: req.body.Descripcion,
+            IsDelete: false
         });
-        return res.status(200).send(rol);
+        return res.status(200).json({
+            message: "Rol creado con exito",
+            data: rol
+        });
     }
     catch (error) {
         return res.status(500).send({
@@ -31,8 +35,9 @@ exports.bajarol = async (req, res) => {
               message: "No se pudo dar de baja al rol"
             })
           }else {
-            return res.send({
-              message: "Se le dio de baja exitosamente"
+            return res.status(200).json({
+              message: "Se le dio de baja exitosamente",
+              data: bajarol
             })
           }
     }
@@ -57,8 +62,9 @@ exports.updaterol = async (req, res) => {
               message: "Error al actualizar el rol"
             })
           }else {
-            return res.send({
-              message: "Actualizacion exitosa"
+            return res.status(200).json({
+              message: "Actualizacion exitosa",
+              data: updaterol
             })
           }
     }

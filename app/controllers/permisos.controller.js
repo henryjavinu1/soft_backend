@@ -8,10 +8,14 @@ const Op = db.Sequelize.Op;
 exports.creapermiso = async (req, res) => {
     try {
         const permiso = await Permiso.create({
-            permiso: req.body.permiso,
-            descripcion: req.body.descripcion, 
+            permiso: req.body.Permiso,
+            descripcion: req.body.Descripcion,
+            IsDelete: false, 
         });
-        return res.status(200).send(permiso);
+        return res.status(200).json({
+            message: "Permiso Creado",    
+            data: permiso
+        });
         }
     catch (error) {
         return res.status(500).send({
@@ -31,8 +35,9 @@ exports.bajapermiso = async (req, res) => {
               message: "No se pudo dar de baja al permiso"
             })
           }else {
-            return res.send({
-              message: "Se le dio de baja exitosamente"
+            return res.status(200).json({
+              message: "Se le dio de baja exitosamente",
+              data: bajapermiso
             })
           }
     }
@@ -58,8 +63,9 @@ exports.updatepermiso = async (req, res) => {
               message: "Error al actualizar el permiso"
             })
           }else {
-            return res.send({
-              message: "Actualizacion exitosa"
+            return res.status(200).json({
+              message: "Actualizacion exitosa",
+              data: updatepermiso
             })
           }
     }
