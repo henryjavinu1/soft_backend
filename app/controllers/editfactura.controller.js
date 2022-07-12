@@ -51,6 +51,24 @@ const buscarfactura = async (req = request, res = response) => {
             where: { 
                 [Op.and] : [{numeroFactura: numeroFactura}, {isDelete: false}]
                 },
+                include: [
+                    {
+                        model: Empleado,
+                        attributes: ['id', 'nombre', 'apellido'],
+                    },
+                    {
+                        model: TipoPago,
+                        attributes: ['tipoDePago']
+                    },
+                    {
+                        model: Talonario,
+                        attributes: ['cai']
+                    },
+                    {
+                        model: Cliente,
+                        attributes: ['nombreCliente', 'direccion', 'dni','email','rtn', 'telefonoCliente']
+                    }
+                ]
         });
         if (!facturaBuscada){
             return res.status(404).json({
@@ -58,7 +76,7 @@ const buscarfactura = async (req = request, res = response) => {
             })
         }
         return res.status(200).json({
-            facturaBuscada});
+            unafactura: facturaBuscada});
     } catch (error) {
         console.log(error);
     }
@@ -131,21 +149,30 @@ const buscarFacturaCliente = async (req, res) => {
 
 const buscarFacturaFecha = async (req, res) => {
     const {fecha1, fecha2} = req.query;
-    let facturaBuscada;
-    if (fecha1 && !fecha2) {
-        // Función para poder buscar facturas por fecha aceptando dos parametros de búsqueda.
-        facturaBuscada = await filtrarFacturasPorFechaQuery(Op, Factura, fecha1, fecha1, Empleado, TipoPago, Talonario, Cliente);
-    } else if (fecha1 && fecha2) {
-        facturaBuscada = await filtrarFacturasPorFechaQuery(Op, Factura, fecha1, fecha2, Empleado, TipoPago, Talonario, Cliente);
+    let facturaBuscada = [];
+    try {
+        if (fecha1 && !fecha2) {
+            // Función para poder buscar facturas por fecha aceptando dos parametros de búsqueda.
+            facturaBuscada = await filtrarFacturasPorFechaQuery(Op, Factura, fecha1, fecha1, Empleado, TipoPago, Talonario, Cliente);
+        } else if (fecha1 && fecha2) {
+            facturaBuscada = await filtrarFacturasPorFechaQuery(Op, Factura, fecha1, fecha2, Empleado, TipoPago, Talonario, Cliente);
+        }
+        if (facturaBuscada.length === 0) {
+            return res.status(404).json({
+                msg: (fecha1 && !fecha2)
+                     ?`No hay facturas registradas en la fecha: ${fecha1}`
+                     :`No hay facturas registradas entre las fechas: ${fecha1}, ${fecha2}`
+            })
+        }
+        const facturas = impresionDeFacturas(facturaBuscada);
+            return res.status(200).json({
+                facturas
+            });  
+    } catch (error) {
+        console.log(error);
     }
-    if (facturaBuscada.length === 0) {
-        return res.status(404).json({
-            msg: (fecha1 && !fecha2)
-                 ?`No hay facturas registradas en la fecha: ${fecha1}`
-                 :`No hay facturas registradas entre las fechas: ${fecha1}, ${fecha2}`
-        })
-    }
-    return res.status(200).json({facturaBuscada});
+    
+    // return res.status(200).json({facturaBuscada});
 }
 
 const buscarFacturaEmpleado = async (req = request, res = response) => {
