@@ -256,12 +256,16 @@ const buscarPorTalonario = async (req = request, res = response) => {
                 }
             ]
         })
-        return res.status(200).json({
-            facturaBuscada
-        });
+        const facturas = impresionDeFacturas(facturaBuscada);
+            return res.status(200).json({
+                facturas
+            });  
     } catch (error) {
         console.log(error);
     }
+}
+
+const imprimirUnaFactura = async (req = request, res = response) => {
 }
 
 const editarFactura = async (req = request, res = response) => {
@@ -304,5 +308,6 @@ module.exports = {
     buscarFacturaCliente,
     buscarFacturaFecha,
     buscarFacturaEmpleado,
-    buscarPorTalonario
+    buscarPorTalonario,
+    imprimirUnaFactura
 }
