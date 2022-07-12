@@ -10,7 +10,7 @@ module.exports = (sequelize, Sequelize) => {
         allowNull: false // no permite valores nulos
       },
       isvTipoProducto: {
-        type: Sequelize.STRING,
+        type: Sequelize.DECIMAL,
         allowNull: false, // no permite valores nulos
       },
       isDelete: {

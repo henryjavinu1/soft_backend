@@ -1,6 +1,6 @@
 //db = require("../models/produ");
 const config = require("../config/auth.config");
-const db = require("../models/producto");
+const db = require("../models/puntoDeVentas");
 const e = require("express");
 const { response } = require("express");
 const Producto = db.producto;
