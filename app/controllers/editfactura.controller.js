@@ -8,6 +8,9 @@ const Cliente = db.cliente;
 const Talonario = db.talonario; 
 const Empleado = db.empleado;
 const TipoPago = db.tipopago;
+const Venta = db.ventas;
+const DetalleVenta = db.detalleventa;
+const Producto = db.producto;
 
 const traerFacturas = async (req = request, res = response) => { 
     try {
@@ -266,6 +269,46 @@ const buscarPorTalonario = async (req = request, res = response) => {
 }
 
 const imprimirUnaFactura = async (req = request, res = response) => {
+    const numeroFactura = req.query.numeroFactura;
+    console.log(numeroFactura);
+    try {
+        const facturaBuscada = await Factura.findOne({
+            where: { isDelete: false, numeroFactura: numeroFactura},
+            include: [
+                {
+                    model: Venta,
+                },
+                {
+                    model: Empleado,
+                },
+                {
+                    model: TipoPago,
+                },
+                {
+                    model: Talonario,
+                },
+                {
+                    model: Cliente,
+                }
+            ]
+        });
+
+        const detallesDeVentas = await DetalleVenta.findAll({
+            where: { isDelete: false, idVentas: facturaBuscada.venta.id},
+            include: [
+                {
+                    model: Producto
+                }
+            ]
+        });
+    
+        return res.status(200).json({
+            facturaConDatos: facturaBuscada,
+            detallesDeVentas
+        });  
+    } catch (error) {
+       console.log(error); 
+    }
 }
 
 const editarFactura = async (req = request, res = response) => {

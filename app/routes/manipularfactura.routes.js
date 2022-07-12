@@ -1,4 +1,4 @@
-const { editarFactura, traerFacturas, buscarfactura, buscarFacturaCliente, buscarFacturaFecha, buscarFacturaEmpleado, buscarPorTalonario } = require("../controllers/editfactura.controller");
+const { editarFactura, traerFacturas, buscarfactura, buscarFacturaCliente, buscarFacturaFecha, buscarFacturaEmpleado, buscarPorTalonario, imprimirUnaFactura } = require("../controllers/editfactura.controller");
 const { validarCamposTalonario, validarCamposCliente, validarCamposFecha, validarCamposIdEmpleado, validarCamposNumeroFactura } = require("../middleware/manipularfactura.middleware");
 
 module.exports = function(app) {
@@ -17,5 +17,6 @@ module.exports = function(app) {
     app.get("/api/buscarfacturaporempleado/:empleado?", [validarCamposIdEmpleado], buscarFacturaEmpleado);
     app.get("/api/buscarfacturaportalonario/:talonario?", [validarCamposTalonario], buscarPorTalonario);
     app.put("/api/manipularfactura/:id", editarFactura);
+    app.get("/api/traerunafactura/:id?", imprimirUnaFactura);
   
   };
