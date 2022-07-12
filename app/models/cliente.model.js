@@ -3,6 +3,7 @@ module.exports = (sequelize, Sequelize) => {
         dni: {
             type: Sequelize.STRING,
             allowNull: false,
+            unique: true
         },
         email: {
             type: Sequelize.STRING,
@@ -11,7 +12,7 @@ module.exports = (sequelize, Sequelize) => {
         },
         rtn: {
             type: Sequelize.STRING,
-            allowNull: true, //no permite nulos
+            allowNull: true, // permite nulos
         },
         nombreCliente:{
             type: Sequelize.STRING,

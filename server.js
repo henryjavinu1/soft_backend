@@ -46,8 +46,11 @@ require("./app/routes/tipoproducto.routes")(app);
 require("./app/routes/detalleventa.routes")(app);
 require("./app/routes/ventas.routes")(app);
 //require("./app/routes/tipopago.routes")(app);
+require("./app/routes/talonario.routes")(app);
 require("./app/routes/cliente.routes")(app);
-// require("./app/routes/permisos.routes")(app);
+require("./app/routes/empleado.routes")(app);
+require("./app/routes/permisos.routes")(app);
+require("./app/routes/roles.routes")(app);
 
 
 

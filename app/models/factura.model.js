@@ -27,8 +27,12 @@ module.exports = (sequelize, Sequelize) => {
         type : Sequelize.DECIMAL(10,2),
         allowNull: false
       },
-      subTotalFactura: {
+      subTotalExonerado: {
         type : Sequelize.DECIMAL(10,2),
+        allowNull: true
+      },
+      subTotalFactura: { // Imprimir en la pantalla el subtotal y ponerle excento o exonerado 
+        type : Sequelize.DECIMAL(10,2),//expresar cantidad de dinero
         allowNull: true
       },
       cantidadLetras: {
