@@ -1,5 +1,6 @@
 const { verifySignUp } = require("../middleware");
 const controller = require("../controllers/tipopago.controller");
+const { permisosJwt } = require("../middleware");
 
 module.exports = function(app) {
   app.use(function(req, res, next) {
@@ -10,10 +11,10 @@ module.exports = function(app) {
     next();
   });
 
-  app.post("/api/gene/insertartipopago", controller.insertarTipoPago); // Apoyo
-    app.post("/api/gene/actualizartipopago", controller.updateTipoPago);
-    app.get("/api/gene/buscartipopago", controller.findTipoPago);
-    app.post("/api/gene/buscartipopagoid", controller.findTipoPagoid);
-    app.post("/api/gene/eliminartipopago", controller.deleteTipoPago);
+  app.post("/api/gene/insertartipopago",[permisosJwt.isPermisos("33")], controller.insertarTipoPago); // Apoyo
+    app.post("/api/gene/actualizartipopago",[permisosJwt.isPermisos("34")], controller.updateTipoPago);
+    app.get("/api/gene/buscartipopago",[permisosJwt.isPermisos("36")], controller.findTipoPago);
+    app.post("/api/gene/buscartipopagoid",[permisosJwt.isPermisos("36")], controller.findTipoPagoid);
+    app.post("/api/gene/eliminartipopago",[permisosJwt.isPermisos("35")], controller.deleteTipoPago);
 
 };

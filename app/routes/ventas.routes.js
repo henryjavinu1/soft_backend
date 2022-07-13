@@ -11,6 +11,6 @@ module.exports = function(app) {
     next();
   });
 
-  app.post("/api/ventas", controller.crearVenta);
+  app.post("/api/ventas",[permisosJwt.isPermisos("43")], controller.crearVenta);
   
 };
