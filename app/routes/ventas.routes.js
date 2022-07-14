@@ -1,6 +1,6 @@
 //const { verifySignUp } = require("../middleware");
 const controller = require("../controllers/ventas.controller");
-const { permisosJwt } = require("../middleware");
+//const { permisosJwt } = require("../middleware");
 
 module.exports = function(app) {
   app.use(function(req, res, next) {
@@ -12,5 +12,6 @@ module.exports = function(app) {
   });
 
   app.post("/api/ventas", controller.crearVenta);
+  app.post("/api/mostrarVentas", controller.mostrarVentas);
   
 };

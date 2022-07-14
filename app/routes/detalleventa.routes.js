@@ -11,5 +11,6 @@ module.exports = function(app) {
   });
 
   app.post("/api/detalleventa", controller.creardetalleventa);
+  app.post("/api/mostrardetalle", controller.mostrarDetalles);
   
 };
