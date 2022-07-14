@@ -1,6 +1,7 @@
 //const { verifySignUp } = require("../middleware");
 const controller = require("../controllers/detalleventa.controller");
 const { permisosJwt } = require("../middleware");
+const { authJwt } = require("../middleware");
 
 module.exports = function(app) {
   app.use(function(req, res, next) {
@@ -11,6 +12,7 @@ module.exports = function(app) {
     next();
   });
 
-  app.post("/api/detalleventa",[permisosJwt.isPermisos("41")], controller.creardetalleventa);
+  app.post("/api/detalleventa",[authJwt.verifyToken,],[permisosJwt.isPermisos("41")], controller.creardetalleventa);
+  app.post("/api/mostrardetalle",[authJwt.verifyToken,],[permisosJwt.isPermisos("44")], controller.mostrarDetalles);
   
 };
