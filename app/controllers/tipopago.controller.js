@@ -1,7 +1,9 @@
 const db = require("../models/puntoDeVentas");
 const config = require("../config/auth.config");
 const detalleventaModel = require("../models/detalleventa.model");
+const { ARRAY } = require("sequelize");
 const TipoPago = db.tipopago;
+const { impresionDeTipoPago} = require('../helpers/tipopago.helper');
 const Op = db.Sequelize.Op;
 //Insertar tipo de pago
 exports.insertarTipoPago = async (req, res) => {
@@ -29,7 +31,7 @@ exports.updateTipoPago = async (req, res) => {
                     isDelete: false
                 } , {
                     where: {
-                        idTipoPago: req.body.idTipoPago
+                        idTipoPago: parseInt(req.body.idTipoPago)
                     }
                 });
                 return res.status(200).send({
@@ -51,16 +53,12 @@ exports.findTipoPago = async (req, res) => {
                 isDelete: false,
             }
         });
-        if (!tipopago) {
-            return res.status(404).send({
-                message: "El tipo de pago no existe"
-            });
-        } else {
-            return res.status(200).send({
-                message: "El tipo de pago existe",
-                tipoDePago: tipopago
-            });
-        }
+       
+        const tipopagos = impresionDeTipoPago(tipopago);
+        res.json({
+            tipopagos
+        })
+        
     } catch (error) {
        
         return res.status(500).send({
@@ -73,7 +71,7 @@ exports.findTipoPagoid = async (req, res) => {
     try {
         const tipopago = await db.tipopago.findAll({
             where: {
-                idTipoPago: req.body.idTipoPago,
+                idTipoPago: parseInt(req.body.idTipoPago),
                 isDelete: false,
             }
         });
@@ -82,10 +80,10 @@ exports.findTipoPagoid = async (req, res) => {
                 message: "El tipo de pago no existe"
             });
         } else {
-            return res.status(200).send({
-                message: "El tipo de pago existe",
-                tipoDePago: tipopago
-            });
+            const tipopagos = impresionDeTipoPago(tipopago);
+            res.json({
+                tipopagos
+            })
         }
     } catch (error) {
        
@@ -101,7 +99,7 @@ exports.deleteTipoPago = async (req, res) => {
             isDelete: true
         } , {
             where: {
-                idTipoPago: req.body.idTipoPago
+                idTipoPago: parseInt(req.body.idTipoPago)
             }
         });
         return res.status(200).send({
