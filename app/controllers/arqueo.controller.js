@@ -1,7 +1,7 @@
 const { query } = require("express");
-const { factura, sequelize } = require("../models/puntoDeVentas");
+const { sequelize } = require("../models/puntoDeVentas");
 const db = require("../models/puntoDeVentas");
-const { impresionArqueo} = require('../helpers/arqueo.helper');
+const { impresionArqueo } = require('../helpers/arqueo.helper');
 const Arque = db.arqueo;
 const Sesi = db.sesion;
 const User = db.user;
@@ -162,17 +162,11 @@ exports.mostrarArqueo = async (req, res) => {
             }
         });
         //validar que el arqueo se mostro correctamente
-        if(!arqueo){
-            return res.status(404).send({
-                message: "No se encontraron arqueos"
-            });
-        } else {
             const arqueo1 = impresionArqueo(arqueo);
             res.json({
                 message: "Arqueos encontrados",
-                arqueo : arqueo 
+                arqueo1  
             });
-        }
     } catch (error) {
         res.status(500).send({
             message: "Error al mostrar arqueo" + error.message

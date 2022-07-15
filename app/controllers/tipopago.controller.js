@@ -51,16 +51,12 @@ exports.findTipoPago = async (req, res) => {
                 isDelete: false,
             }
         });
-        if (!tipopago) {
-            return res.status(404).send({
-                message: "El tipo de pago no existe"
-            });
-        } else {
-            return res.status(200).send({
-                message: "El tipo de pago existe",
-                tipoDePago: tipopago
-            });
-        }
+       
+        const tipopagos = impresionDeTipoPago(tipopago);
+        res.json({
+            tipopagos
+        })
+        
     } catch (error) {
        
         return res.status(500).send({
