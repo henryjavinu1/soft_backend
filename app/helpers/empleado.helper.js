@@ -8,7 +8,7 @@ const validarCamposEmpleado = (empleado, id, nombre, apellido, direccion, telefo
     }
 
     if (apellido) {
-        empleado.apellido = rtn;
+        empleado.apellido = apellido;
     }
 
     if (direccion) {
