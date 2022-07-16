@@ -16,7 +16,7 @@ exports.crearCliente = async (req = request, res = response) => {
             telefonoCliente: req.body.telefonoCliente,
         });
         return res.status(200).send({
-            message: "Cliente Creado",
+            message: "Cliente añadido con exito",
             insertCliente
         });
     } catch (error) {
@@ -38,24 +38,12 @@ exports.buscarCliente = async (req = request, res = response) => {
                 }
             },
         });
-        const resp = {
-            id: clienteBuscado.id,
-            dni: clienteBuscado.dni,
-            email: clienteBuscado.email,
-            rtn: clienteBuscado.rtn,
-            nombreCliente: clienteBuscado.nombreCliente,
-            direccion: clienteBuscado.direccion,
-            telefonoCliente: clienteBuscado.telefonoCliente,
-            isDelete: clienteBuscado.isDelete,
-            createdAt: clienteBuscado.createdAt,
-            updatedAt: clienteBuscado.updatedAt
-        }
         if (!clienteBuscado) {
-            return res.status(404).json({
+            return res.status(404).send({
                 msg: "El Dni del cliente no existe"
             })
         } else {
-            return res.status(200).send(resp);
+            return res.status(200).send(clienteBuscado);
         }
     } catch (error) {
         console.log(error);
@@ -77,23 +65,11 @@ exports.buscarClientePorNombre = async (req = request, res = response) => {
             },
         });
         if (!clienteBuscado) {
-            return res.status(404).json({
+            return res.status(404).send({
                 msg: "El cliente no existe"
             })
         }
-        const resp = {
-            id: clienteBuscado.id,
-            dni: clienteBuscado.dni,
-            email: clienteBuscado.email,
-            rtn: clienteBuscado.rtn,
-            nombreCliente: clienteBuscado.nombreCliente,
-            direccion: clienteBuscado.direccion,
-            telefonoCliente: clienteBuscado.telefonoCliente,
-            isDelete: clienteBuscado.isDelete,
-            createdAt: clienteBuscado.createdAt,
-            updatedAt: clienteBuscado.updatedAt
-        }
-        return res.status(200).send(resp);
+        return res.status(200).send(clienteBuscado);
     } catch (error) {
         console.log(error);
         return res.status(500).send({
@@ -105,28 +81,16 @@ exports.buscarClientePorNombre = async (req = request, res = response) => {
 exports.traerTodosLosClientes = async (req = request, res = response) => {
     try {
         const todoslosClientes = await Cliente.findAll({
-
+            where: {
+                isDelete: false,
+            }
         });
         if (!todoslosClientes) {
-            return res.status(404).json({
+            return res.status(404).send({
                 msg: "No hay ningun cliente creado"
             })
         }
-        const resp = {
-            id: todoslosClientes.id,
-            dni: todoslosClientes.dni,
-            email: todoslosClientes.email,
-            rtn: todoslosClientes.rtn,
-            nombreCliente: todoslosClientes.nombreCliente,
-            direccion: todoslosClientes.direccion,
-            telefonoCliente: todoslosClientes.telefonoCliente,
-            isDelete: todoslosClientes.isDelete,
-            createdAt: todoslosClientes.createdAt,
-            updatedAt: todoslosClientes.updatedAt
-        }
-        return res.status(200).json({
-            resp
-        })
+        return res.status(200).send({ todoslosClientes });
     } catch (error) {
         console.log(error);
         return res.status(500).send({
@@ -146,15 +110,14 @@ exports.actualizarCliente = async (req = request, res = response) => {
             },
         });
         if (!clienteBuscado) {
-            return res.status(404).json({
+            return res.status(404).send({
                 msg: "Cliente no existe"
             })
         }
         validarCamposCliente(clienteBuscado, dni, email, rtn, nombreCliente, direccion, telefonoCliente, isDelete)
         clienteBuscado.save();
-        return res.status(200).json({
-            message: "cliente actualizado con exito",
-            cliente: clienteBuscado,
+        return res.status(200).send({
+            clienteBuscado,
         });
 
     } catch (error) {
@@ -175,13 +138,13 @@ exports.eliminarCliente = async (req, res) => {
             }
         });
         if (eliminarCliente) {
-            res.status(200).json({
+            res.status(200).send({
                 message: "Cliente eliminado correctamente"
             });
         }
     } catch (error) {
         console.log(error);
-        res.status(401).json({
+        res.status(401).send({
             message: "Error al eliminar cliente: " + error.message
         });
     }
