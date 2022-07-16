@@ -1,11 +1,8 @@
 //const {crearCliente, buscarCliente, buscarClientePorNombre} = require("../controllers/cliente.controller.js")
 const controller = require("../controllers/cliente.controller");
-<<<<<<< HEAD
 const { permisosJwt } = require("../middleware");
 const { authJwt } = require("../middleware");
-=======
 const { verifyClients } = require("../middleware");
->>>>>>> main
 module.exports = function(app) {
     app.use(function(req, res, next) {
         res.header(
