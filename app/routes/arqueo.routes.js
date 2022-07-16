@@ -9,12 +9,12 @@ module.exports = function(app) {
         );
         next();
     });
-    app.post("/api/arqueo/createArqueo",[authJwt.verifyToken,],[permisosJwt.isPermisos("1")], arqueo.createArqueo);
-    app.post("/api/arqueo/actualizacionCerrandoSesion",[authJwt.verifyToken,],[permisosJwt.isPermisos("2")], arqueo.actualizacionCerrandoSesion);
-    app.post("/api/arqueo/deleteArqueo",[authJwt.verifyToken,],[permisosJwt.isPermisos("3")], arqueo.deleteArqueo);
-    app.post("/api/arqueo/mostrarArqueo",[authJwt.verifyToken,],[permisosJwt.isPermisos("4")], arqueo.mostrarArqueo);
-    app.post("/api/arqueo/buscarPorFechaInicioFechaFinal",[authJwt.verifyToken,],[permisosJwt.isPermisos("4")], arqueo.buscarPorFechaInicioFechaFinal);
-    app.post("/api/arqueo/buscarPorUsuario",[authJwt.verifyToken,],[permisosJwt.isPermisos("4")], arqueo.buscarPorUsuario);
+    app.post("/api/arqueo/createArqueo",arqueo.createArqueo);
+    app.post("/api/arqueo/actualizacionCerrandoSesion", arqueo.actualizacionCerrandoSesion);
+    app.post("/api/arqueo/deleteArqueo", arqueo.deleteArqueo);
+    app.post("/api/arqueo/mostrarArqueo", arqueo.mostrarArqueo);
+    app.post("/api/arqueo/buscarPorFechaInicioFechaFinal", arqueo.buscarPorFechaInicioFechaFinal);
+    app.post("/api/arqueo/buscarPorUsuario", arqueo.buscarPorUsuario);
     app.get("/api/arqueo/createArqueo", arqueo.createArqueo);
     app.get("/api/arqueo/mostrarArqueo", arqueo.mostrarArqueo);
 

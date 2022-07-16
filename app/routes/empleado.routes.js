@@ -11,10 +11,10 @@ module.exports = function(app) {
         next();
     });
       
-    app.post("/api/empleado/crearempleado",[authJwt.verifyToken,],[permisosJwt.isPermisos("9")], controller.crearEmpleado);
-    app.post("/api/empleado/buscarempleado",[authJwt.verifyToken,],[permisosJwt.isPermisos("12")], controller.buscarEmpleado);
-    app.post("/api/empleado/buscarEmpleadoPorNombre",[authJwt.verifyToken,],[permisosJwt.isPermisos("12")], controller.buscarEmpleadoPorNombre);
-    app.post("/api/empleado/traerTodosLosEmpleados",[authJwt.verifyToken,],[permisosJwt.isPermisos("12")], controller.traerTodosLosEmpleados); 
-    app.put("/api/empleado/actualizarEmpleado",[authJwt.verifyToken,],[permisosJwt.isPermisos("10")], controller.actualizarEmpleado); 
-    app.post("/api/empleado/eliminarEmpleado",[authJwt.verifyToken,],[permisosJwt.isPermisos("11")], controller.eliminarEmpleado);
+    app.post("/api/empleado/crearempleado",controller.crearEmpleado);
+    app.post("/api/empleado/buscarempleado", controller.buscarEmpleado);
+    app.post("/api/empleado/buscarEmpleadoPorNombre", controller.buscarEmpleadoPorNombre);
+    app.post("/api/empleado/traerTodosLosEmpleados", controller.traerTodosLosEmpleados); 
+    app.put("/api/empleado/actualizarEmpleado", controller.actualizarEmpleado); 
+    app.post("/api/empleado/eliminarEmpleado", controller.eliminarEmpleado);
 };

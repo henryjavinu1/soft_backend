@@ -11,10 +11,10 @@ module.exports = function(app) {
     next();
   });
 
-  app.post("/api/gene/insertartipopago",[authJwt.verifyToken,],[permisosJwt.isPermisos("33")], controller.insertarTipoPago); // Apoyo
-    app.post("/api/gene/actualizartipopago",[authJwt.verifyToken,],[permisosJwt.isPermisos("34")], controller.updateTipoPago);
-    app.get("/api/gene/buscartipopago",[authJwt.verifyToken,],[permisosJwt.isPermisos("36")], controller.findTipoPago);
-    app.post("/api/gene/buscartipopagoid",[authJwt.verifyToken,],[permisosJwt.isPermisos("36")], controller.findTipoPagoid);
-    app.post("/api/gene/eliminartipopago",[authJwt.verifyToken,],[permisosJwt.isPermisos("35")], controller.deleteTipoPago);
+  app.post("/api/gene/insertartipopago", controller.insertarTipoPago); // Apoyo
+    app.post("/api/gene/actualizartipopago", controller.updateTipoPago);
+    app.get("/api/gene/buscartipopago", controller.findTipoPago);
+    app.post("/api/gene/buscartipopagoid", controller.findTipoPagoid);
+    app.post("/api/gene/eliminartipopago", controller.deleteTipoPago);
 
 };

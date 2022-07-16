@@ -12,7 +12,7 @@ module.exports = function(app) {
     next();
   });
 
-  app.post("/api/detalleventa",[authJwt.verifyToken,],[permisosJwt.isPermisos("41")], controller.creardetalleventa);
-  app.post("/api/mostrardetalle",[authJwt.verifyToken,],[permisosJwt.isPermisos("44")], controller.mostrarDetalles);
+  app.post("/api/detalleventa", controller.creardetalleventa);
+  app.post("/api/mostrardetalle", controller.mostrarDetalles);
   
 };

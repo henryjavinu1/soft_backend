@@ -11,10 +11,10 @@ module.exports = function(app) {
     next();
   });
 
-  app.post("/api/producto/tipoproducto",[authJwt.verifyToken,],[permisosJwt.isPermisos("37")], controller.createtipoproducto);
-  app.post("/api/producto/buscartipo",[authJwt.verifyToken,],[permisosJwt.isPermisos("40")], controller.findOne);
-  app.get("/api/producto/mostrartipos",[authJwt.verifyToken,],[permisosJwt.isPermisos("40")], controller.findAll);
-  app.post("/api/producto/actualizartipo",[authJwt.verifyToken,],[permisosJwt.isPermisos("38")], controller.update);
-  app.post("/api/producto/eliminartipo",[authJwt.verifyToken,],[permisosJwt.isPermisos("39")], controller.delete);
+  app.post("/api/producto/tipoproducto", controller.createtipoproducto);
+  app.post("/api/producto/buscartipo", controller.findOne);
+  app.get("/api/producto/mostrartipos", controller.findAll);
+  app.post("/api/producto/actualizartipo", controller.update);
+  app.post("/api/producto/eliminartipo", controller.delete);
 
 };

@@ -11,9 +11,9 @@ module.exports = function(app) {
     );
     next();
   });
-  app.post("/api/permisos/create",[authJwt.verifyToken],[permisosJwt.isPermisos("17")],controller.creapermiso);//crea permiso agrega permiso y descripcion
-  app.post("/api/permisos/baja",[authJwt.verifyToken],[permisosJwt.isPermisos("19")], controller.bajapermiso);//baja permiso cambio el valor IsDelete a true
-  app.post("/api/permisos/update",[authJwt.verifyToken],[permisosJwt.isPermisos("18")], controller.updatepermiso);//Actualiza informacion permiso y descripcion 
-  app.get("/api/permisos/buscapermiso",[authJwt.verifyToken],[permisosJwt.isPermisos("20")], controller.buscapermiso);//Trae todos los permisos
-  app.get("/api/permisos/buscapermisoname",[authJwt.verifyToken],[permisosJwt.isPermisos("20")], controller.buscapermisoname);//Trae un permiso por nombre permiso 
+  app.post("/api/permisos/create",controller.creapermiso);//crea permiso agrega permiso y descripcion
+  app.post("/api/permisos/baja", controller.bajapermiso);//baja permiso cambio el valor IsDelete a true
+  app.post("/api/permisos/update", controller.updatepermiso);//Actualiza informacion permiso y descripcion 
+  app.get("/api/permisos/buscapermiso", controller.buscapermiso);//Trae todos los permisos
+  app.get("/api/permisos/buscapermisoname", controller.buscapermisoname);//Trae un permiso por nombre permiso 
 };

@@ -10,8 +10,8 @@ module.exports = function(app) {
     );
     next();
   });
-  app.post("/api/talonarios/create",[authJwt.verifyToken,],[permisosJwt.isPermisos("29")], controller.createTalonario);    //C
-  app.get("/api/talonarios/get",[authJwt.verifyToken,],[permisosJwt.isPermisos("32")], controller.getTalonarios);          //R
-  app.post("/api/talonarios/update",[authJwt.verifyToken,],[permisosJwt.isPermisos("30")], controller.updateTalonario);    //U
-  app.get("/api/talonarios/delete",[authJwt.verifyToken,],[permisosJwt.isPermisos("31")], controller.deleteTalonario);     //D
+  app.post("/api/talonarios/create", controller.createTalonario);    //C
+  app.get("/api/talonarios/get", controller.getTalonarios);          //R
+  app.post("/api/talonarios/update", controller.updateTalonario);    //U
+  app.get("/api/talonarios/delete", controller.deleteTalonario);     //D
 };

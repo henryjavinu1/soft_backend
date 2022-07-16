@@ -12,12 +12,12 @@ module.exports = function(app) {
     next();
   });
 
-  app.post("/api/producto/crearproducto",[authJwt.verifyToken,],[permisosJwt.isPermisos("21")], controller.createproducto);
-  app.post("/api/producto/buscarproducto",[authJwt.verifyToken,],[permisosJwt.isPermisos("24")], controller.findOne);
-  app.get("/api/producto/mostrarproductos",[authJwt.verifyToken,],[permisosJwt.isPermisos("24")], controller.findAll);
-  app.post("/api/producto/actualizarproducto",[authJwt.verifyToken,],[permisosJwt.isPermisos("22")], controller.update);
-  app.post("/api/producto/eliminarproducto",[authJwt.verifyToken,],[permisosJwt.isPermisos("23")], controller.delete);
-  app.post("/api/producto/buscarproductoxcodigo",[authJwt.verifyToken,],[permisosJwt.isPermisos("24")], controller.buscarxcodigo);
+  app.post("/api/producto/crearproducto", controller.createproducto);
+  app.post("/api/producto/buscarproducto", controller.findOne);
+  app.get("/api/producto/mostrarproductos", controller.findAll);
+  app.post("/api/producto/actualizarproducto", controller.update);
+  app.post("/api/producto/eliminarproducto", controller.delete);
+  app.post("/api/producto/buscarproductoxcodigo", controller.buscarxcodigo);
   
 
 };

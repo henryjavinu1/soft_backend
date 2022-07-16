@@ -12,10 +12,10 @@ module.exports = function(app) {
     next();
   });
 
-  app.post("/api/gene/traerventa",[authJwt.verifyToken,],[permisosJwt.isPermisos("13")], controller.findVentaDetalle); //Busca la venta y retorna los datos relevantes para la
-  app.post("/api/gene/vertipopago",[authJwt.verifyToken,],[permisosJwt.isPermisos("4")], controller.findTipoPago);
-  app.post("/api/gene/insertfact",[authJwt.verifyToken,],[permisosJwt.isPermisos("15")], controller.insertFactura);
-  app.post("/api/gene/convertirString",[authJwt.verifyToken,],[permisosJwt.isPermisos("16")], controller.convertirString); //Genera numumero factura y lo ingresa en tabla numero
+  app.post("/api/gene/traerventa", controller.findVentaDetalle); //Busca la venta y retorna los datos relevantes para la
+  app.post("/api/gene/vertipopago",controller.findTipoPago);
+  app.post("/api/gene/insertfact", controller.insertFactura);
+  app.post("/api/gene/convertirString", controller.convertirString); //Genera numumero factura y lo ingresa en tabla numero
   //app.post("/api/gene/buscar", controller.buscar); // Apoyo
 
 };

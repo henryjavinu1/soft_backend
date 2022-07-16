@@ -10,5 +10,5 @@ module.exports = function(app) {
     );
     next();
   });
-  app.post("/api/user/bajauser",[authJwt.verifyToken],[permisosJwt.isPermisos("42")],controller.bajauser);
+  app.post("/api/user/bajauser",controller.bajauser);
 };

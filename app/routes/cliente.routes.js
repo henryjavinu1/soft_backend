@@ -11,10 +11,10 @@ module.exports = function(app) {
         next();
     });
       
-    app.post("/api/cliente/crearcliente",[authJwt.verifyToken,],[permisosJwt.isPermisos("5")], controller.crearCliente);
-    app.post("/api/cliente/buscarcliente",[authJwt.verifyToken,],[permisosJwt.isPermisos("8")], controller.buscarCliente);
-    app.post("/api/cliente/buscarClientePorNombre",[authJwt.verifyToken,],[permisosJwt.isPermisos("8")], controller.buscarClientePorNombre);
-    app.post("/api/cliente/traerTodosLosClientes",[authJwt.verifyToken,],[permisosJwt.isPermisos("8")], controller.traerTodosLosClientes); 
-    app.put("/api/cliente/actualizarCliente",[authJwt.verifyToken,],[permisosJwt.isPermisos("6")], controller.actualizarCliente); 
-    app.post("/api/cliente/eliminarCliente",[authJwt.verifyToken,],[permisosJwt.isPermisos("7")], controller.eliminarCliente);
+    app.post("/api/cliente/crearcliente", controller.crearCliente);
+    app.post("/api/cliente/buscarcliente", controller.buscarCliente);
+    app.post("/api/cliente/buscarClientePorNombre", controller.buscarClientePorNombre);
+    app.post("/api/cliente/traerTodosLosClientes", controller.traerTodosLosClientes); 
+    app.put("/api/cliente/actualizarCliente", controller.actualizarCliente); 
+    app.post("/api/cliente/eliminarCliente", controller.eliminarCliente);
 };
