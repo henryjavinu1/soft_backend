@@ -35,6 +35,9 @@ exports.crearVenta = async (req, res) => {
 exports.mostrarVentas = async (req = request, res = response) => {
     try {
         const todasLasVentas = await Ventas.findAll({
+            where:{
+                isDelete : false,
+            },
 
         });
         if (!todasLasVentas) {
@@ -42,7 +45,7 @@ exports.mostrarVentas = async (req = request, res = response) => {
                 msg: "No hay ninguna venta creado"
             })
         }
-        return res.status(200).send(todasLasVentas);
+        return res.status(200).json({todasLasVentas});
     } catch (error) {
         console.log(error);
         return res.status(500).send({
