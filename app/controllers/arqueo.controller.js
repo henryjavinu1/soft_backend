@@ -1,6 +1,8 @@
+const { query } = require("express");
+const { factura, sequelize } = require("../models/puntoDeVentas");
 const db = require("../models/puntoDeVentas");
-const Arqueo = db.arqueo;
-const Sesion = db.sesion;
+const Arque = db.arqueo;
+const Sesi = db.sesion;
 const User = db.user;
 const Op = db.Sequelize.Op;
 
@@ -14,7 +16,7 @@ exports.createArqueo = async(req, res) => {
                 isDelete: false
             }
         });
-        const consult2 = await Sesion.findOne({
+        const consult2 = await Sesi.findOne({
             where: {
                 id: req.body.idSesion,
                 isActive: true
@@ -24,7 +26,7 @@ exports.createArqueo = async(req, res) => {
         if (consult) {
             if(consult2){
                  //insertar un nuevo arqueo
-                const arqueo = await Arqueo.create({   
+                const arqueo = await Arque.create({   
                 idUsuario: req.body.idUsuario,
                 idSesion: req.body.idSesion,
                 fechaInicio: new Date(),
@@ -56,78 +58,78 @@ exports.actualizacionCerrandoSesion = async (req, res) => {
                 isDelete: false
             }
         });
-        const consult2 = await Sesion.findOne({
+        const consult2 = await Sesi.findOne({
             where: {
                 id: req.body.idSesion,
                 isActive: true,
                 isDelete: false
             }
         });
+        const consult3 = await Arque.findOne({
+            where: {
+                id: req.body.idArqueo,
+                isDelete: false
+            }
+        });
         //si el id del usuario y la sesion iniciada estan en la base de datos
         if (consult) {
             if(consult2){
-                //actualizar el arqueo
-                const arqueo = await Arqueo.update({
-                    fechaFinal: new Date(),
-                    //sumar las ventas que su idSesion sea igual al idSesion que se esta cerrando
-                    efectivoCierre: db.factura.sum('totalFactura', {
-                        where: {
-                            idTipoPago: 1
-                        }
-                    }),
-                    otrosPagos: db.factura.sum('totalFactura', {
-                        where: {
-                            idTipoPago: 2
-                        }
-                    }),
-                    ventaCredito: db.factura.sum('totalFactura', {
-                        where: {
-                            idTipoPago: 3
-                        }
-                    }),
-                    ventaTotal: db.factura.sum('totalFactura', {
-                        where: {
-                            idTipoPago: 1 || 2 || 3 || 4
-                        }
-                    }),
-                    efectivoTotal: arqueo.efectivoApertura + arqueo.efectivoCierre
-                }, {
-                    where: {
-                        idSesion: req.body.idSesion
-                    }
-                });//termina el update
-                //validar que el arqueo se actualizo correctamente
-                if(arqueo){
-                    res.status(200).json({
-                        message: "Arqueo actualizado correctamente",
-                        data: 
-                        await Arqueo.findOne({
-                            where: {
-                                id: req.body.idArqueo
-                            }
-                        })
+                if(consult3){
+                    //actualizar el arqueo
+                    const arqueo = await sequelize.query(`UPDATE Arqueos SET    efectivoCierre = (SELECT SUM(totalFactura) 
+                                                                                                  FROM facturas 
+                                                                                                  WHERE idTipoPago = 1),
+                                                                                otrosPagos = (SELECT SUM(totalFactura)
+                                                                                              FROM facturas
+                                                                                              WHERE idTipoPago = 2),
+                                                                                ventaCredito = (SELECT SUM(totalFactura)
+                                                                                                FROM facturas
+                                                                                                WHERE idTipoPago = 3),
+                                                                                ventaTotal = (SELECT SUM(totalFactura)
+                                                                                              FROM facturas
+                                                                                              WHERE idTipoPago = 1 OR idTipoPago = 2 OR idTipoPago = 3 OR idTipoPago = 4),
+                                                                                efectivoTotal = (SELECT SUM(efectivoApertura + efectivoCierre)
+                                                                                                 FROM Arqueos)
+                                                        WHERE id = ${req.body.idArqueo}`);
+                    const fe = await Arque.update({
+                      fechaFinal: new Date(),
+                    },{
+                      where: {
+                        id: req.body.idArqueo,
+                      },
                     });
+                    //validar que el arqueo se actualizo correctamente
+                    if (arqueo && fe) {
+                        res.status(200).json({
+                            message: "Arqueo actualizado correctamente",
+                            data: await Arque.findOne({
+                                where: {
+                                    id: req.body.idArqueo,
+                                },
+                            }),
+                        });
+                        //actualizar la sesion
+                        Sesi.update({
+                            isActive: false,
+                        },{
+                            where: {
+                                id: req.body.idSesion,
+                            },
+                      });
+                  }
                 }
-                //actualizar la sesion
-                const sesion = await sesion.update({
-                    isActive: false
-                }, {
-                    where: {
-                        id: req.body.idSesion
-                    }
-                });
             }
-        } 
+        }
     } catch (error) {
         res.status(401).json({
-            message: "Error al cerrar sesion" + error.message
+            message: "Error al cerrar sesion " + error.message
         });
     }
 }
 
 exports.deleteArqueo = async (req, res) => {
     try {
-        const arqueo = await Arqueo.update({
+        const arqueo = await Arque.update({
             isDelete: true
         }, {
             where: {
@@ -150,7 +152,7 @@ exports.deleteArqueo = async (req, res) => {
 exports.mostrarArqueo = async (req, res) => {
     try {
         //mostrar arqueo que su isDelete sea false
-        const arqueo = await arqueo.findAll({
+        const arqueo = await Arque.findAll({
             where: {
                 isDelete: false
             }
@@ -172,7 +174,7 @@ exports.mostrarArqueo = async (req, res) => {
 exports.buscarPorFechaInicioFechaFinal = async (req, res) => {
     try {
         //mostrar los arqueo que esten entre las fechas de inicio y final
-        const arqueo = await arqueo.findAll({
+        const arqueo = await Arque.findAll({
             where: {
                 fechaInicio: {
                     [Op.between]: [`${fechaInicio}`, `${fechaFinal}`]
@@ -198,7 +200,7 @@ exports.buscarPorFechaInicioFechaFinal = async (req, res) => {
 exports.buscarPorUsuario = async (req, res) => {
     try{
         //buscar arqueo por usuario
-        const arqueo = await Arqueo.findAll({
+        const arqueo = await Arque.findAll({
             where: {
                 idUsuario: req.body.idUsuario,
                 isDelete: false
