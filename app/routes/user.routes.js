@@ -1,5 +1,6 @@
 const { authJwt } = require("../middleware");
 const controller = require("../controllers/user.controller");
+const controllerauth = require("../controllers/auth.controller");
 const { permisosJwt } = require("../middleware");
 
 module.exports = function(app) {
@@ -11,4 +12,5 @@ module.exports = function(app) {
     next();
   });
   app.post("/api/user/bajauser",controller.bajauser);
+  app.post("/api/user/crearuser", controllerauth.signin);
 };
