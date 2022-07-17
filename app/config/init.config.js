@@ -268,6 +268,9 @@ exports.initial = async () => {
             dni: "02012",
             nombre: "root",
             apellido: "root",
+            direccion: "La libertad",
+            telefonoCliente: "123",
+            fechaNacimineto:"2002-20-2",
             sexo: "M",
         });
         Empleado.create({
@@ -275,6 +278,9 @@ exports.initial = async () => {
             dni: "02013",
             nombre: "Erick",
             apellido: "Reyes",
+            direccion: "La libertad",
+            telefonoCliente: "123",
+            fechaNacimineto:"2002-20-2",
             sexo: "M",
         });
         User.create({
