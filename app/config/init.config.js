@@ -269,8 +269,8 @@ exports.initial = async () => {
             nombre: "root",
             apellido: "root",
             direccion: "La libertad",
-            telefonoCliente: "123",
-            fechaNacimineto:"2002-20-2",
+            telefonoCliente: 123,
+            fechaNacimineto: 2002-20-2,
             sexo: "M",
         });
         Empleado.create({
@@ -279,8 +279,8 @@ exports.initial = async () => {
             nombre: "Erick",
             apellido: "Reyes",
             direccion: "La libertad",
-            telefonoCliente: "123",
-            fechaNacimineto:"2002-20-2",
+            telefonoCliente: 123,
+            fechaNacimineto: 2002-20-2,
             sexo: "M",
         });
         User.create({
