@@ -265,12 +265,14 @@ exports.initial = async () => {
         await role2.addPermisos(permisos[11]);
         Empleado.create({
             id: 1,
+            dni: "02012",
             nombre: "root",
             apellido: "root",
             sexo: "M",
         });
         Empleado.create({
             id: 2,
+            dni: "02013",
             nombre: "Erick",
             apellido: "Reyes",
             sexo: "M",

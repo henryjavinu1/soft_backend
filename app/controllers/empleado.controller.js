@@ -8,6 +8,7 @@ const Empleado = db.empleado;
 exports.crearEmpleado = async (req = request, res = response) => {
     try {
         const insertEmpleado = await Empleado.create({
+            dni: req.body.dni,
             nombre: req.body.nombre,
             apellido: req.body.apellido,
             direccion: req.body.direccion,
@@ -87,7 +88,7 @@ exports.traerTodosLosEmpleados = async (req = request, res = response) => {
                 msg: "No hay Empleados "
             })
         }
-        return res.status(200).send(todoslosEmpleados); 
+        return res.status(200).send({todoslosEmpleados}); 
     } catch (error) {
         console.log(error);
         return res.status(500).send({
@@ -98,7 +99,7 @@ exports.traerTodosLosEmpleados = async (req = request, res = response) => {
 //Actualizar 
 exports.actualizarEmpleado = async (req = request, res = response) => {
     const id = req.body.id;
-    const { nombre, apellido, direccion, telefono, fechaNacimiento, sexo, isDelete } = req.body;
+    const { dni, nombre, apellido, direccion, telefono, fechaNacimiento, sexo, isDelete } = req.body;
     console.log(id);
     try {
         const EmpleadoBuscado = await Empleado.findOne({
@@ -108,13 +109,13 @@ exports.actualizarEmpleado = async (req = request, res = response) => {
         });
         if (!EmpleadoBuscado) {
             return res.status(404).json({
-                msg: "Cliente no existe"
+                msg: "Empleado no existe"
             })
         }
-        validarCamposEmpleado(EmpleadoBuscado, id, nombre, apellido, direccion, telefono, fechaNacimiento, sexo, isDelete)
+        validarCamposEmpleado(EmpleadoBuscado, id, dni, nombre, apellido, direccion, telefono, fechaNacimiento, sexo, isDelete)
         EmpleadoBuscado.save();
         return res.status(200).send({
-            message: "cliente actualizado con exito",
+            message: "Empleado actualizado con exito",
             empleado: EmpleadoBuscado,
         });
 
@@ -137,7 +138,7 @@ exports.eliminarEmpleado = async (req, res) => {
         });
         if (eliminarEmpleado) {
             res.status(200).send({
-                message: "Cliente eliminado correctamente"
+                message: "Empleado eliminado correctamente"
             });
         }
     } catch (error) {

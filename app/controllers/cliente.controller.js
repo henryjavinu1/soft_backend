@@ -106,7 +106,7 @@ exports.actualizarCliente = async (req = request, res = response) => {
     try {
         const clienteBuscado = await Cliente.findOne({
             where: {
-                dni: req.body.dni
+                id: req.body.id
             },
         });
         if (!clienteBuscado) {

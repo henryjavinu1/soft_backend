@@ -1,8 +1,10 @@
-const validarCamposEmpleado = (empleado, id, nombre, apellido, direccion, telefono, fechaNacimiento, sexo, isDelete) => {
+const validarCamposEmpleado = (empleado, id, dni, nombre, apellido, direccion, telefono, fechaNacimiento, sexo, isDelete) => {
     if (id) {
         empleado.id = id;
     }
-
+    if (dni){
+        empleado.dni = dni;
+    }
     if (nombre) {
         empleado.nombre = nombre;
     }
