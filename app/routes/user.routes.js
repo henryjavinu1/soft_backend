@@ -12,5 +12,5 @@ module.exports = function(app) {
     next();
   });
   app.post("/api/user/bajauser",controller.bajauser);
-  app.post("/api/user/crearuser", controllerauth.signin);
+  app.post("/api/user/crearuser", controllerauth.signup);
 };
