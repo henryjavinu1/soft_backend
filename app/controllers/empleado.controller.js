@@ -8,6 +8,7 @@ const Empleado = db.empleado;
 exports.crearEmpleado = async (req = request, res = response) => {
     try {
         const insertEmpleado = await Empleado.create({
+            dni: req.body.dni,
             nombre: req.body.nombre,
             apellido: req.body.apellido,
             direccion: req.body.direccion,
@@ -30,7 +31,7 @@ exports.crearEmpleado = async (req = request, res = response) => {
 //buscar empleado por id
 exports.buscarEmpleado = async (req = request, res = response) => {
     try {
-        const empleadoBuscado = await Empleado.findAll({
+        const empleadoBuscado = await Empleado.findOne({
             raw: true,
             where: {
                 id: req.body.id,
@@ -42,18 +43,7 @@ exports.buscarEmpleado = async (req = request, res = response) => {
                 msg: "El empleado buscado no existe"
             })
         } else {
-            const resp = {
-                nombre: empleadoBuscado.nombre,
-                apellido: empleadoBuscado.apellido,
-                direccion: empleadoBuscado.direccion,
-                telefono: empleadoBuscado.telefono,
-                fechaNacimiento: empleadoBuscado.fechaNacimiento,
-                sexo: empleadoBuscado.sexo,
-                isDelete: empleadoBuscado.isDelete,
-                createdAt: empleadoBuscado.createdAt,
-                updateAt: empleadoBuscado.createdAt
-            }
-            return res.status(200).send(resp);
+            return res.status(200).send(empleadoBuscado);
         }
     } catch (error) {
         console.log(error);
@@ -79,18 +69,7 @@ exports.buscarEmpleadoPorNombre = async (req = request, res = response) => {
                 msg: "El empleado no existe"
             })
         }
-        const resp = {
-            nombre: EmpleadoBuscado.nombre,
-            apellido: EmpleadoBuscado.apellido,
-            direccion: EmpleadoBuscado.direccion,
-            telefono: EmpleadoBuscado.telefono,
-            fechaNacimiento: EmpleadoBuscado.fechaNacimiento,
-            sexo: EmpleadoBuscado.sexo,
-            isDelete: EmpleadoBuscado.isDelete,
-            createdAt: EmpleadoBuscado.createdAt,
-            updateAt: EmpleadoBuscado.createdAt
-        }
-        return res.status(200).send(resp);
+        return res.status(200).send(EmpleadoBuscado);
     } catch (error) {
         console.log(error);
         return res.status(500).send({
@@ -109,18 +88,7 @@ exports.traerTodosLosEmpleados = async (req = request, res = response) => {
                 msg: "No hay Empleados "
             })
         }
-        const resp = {
-            nombre: todoslosEmpleados.nombre,
-            apellido: todoslosEmpleados.apellido,
-            direccion: todoslosEmpleados.direccion,
-            telefono: todoslosEmpleados.telefono,
-            fechaNacimiento: todoslosEmpleados.fechaNacimiento,
-            sexo: todoslosEmpleados.sexo,
-            isDelete: todoslosEmpleados.isDelete,
-            createdAt: todoslosEmpleados.createdAt,
-            updateAt: todoslosEmpleados.createdAt
-        }
-        return res.status(200).send(resp); 
+        return res.status(200).send({todoslosEmpleados}); 
     } catch (error) {
         console.log(error);
         return res.status(500).send({
@@ -131,7 +99,7 @@ exports.traerTodosLosEmpleados = async (req = request, res = response) => {
 //Actualizar 
 exports.actualizarEmpleado = async (req = request, res = response) => {
     const id = req.body.id;
-    const { nombre, apellido, direccion, telefono, fechaNacimiento, sexo, isDelete } = req.body;
+    const { dni, nombre, apellido, direccion, telefono, fechaNacimiento, sexo, isDelete } = req.body;
     console.log(id);
     try {
         const EmpleadoBuscado = await Empleado.findOne({
@@ -141,13 +109,13 @@ exports.actualizarEmpleado = async (req = request, res = response) => {
         });
         if (!EmpleadoBuscado) {
             return res.status(404).json({
-                msg: "Cliente no existe"
+                msg: "Empleado no existe"
             })
         }
-        validarCamposEmpleado(EmpleadoBuscado, id, nombre, apellido, direccion, telefono, fechaNacimiento, sexo, isDelete)
+        validarCamposEmpleado(EmpleadoBuscado, id, dni, nombre, apellido, direccion, telefono, fechaNacimiento, sexo, isDelete)
         EmpleadoBuscado.save();
-        return res.status(200).json({
-            message: "cliente actualizado con exito",
+        return res.status(200).send({
+            message: "Empleado actualizado con exito",
             empleado: EmpleadoBuscado,
         });
 
@@ -169,13 +137,13 @@ exports.eliminarEmpleado = async (req, res) => {
             }
         });
         if (eliminarEmpleado) {
-            res.status(200).json({
-                message: "Cliente eliminado correctamente"
+            res.status(200).send({
+                message: "Empleado eliminado correctamente"
             });
         }
     } catch (error) {
         console.log(error);
-        res.status(401).json({
+        res.status(401).send({
             message: "Error al eliminar cliente: " + error.message
         });
     }
