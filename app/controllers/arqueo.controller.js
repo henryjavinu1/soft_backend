@@ -1,5 +1,4 @@
 const { query } = require("express");
-const { sequelize } = require("../models/puntoDeVentas");
 const db = require("../models/puntoDeVentas");
 const { impresionArqueo } = require('../helpers/arqueo.helper');
 const Arque = db.arqueo;
@@ -68,7 +67,7 @@ exports.actualizacionCerrandoSesion = async (req, res) => {
         });
         const consult3 = await Arque.findOne({
             where: {
-                id: req.body.idArqueo,
+                idArqueo: req.body.idArqueo,
                 isDelete: false
             }
         });
@@ -89,17 +88,17 @@ exports.actualizacionCerrandoSesion = async (req, res) => {
                                                                                 ventaTotal = (SELECT SUM(totalFactura)
                                                                                               FROM facturas
                                                                                               WHERE idTipoPago = 1 OR idTipoPago = 2 OR idTipoPago = 3 OR idTipoPago = 4)
-                                                        WHERE arqueos.id = ${req.body.idArqueo} , AND arqueos.idSesion = ${req.body.idSesion}`);
+                                                        WHERE arqueos.idArqueo = ${req.body.idArqueo}  AND arqueos.idSesion = ${req.body.idSesion}`);
                     const arqueo2 = await sequelize.query(`UPDATE arqueos SET efectivoTotal = (SELECT SUM(efectivoApertura + efectivoCierre)
                                                                                                 FROM arqueos
-                                                                                                WHERE arqueos.id = ${req.body.idArqueo})
-                                                                                                WHERE arqueos.id = ${req.body.idArqueo}`);
+                                                                                                WHERE arqueos.idArqueo = ${req.body.idArqueo})
+                                                                                                WHERE arqueos.idArqueo = ${req.body.idArqueo}`);
 
                     const fe = await Arque.update({
                       fechaFinal: new Date(),
                     },{
                       where: {
-                        id: req.body.idArqueo,
+                        idArqueo: req.body.idArqueo,
                       },
                     });
                     //validar que el arqueo se actualizo correctamente
@@ -108,7 +107,7 @@ exports.actualizacionCerrandoSesion = async (req, res) => {
                             message: "Arqueo actualizado correctamente",
                             data: await Arque.findOne({
                                 where: {
-                                    id: req.body.idArqueo,
+                                    idArqueo: req.body.idArqueo,
                                 },
                             }),
                         });
@@ -137,7 +136,7 @@ exports.deleteArqueo = async (req, res) => {
             isDelete: true
         }, {
             where: {
-                id: req.body.idArqueo
+                idArqueo: req.body.idArqueo
             }
         });
         //validar que el arqueo se elimino correctamente
@@ -158,18 +157,17 @@ exports.mostrarArqueo = async (req, res) => {
         //mostrar arqueo que su isDelete sea false
         const arqueo = await Arque.findAll({
             where: {
-                isDelete: false
+                isDelete: false,
             }
         });
         //validar que el arqueo se mostro correctamente
             const arqueo1 = impresionArqueo(arqueo);
             res.json({
-                message: "Arqueos encontrados",
                 arqueo1  
             });
     } catch (error) {
         res.status(500).send({
-            message: "Error al mostrar arqueo" + error.message
+            message: "Error al mostrar arqueo" + error
         });
     }
 }
@@ -210,15 +208,19 @@ exports.buscarPorUsuario = async (req, res) => {
             }
         });
         //validar que el arqueo se mostro correctamente
-        if(arqueo){
-            res.status(200).json({
-                message: "arqueo mostrados correctamente",
-                data: arqueo
+        if(!arqueo){
+            res.status(404).json({
+                message: "No se encontro ningun arqueo"
+            });
+        } else{
+            const arqueo1 = impresionArqueo(arqueo);
+            res.json({
+                arqueo1
             });
         }
     } catch (error) {
         //enviar respuesta al cliente
-        res.status(401).json({
+        return res.status(500).json({
             message: "Error al buscar arqueo por usuario" + error.message
         });
     }
