@@ -1,4 +1,6 @@
 const arqueo = require("../controllers/arqueo.controller")
+const { permisosJwt } = require("../middleware");
+const { authJwt } = require("../middleware");
 module.exports = function(app) {
     app.use(function(req, res, next) {
         res.header(
@@ -7,7 +9,7 @@ module.exports = function(app) {
         );
         next();
     });
-    app.post("/api/arqueo/createArqueo", arqueo.createArqueo);
+    app.post("/api/arqueo/createArqueo",arqueo.createArqueo);
     app.post("/api/arqueo/actualizacionCerrandoSesion", arqueo.actualizacionCerrandoSesion);
     app.post("/api/arqueo/deleteArqueo", arqueo.deleteArqueo);
     app.post("/api/arqueo/mostrarArqueo", arqueo.mostrarArqueo);
