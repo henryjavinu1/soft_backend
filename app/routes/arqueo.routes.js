@@ -10,7 +10,7 @@ module.exports = function(app) {
     app.post("/api/arqueo/createArqueo", controller.createArqueo);
     app.post("/api/arqueo/actualizacionCerrandoSesion", controller.actualizacionCerrandoSesion);
     app.post("/api/arqueo/deleteArqueo", controller.deleteArqueo);
-    app.get("/api/arqueo/mostrarArqueo", controller.mostrarArqueo);
+    app.post("/api/arqueo/mostrarArqueo", controller.mostrarArqueo);
     app.post("/api/arqueo/buscarPorFechaInicioFechaFinal", controller.buscarPorFechaInicioFechaFinal);
     app.post("/api/arqueo/buscarPorUsuario", controller.buscarPorUsuario);
 
