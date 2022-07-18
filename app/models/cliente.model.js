@@ -13,6 +13,7 @@ module.exports = (sequelize, Sequelize) => {
         rtn: {
             type: Sequelize.STRING,
             allowNull: true, // permite nulos
+            unique: true 
         },
         nombreCliente:{
             type: Sequelize.STRING,
