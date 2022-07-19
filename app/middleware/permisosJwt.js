@@ -33,13 +33,13 @@ const isPermisos = (permisos) => {
       if(rolpermiso){
         next()
       }else{
-      return res.status(402).send({
+      return res.status(401).send({
         message: "No tienes el permiso necesario",
       });
     }
     } catch (error) {
       return res.status(500).send({
-        message: "Unable to validate User role!",
+        message: "Error al Verificar Permiso",
       });
     }
   }
