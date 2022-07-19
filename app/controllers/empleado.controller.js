@@ -81,7 +81,9 @@ exports.buscarEmpleadoPorNombre = async (req = request, res = response) => {
 exports.traerTodosLosEmpleados = async (req = request, res = response) => {
     try {
         const todoslosEmpleados = await Empleado.findAll({
-
+            where: {
+                isDelete: false,
+            }
         });
         if (!todoslosEmpleados) {
             return res.status(404).json({
@@ -133,7 +135,7 @@ exports.eliminarEmpleado = async (req, res) => {
             isDelete: true
         }, {
             where: {
-                idEmpleado: req.body.idEmpleado
+                id: req.body.id
             }
         });
         if (eliminarEmpleado) {

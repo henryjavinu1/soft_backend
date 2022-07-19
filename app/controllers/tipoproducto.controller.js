@@ -89,6 +89,7 @@ exports.update = async (req, res) => {
     }   
 }
 
+
 exports.findAll = async (req, res) =>{
     try {
         const tipoproducto = await TipoProducto.findAll({
@@ -102,7 +103,6 @@ exports.findAll = async (req, res) =>{
             });
         } else {
             return res.status(200).send({
-                message: "Registros encontrados: ",
                 tipoProducto: tipoproducto
             });
         }
@@ -123,7 +123,6 @@ exports.findOne = async (req, res) => {
         },
     });
     */
-
     try {
         const tipProducto = await TipoProducto.findOne({
             where: {
