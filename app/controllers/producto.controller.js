@@ -167,6 +167,7 @@ exports.update = async (req, res) => {
     }   
 }
 
+exports.setsaldo = async (req, res) => {
     var saldoRecibir  = req.body.saldoRestar;
     var saldoActual = req.body.saldoActual;
     try {
