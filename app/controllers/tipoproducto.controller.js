@@ -123,7 +123,6 @@ exports.findOne = async (req, res) => {
         },
     });
     */
-
     try {
         const tipProducto = await TipoProducto.findOne({
             where: {
