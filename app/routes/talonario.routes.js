@@ -14,4 +14,6 @@ module.exports = function(app) {
   app.get("/api/talonarios/get", controller.getTalonarios);          //R
   app.post("/api/talonarios/update", controller.updateTalonario);    //U
   app.get("/api/talonarios/delete", controller.deleteTalonario);     //D
+  app.post("/api/talonarios/activate", controller.activateTalonario);     
+  app.post("/api/talonarios/disactivate", controller.disactivateTalonario);     
 };

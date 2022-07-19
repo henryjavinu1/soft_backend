@@ -204,14 +204,30 @@ exports.initial = async () => {
             permiso: "Bajar Usuario",
             descripcion: "Acceder al modulo de Bajar Usuario"
         },
+        {
+            permiso: "Crear Usuario",
+            descripcion: "Acceder al modulo de Crear Usuario"
+        },
 
         {
             permiso: "Crear Venta",
             descripcion: "Acceder al modulo de Crear Venta"
         },
         {
-            permiso: "Buscar ventas",
+            permiso: "Buscar o Mostrar ventas",
             descripcion: "Acceder al modulo de buscar Venta"
+        },
+        {
+            permiso: "Traer o buscar  Factura",
+            descripcion: "Acceder al modulo de Traer Factura"
+        },
+        {
+            permiso: "Editar Factura",
+            descripcion: "Acceder al modulo de Editar Factura"
+        },
+        {
+            permiso: "Imprimir Factura",
+            descripcion: "Acceder al modulo de Imprimir Factura"
         },
     ]);
         await role.addPermisos(permisos[0]);
@@ -259,6 +275,10 @@ exports.initial = async () => {
         await role.addPermisos(permisos[42]);
         await role.addPermisos(permisos[43]);
         await role.addPermisos(permisos[44]);
+        await role.addPermisos(permisos[45]);
+        await role.addPermisos(permisos[46]);
+        await role.addPermisos(permisos[47]);
+        await role.addPermisos(permisos[48]);
         await role2.addPermisos(permisos[8]);
         await role2.addPermisos(permisos[9]);
         await role2.addPermisos(permisos[10]);
