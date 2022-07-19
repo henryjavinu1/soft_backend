@@ -275,7 +275,8 @@ const imprimirUnaFactura = async (req = request, res = response) => {
     console.log(numeroFactura);
     try {
         let facturaBuscada = await Factura.findOne({
-            where: { isDelete: false, numeroFactura: numeroFactura },
+            where: { 
+                [Op.and]:[{isDelete: false}, {numeroFactura: numeroFactura}]},
             include: [
                 {
                     model: Venta,
@@ -294,7 +295,6 @@ const imprimirUnaFactura = async (req = request, res = response) => {
                 }
             ]
         });
-
         let detallesDeVentas = [];
         if (facturaBuscada.venta) {
             detallesDeVentas = await DetalleVenta.findAll({
@@ -307,14 +307,13 @@ const imprimirUnaFactura = async (req = request, res = response) => {
             });
         }
 
-        console.log(detallesDeVentas);
         return res.status(200).json({
             facturaConDatos: facturaBuscada,
             detallesDeVentas
         });
     } catch (error) {
         console.log(error);
-        return res.status(400).json({
+        return res.status(500).json({
             error: error.message,
         });
     }
