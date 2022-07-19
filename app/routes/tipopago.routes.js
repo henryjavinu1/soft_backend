@@ -1,5 +1,6 @@
 const { verifySignUp } = require("../middleware");
 const controller = require("../controllers/tipopago.controller");
+const controller2 = require("../controllers/manipularventa.controller");
 
 module.exports = function(app) {
   app.use(function(req, res, next) {
@@ -15,5 +16,6 @@ module.exports = function(app) {
     app.get("/api/gene/buscartipopago", controller.findTipoPago);
     app.post("/api/gene/buscartipopagoid", controller.findTipoPagoid);
     app.post("/api/gene/eliminartipopago", controller.deleteTipoPago);
+    app.get("/api/mostrarventas", controller2.findAllVenta);
 
 };

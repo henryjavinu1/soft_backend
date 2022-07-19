@@ -30,7 +30,7 @@ exports.insertFactura = async (req, res) => {
                     include: [{
                         model: db.empleado,
                       }]  
-                }]
+                }, ]
             });              
         const isvTotal = await ventas.totalISV;
         const descuentoVentas = await ventas.totalDescuentoVenta;
@@ -47,6 +47,7 @@ exports.insertFactura = async (req, res) => {
         }*/
         //Falta conectar bien ventas para generar calculos dependiendo de los atributos de ventas
         const subTotalExoneradoo = 0.00
+        const idEmple = User.idEmpleado;
         const subTotal = parseFloat(isvTotal) + parseFloat(totalventaa) - parseFloat(descuentoVentas);
         const insertfactura = await db.factura.create({
                 numeroFactura: numero.numero,
@@ -69,6 +70,7 @@ exports.insertFactura = async (req, res) => {
         });
         return res.status(200).send({
             message: "Factura creada",
+            insertfactura: insertfactura,
         });
     } catch (error) {
         return res.status(500).send({
@@ -211,6 +213,7 @@ exports.convertirString = async (req, res) => {
                 active: true,
                 isDelete: false,
                 //Fecha sea mayor a la de hoy
+               
                 fechaLimiteEmision: {
                     [Op.gt]: new Date()
                 }
@@ -281,7 +284,7 @@ exports.convertirString = async (req, res) => {
                         });
                     }
             } else {
-                message: "hi"
+               
                 const numeroFactura = await talonario.rangoInicialFactura;
                 //Ingresar por defecto o manualmente... Solo colocar req.body.numero o lo que
                 const insert = await db.numero.create({ puntoEmision: pEmision, establecimiento: estableci, 
