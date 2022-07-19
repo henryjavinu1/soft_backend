@@ -111,7 +111,6 @@ exports.findAll = async (req, res) =>{
             });
         } else {
             return res.status(200).send({
-                message: "Todos los productos",
                 producto: producto
             });
         }
@@ -167,6 +166,48 @@ exports.update = async (req, res) => {
         });
     }   
 }
+
+    var saldoRecibir  = req.body.saldoRestar;
+    var saldoActual = req.body.saldoActual;
+    try {
+        const producto = await Producto.findOne({
+            where: {
+                id: req.body.id,
+                isDelete: false
+            }
+        });
+        if (!producto) {
+            return res.status(404).send({
+                message: "No existe el producto ingresado."
+            });
+        } else {
+            try {
+                const producto = await Producto.update({
+                    cantidadProducto: saldoActual - saldoRecibir,
+                } , {
+                    where: {
+                        id: req.body.id
+                    }
+                });
+              
+                return res.status(200).send({
+                    message: "Producto actualizado."
+                });
+        
+            } catch (error) {
+                return res.status(500).send({
+                    message: "Ocurrio un error al actualizar el producto."  + error
+                });
+            }
+        }
+    } catch (error) {
+        return res.status(500).send({
+            message: "Ocurrio un error" + error
+        });
+    }   
+}
+
+
 
 exports.delete = async (req, res) => {
     try {

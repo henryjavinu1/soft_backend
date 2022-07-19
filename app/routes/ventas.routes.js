@@ -1,5 +1,6 @@
 //const { verifySignUp } = require("../middleware");
 const controller = require("../controllers/ventas.controller");
+const controller2 = require("../controllers/manipularventa.controller");
 const { permisosJwt } = require("../middleware");
 
 module.exports = function(app) {
@@ -12,5 +13,6 @@ module.exports = function(app) {
   });
 
   app.post("/api/ventas", controller.crearVenta);
+  app.get("/api/ventas/traerventas", controller2.findAll);
   
 };
