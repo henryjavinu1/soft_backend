@@ -1,5 +1,10 @@
 module.exports =(sequelize, Sequelize) => {
     const Arqueo = sequelize.define("arqueos", {
+        idArqueo: {
+            type: Sequelize.INTEGER,
+            primaryKey: true,
+            autoIncrement: true
+          },
         fechaInicio: {//fecha de inicio el turno
             type: Sequelize.DATE,
             allowNull: false
