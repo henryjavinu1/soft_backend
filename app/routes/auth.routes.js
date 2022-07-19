@@ -13,6 +13,6 @@ module.exports = function(app) {
   });
 
   app.post("/api/user/login",controller.signin);
-  app.get("/api/user/login",controller.signout);
+  //app.get("/api/user/login",controller.signout);
 
 };
