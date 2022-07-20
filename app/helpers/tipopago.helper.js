@@ -1,17 +1,17 @@
-const impresionDeTipoPago = (tipoPagoBuscado) => {
-    const tipoDePago = tipoPagoBuscado.map((tipoDePago) => {
+
+const impresionDeTipoPago = (pagoBuscadas) => {
+    const tipopago = pagoBuscadas.map((tipopago) => {
+  
         return {
-            idTipoPago: tipoDePago.idTipoPago,
-            tipoDePago: tipoDePago.tipoDePago,
-            descripcionTipoPago: tipoDePago.descripcionTipoPago,
+            idTipoPago: tipopago.idTipoPago,
+            tipoDePago: tipopago.tipoDePago,
+            descripcionTipoPago: tipopago.descripcionTipoPago,
         }
     });
-    return tipoDePago;
+    return tipopago;
 }
-
-
 
 module.exports = {
     impresionDeTipoPago,
-
+    // filtrarFacturas,
 }
