@@ -12,7 +12,7 @@ module.exports = function(app) {
 
   app.post("/api/producto/crearproducto", controller.createproducto);
   app.post("/api/producto/buscarproducto", controller.findOne);
-  app.post("/api/producto/mostrarproductos", controller.findAll);
+  app.get("/api/producto/mostrarproductos", controller.findAll);
   app.post("/api/producto/actualizarproducto", controller.update);
   app.post("/api/producto/eliminarproducto", controller.delete);
   app.post("/api/producto/buscarproductoxcodigo", controller.buscarxcodigo);

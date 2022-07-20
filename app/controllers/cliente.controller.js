@@ -1,5 +1,5 @@
 const { request, response } = require('express');
-const  {Op, DataTypes}  = require("sequelize");
+const { Op, DataTypes, Model } = require("sequelize");
 const db = require('../models/puntoDeVentas');
 const { validarCamposCliente } = require('../helpers/cliente.helper');
 const Cliente = db.cliente;
@@ -10,7 +10,7 @@ exports.crearCliente = async (req = request, res = response) => {
         const insertCliente = await Cliente.create({
             dni: req.body.dni,
             email: req.body.email,
-            rtn: req.body.rtn, 
+            rtn: req.body.rtn,
             nombreCliente: req.body.nombreCliente,
             direccion: req.body.direccion,
             telefonoCliente: req.body.telefonoCliente,
@@ -21,80 +21,113 @@ exports.crearCliente = async (req = request, res = response) => {
         });
     } catch (error) {
         console.log(error);
-        return res.status(500).send({    
+        return res.status(500).send({
             message: "Ocurrio un error" + error
         });
     }
 }
 //buscar cliente por dni
-exports.buscarCliente = async (req = request, res = response)=>{
+exports.buscarCliente = async (req = request, res = response) => {
     const dni = req.query.dni;
     console.log(dni);
-    try{
+    try {
         const clienteBuscado = await Cliente.findOne({
-            where:{
-                dni:{
+            where: {
+                dni: {
                     [Op.like]: req.body.dni
                 }
             },
         });
-        if (!clienteBuscado){
+        const resp = {
+            id: clienteBuscado.id,
+            dni: clienteBuscado.dni,
+            email: clienteBuscado.email,
+            rtn: clienteBuscado.rtn,
+            nombreCliente: clienteBuscado.nombreCliente,
+            direccion: clienteBuscado.direccion,
+            telefonoCliente: clienteBuscado.telefonoCliente,
+            isDelete: clienteBuscado.isDelete,
+            createdAt: clienteBuscado.createdAt,
+            updatedAt: clienteBuscado.updatedAt
+        }
+        if (!clienteBuscado) {
             return res.status(404).json({
                 msg: "El Dni del cliente no existe"
             })
+        } else {
+            return res.status(200).send(resp);
         }
-        return res.status(200).json({
-            clienteBuscado
-        });
-    } catch (error){
+    } catch (error) {
         console.log(error);
         return res.status(500).send({
             message: "Ocurrio un error" + error
         })
-}
+    }
 }
 //buscar cliente por nombre
-exports.buscarClientePorNombre = async (req = request, res = response)=>{
+exports.buscarClientePorNombre = async (req = request, res = response) => {
     const nombreCliente = req.query.nombreCliente;
     console.log(nombreCliente);
-    try{
+    try {
         const clienteBuscado = await Cliente.findOne({
-            where:{
-                nombreCliente:{
+            where: {
+                nombreCliente: {
                     [Op.like]: req.body.nombreCliente
                 }
             },
         });
-        if (!clienteBuscado){
+        if (!clienteBuscado) {
             return res.status(404).json({
                 msg: "El cliente no existe"
             })
         }
-        return res.status(200).json({
-            clienteBuscado
-        });
-    } catch (error){
+        const resp = {
+            id: clienteBuscado.id,
+            dni: clienteBuscado.dni,
+            email: clienteBuscado.email,
+            rtn: clienteBuscado.rtn,
+            nombreCliente: clienteBuscado.nombreCliente,
+            direccion: clienteBuscado.direccion,
+            telefonoCliente: clienteBuscado.telefonoCliente,
+            isDelete: clienteBuscado.isDelete,
+            createdAt: clienteBuscado.createdAt,
+            updatedAt: clienteBuscado.updatedAt
+        }
+        return res.status(200).send(resp);
+    } catch (error) {
         console.log(error);
         return res.status(500).send({
             message: "Ocurrio un error" + error
         })
-}
+    }
 }
 //Buscar todos los clientes 
-exports.traerTodosLosClientes = async (req = request, res = response) => { 
+exports.traerTodosLosClientes = async (req = request, res = response) => {
     try {
         const todoslosClientes = await Cliente.findAll({
-    
+
         });
-        if (!todoslosClientes){
+        if (!todoslosClientes) {
             return res.status(404).json({
                 msg: "No hay ningun cliente creado"
             })
         }
+        const resp = {
+            id: todoslosClientes.id,
+            dni: todoslosClientes.dni,
+            email: todoslosClientes.email,
+            rtn: todoslosClientes.rtn,
+            nombreCliente: todoslosClientes.nombreCliente,
+            direccion: todoslosClientes.direccion,
+            telefonoCliente: todoslosClientes.telefonoCliente,
+            isDelete: todoslosClientes.isDelete,
+            createdAt: todoslosClientes.createdAt,
+            updatedAt: todoslosClientes.updatedAt
+        }
         return res.status(200).json({
-            todoslosClientes
+            resp
         })
-     } catch (error) {
+    } catch (error) {
         console.log(error);
         return res.status(500).send({
             message: "Ocurrio un error" + error
@@ -104,11 +137,11 @@ exports.traerTodosLosClientes = async (req = request, res = response) => {
 //Actualizar 
 exports.actualizarCliente = async (req = request, res = response) => {
     const dni = req.body.dni;
-    const {email, rtn, nombreCliente, direccion, telefonoCliente, isDelete} = req.body;
+    const { email, rtn, nombreCliente, direccion, telefonoCliente, isDelete } = req.body;
     console.log(dni);
     try {
         const clienteBuscado = await Cliente.findOne({
-            where:{
+            where: {
                 dni: req.body.dni
             },
         });
@@ -117,14 +150,14 @@ exports.actualizarCliente = async (req = request, res = response) => {
                 msg: "Cliente no existe"
             })
         }
-        validarCamposCliente (clienteBuscado, dni, email, rtn, nombreCliente, direccion, telefonoCliente, isDelete)
-        clienteBuscado.save();      
+        validarCamposCliente(clienteBuscado, dni, email, rtn, nombreCliente, direccion, telefonoCliente, isDelete)
+        clienteBuscado.save();
         return res.status(200).json({
             message: "cliente actualizado con exito",
             cliente: clienteBuscado,
         });
 
-     } catch (error) {
+    } catch (error) {
         console.log(error);
         return res.status(500).send({
             message: "Ocurrio un error" + error
@@ -136,12 +169,12 @@ exports.eliminarCliente = async (req, res) => {
     try {
         const eliminarCliente = await Cliente.update({
             isDelete: true
-        },{
+        }, {
             where: {
                 id: req.body.id
             }
         });
-        if(eliminarCliente){
+        if (eliminarCliente) {
             res.status(200).json({
                 message: "Cliente eliminado correctamente"
             });

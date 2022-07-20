@@ -222,16 +222,12 @@ db.tipopago.hasMany(db.factura,{
   });
 // Factura-Numero
 //una factuta tiene un numero, un numero tiene una factura
-db.numero.hasOne(db.factura,{
-  foreignKey: {
-    name: 'idNumero', allowNull: false 
-  }
-});
-db.factura.belongsTo(db.numero,{
-  foreignKey: {
-    name: 'idNumero', allowNull: false 
-  }
-});
+  db.numero.hasOne(db.factura,{
+    foreignKey: {  name: 'idNumero', allowNull: false }
+  });
+  db.factura.belongsTo(db.numero,{
+    foreignKey: {  name: 'idNumero', allowNull: false }
+  });
 module.exports = db;
 
 
