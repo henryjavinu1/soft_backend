@@ -8,9 +8,9 @@ const Op = db.Sequelize.Op;
 exports.crearol = async (req, res) => {
     try {
         const rol = await Role.create({
-            rol: req.body.Rol,
-            descripcion: req.body.Descripcion,
-            IsDelete: false,
+            id: req.body.id,
+            rol: req.body.rol,
+            descripcion: req.body.descripcion,
         });
         return res.status(200).json({
             message: "Rol creado con exito",
@@ -19,7 +19,7 @@ exports.crearol = async (req, res) => {
     }
     catch (error) {
         return res.status(500).send({
-            message: "Ocurrio un error"
+            message: "Ocurrio un error en el backend"
         });
     }
 }
