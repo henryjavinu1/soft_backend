@@ -20,11 +20,10 @@ exports.getTalonarios = async (req = request, res = response) => {
 exports.createTalonario = async (req = request, res = response) => {
     try {
         const talonario = await Talonario.create({
-            rangoInicialFactura: req.query.rangoInicialFactura,
-            rangoFinalFactura: req.query.rangoFinalFactura,
-            cai: req.query.cai,
-            fechaLimiteEmision: req.query.fechaLimiteEmision,
-            active: req.query.active
+            rangoInicialFactura: req.body.rangoInicialFactura,
+            rangoFinalFactura: req.body.rangoFinalFactura,
+            cai: req.body.cai,
+            fechaLimiteEmision: req.body.fechaLimiteEmision,
         });
         console.log(talonario);
         return res.status(200).send(talonario);
@@ -38,14 +37,47 @@ exports.createTalonario = async (req = request, res = response) => {
 exports.updateTalonario = async (req = request, res = response) => {
     try {
         const talonario = await Talonario.update({
-            rangoInicialFactura: req.query.rangoInicialFactura,
-            rangoFinalFactura: req.query.rangoFinalFactura,
-            cai: req.query.cai,
-            fechaLimiteEmision: req.query.fechaLimiteEmision,
-            active: req.query.active
+            rangoInicialFactura: req.body.rangoInicialFactura,
+            rangoFinalFactura: req.body.rangoFinalFactura,
+            cai: req.body.cai,
+            fechaLimiteEmision: req.body.fechaLimiteEmision,
         },{
             where: {
-                idTalonario: req.query.idTalonario,
+                idTalonario: req.body.idTalonario,
+            }
+        });
+        return res.status(200).send(talonario);
+    } catch (error) {
+        return res.status(500).send({
+            message: "Error"
+        });
+    }
+}
+
+exports.activateTalonario = async (req = request, res = response) => {
+    try {
+        const talonario = await Talonario.update({
+            active: 1
+        },{
+            where: {
+                idTalonario: req.body.idTalonario,
+            }
+        });
+        return res.status(200).send(talonario);
+    } catch (error) {
+        return res.status(500).send({
+            message: "Error"
+        });
+    }
+}
+
+exports.disactivateTalonario = async (req = request, res = response) => {
+    try {
+        const talonario = await Talonario.update({
+            active: 0
+        },{
+            where: {
+                idTalonario: req.body.idTalonario,
             }
         });
         return res.status(200).send(talonario);

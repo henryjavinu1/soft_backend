@@ -13,37 +13,24 @@ exports.signup = async (req, res) => {
   // Save User to Database
   try {
     const user = await User.create({
-      username: req.body.username,
-      email: req.body.email,
+      usuario: req.body.UserName,
       password: bcrypt.hashSync(req.body.password, 8),
+      email: req.body.email,
+      idEmpleado: req.body.idEmpleado,
+      idRol: req.body.idRol
     });
 
-    if (req.body.roles) {
-      const roles = await Role.findAll({
-        where: {
-          name: {
-            [Op.or]: req.body.roles,
-          },
-        },
-      });
-
-      const result = user.setRoles(roles);
-      if (result) res.send({
-        message: "Usuario registrado satisfactoriamente!"
-      });
-    } else {
-      // user has role = 1
-      const result = user.setRoles([1]);
-      if (result) res.send({
-        message: "User registered successfully!"
-      });
-    }
-  } catch (error) {
-    res.status(500).send({
-      message: error.message
-    });
+    return res.status(200).json({
+      message: "Usuario creado con exito",    
+      data: user
+  });
   }
-};
+catch (error) {
+  return res.status(500).send({
+      message: "Ocurrio un error"
+  });
+}
+}
 
 exports.signin = async (req, res) => {
   try {
