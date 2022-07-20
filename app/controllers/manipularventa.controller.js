@@ -27,6 +27,8 @@ exports.findAllVenta = async (req, res) =>{
                }, 
               {
                 model: db.cliente,
+              }, {
+                model: db.detalleventa,
               }] 
         });
         if (!ventas) {
@@ -37,7 +39,8 @@ exports.findAllVenta = async (req, res) =>{
             
             const venta = impresionDeVentas(ventas);
             res.json({
-                venta
+                venta,
+                detalleventa
             })
         }
     } catch (error) {

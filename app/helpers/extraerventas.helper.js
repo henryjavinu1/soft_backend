@@ -1,5 +1,6 @@
 const impresionDeVentas = (ventaBuscado) => {
     const ventas = ventaBuscado.map((ventas) => {
+    
         let existeUsuario = true;
         let existeEmpleado = true;
         let existenombre = true;
@@ -9,6 +10,7 @@ const impresionDeVentas = (ventaBuscado) => {
         let existeRtn = true;
         let existeDireccion = true;
         let existeTelefonoCliente = true;
+        
         if (!ventas.usuario) { 
             existeUsuario = false;
 
@@ -63,6 +65,7 @@ const impresionDeVentas = (ventaBuscado) => {
             idEmpleado: (!existeEmpleado) ? 0 : ventas.usuario.empleado.id,
             nombreEmpleado: (!existeEmpleado) ? "" : ventas.usuario.empleado.nombre,
             usuario: (!existeUsuario) ? "" : ventas.usuario.usuario,
+           
         };
     });
         return ventas;
