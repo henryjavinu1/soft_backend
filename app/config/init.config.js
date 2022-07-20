@@ -543,7 +543,7 @@ exports.initial = async () => {
             numero: '001-00110708',
             idTalonario: 1,
         });
-        
+
     } catch (error) {
         console.log(error);
     }

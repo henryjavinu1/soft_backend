@@ -21,7 +21,6 @@ const conversor = require('conversor-numero-a-letras-es-ar');
 
 exports.insertFactura = async (req, res) => {
     try {
-        
         const ventas = await db.ventas.findOne({
             where: {
                 id: req.body.idVenta,
@@ -40,7 +39,12 @@ exports.insertFactura = async (req, res) => {
             });   
         const id = ventas.id;
         await this.nuevo(req);  
-         
+         const sesion = await db.sesion.findOne({
+            where: {
+                isActive: true,
+                isDelete: false
+            }
+        });
         const isvTotal = await ventas.totalISV;
         const descuentoVentas = await ventas.totalDescuentoVenta;
         const totalventaa = await ventas.totalVenta;
@@ -48,25 +52,15 @@ exports.insertFactura = async (req, res) => {
         const numero = await db.numero.findOne({ order: [["id", "DESC"]], });
         let ClaseConversor = conversor.conversorNumerosALetras;
         let miConversor = new ClaseConversor();
-        var numeroLetras = miConversor.convertToText(totalventaa);
-        //crear condicion para saber cuando generar un subTotal 0 o Float vistas
-       /* if(subTotalExoneradoSistema==0){
-            const subTotalExoneradoo = 0.00
-            const subTotal = parseFloat(isvTotal) + parseFloat(totalventaa) - parseFloat(descuentoVentas);
-            
-        }else{
-            const subTotalExoneradoo = parseFloat(totalventaa) - parseFloat(descuentoVentas);
-            const subTotal = 0.00
-        }*/
-        //Falta conectar bien ventas para generar calculos dependiendo de los atributos de ventas
-        const subTotalExoneradoo = totalventaa;
+        const subTotalExoneradoo = 0.00;
         const subTotal = parseFloat(isvTotal) + parseFloat(totalventaa) - parseFloat(descuentoVentas);
+        var numeroLetras = miConversor.convertToText(subTotal);
         const insertfactura = await db.factura.create({
                 numeroFactura: numero.numero,
                 fechaFactura: new Date(),
                 descuentoTotalFactura: descuentoVentas,
                 isvTotalFactura: isvTotal,
-                totalFactura: totalventaa,
+                totalFactura: subTotal,
                 subTotalExonerado: subTotalExoneradoo,
                 //Subtotal exonerado o excento
                 subTotalFactura: subTotal, //HACER QUE EL SUBTOTAL SEA EXONERADO o no desde el front 0 o float
@@ -76,10 +70,12 @@ exports.insertFactura = async (req, res) => {
                 idCliente: ventas.idCliente,
                 idUsuario: ventas.idUsuario, // id de usuario que vende
                 idEmpleado: ventas.usuario.empleado.id, // id de empleado que vende
-                idUsuarioSesion: req.body.idUsuarioSesion, //Usuario Sesion con la que se esta facturando
+                 //Usuario Sesion con la que se esta facturando
                 idVenta: ventas.id,
                 idTalonario: numero.idTalonario,
+                idSesion: sesion.id,
                 idNumero: numero.id,
+                
         });
         return res.status(200).send({
             insertfactura: insertfactura,
