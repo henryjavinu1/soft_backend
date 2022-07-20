@@ -1,5 +1,4 @@
 
-
 const impresionDeTipoPago = (pagoBuscadas) => {
     const tipopago = pagoBuscadas.map((tipopago) => {
   
@@ -15,5 +14,4 @@ const impresionDeTipoPago = (pagoBuscadas) => {
 module.exports = {
     impresionDeTipoPago,
     // filtrarFacturas,
-
 }

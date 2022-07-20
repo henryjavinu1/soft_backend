@@ -28,19 +28,279 @@ exports.initial = async () => {
             rol: "root",
             descripcion: "super usuario",
         });
+        const role2 = await Role.create({
+            id: 2,
+            rol: "Empleados",
+            descripcion: "Super usuario Empleados",
+        });
         const permisos = await Permiso.bulkCreate([{
-            permiso: "Modulo de Ventas",
-            descripcion: "Acceder al modulo de Ventas"
+            permiso: "Crear Arqueo",
+            descripcion: "Acceder al modulo de Crear arqueo"
         },{
-            permiso: "Facturas",
-            descripcion: "Acceder al modulo Facturas"
-        }]);
+            permiso: "Actualizar Arqueo",
+            descripcion: "Acceder al modulo de Actualizar Arqueo"
+        },
+        {
+            permiso: "Borrar Arqueo",
+            descripcion: "Acceder al modulo de Borrar Aqueo"
+        },
+        {
+            permiso: "Mostrar o buscar Arqueo",
+            descripcion: "Acceder al modulo de Mostrar o buscar Arqueo"
+        },
+        {
+            permiso: "Crear Cliente",
+            descripcion: "Acceder al modulo de Crear Cliente"
+        },
+        {
+            permiso: "Actualizar Cliente",
+            descripcion: "Acceder al modulo de Actualizar Cliente"
+        },
+        {
+            permiso: "Borrar Cliente",
+            descripcion: "Acceder al modulo de Borrar Cliente"
+        },
+        {
+            permiso: "Mostrar y buscar Cliente",
+            descripcion: "Acceder al modulo de Mostrar y buscar Cliente"
+        },
+        {
+            permiso: "Crear Empleado",
+            descripcion: "Acceder al modulo de Crear Empleado"
+        },
+        {
+            permiso: "Actualizar Empleado",
+            descripcion: "Acceder al modulo de Actualizar Empleado"
+        },
+        {
+            permiso: "Borrar Empleado",
+            descripcion: "Acceder al modulo de Borrar Empleado"
+        },
+        {
+            permiso: "Mostrar y buscar Empleado",
+            descripcion: "Acceder al modulo de Mostrar y buscar Empleado"
+        },
+        {
+            permiso: "traer Factura",
+            descripcion: "Acceder al modulo de traer Factura"
+        },
+        {
+            permiso: "Ver tipo Pago",
+            descripcion: "Acceder al modulo de Ver tipo Pago"
+        },
+        {
+            permiso: "Insertar Factura",
+            descripcion: "Acceder al modulo de Insertar Factura"
+        },
+        {
+            permiso: "Convertir String",
+            descripcion: "Acceder al modulo de Convertir String"
+        },
+        {
+            permiso: "Crear Permiso",
+            descripcion: "Acceder al modulo de Crear Permiso"
+        },
+        {
+            permiso: "Actualizar Permiso",
+            descripcion: "Acceder al modulo de Actualizar Permiso"
+        },
+        {
+            permiso: "Bajar Permiso",
+            descripcion: "Acceder al modulo de Bajar Permiso"
+        },
+        {
+            permiso: "Mostrar o buscar Permiso",
+            descripcion: "Acceder al modulo de Mostrar o buscar Permiso"
+        },
+        {
+            permiso: "Crear Producto",
+            descripcion: "Acceder al modulo de Crear Producto"
+        },
+        {
+            permiso: "Actualizar Producto",
+            descripcion: "Acceder al modulo de Actualizar Producto"
+        },
+        {
+            permiso: "Borrar Producto",
+            descripcion: "Acceder al modulo de Borrar Producto"
+        },
+        {
+            permiso: "Mostrar y buscar Producto",
+            descripcion: "Acceder al modulo de Mostrar y buscar Producto"
+        },
+        {
+            permiso: "Crear roles",
+            descripcion: "Acceder al modulo de Crear roles"
+        },
+        {
+            permiso: "bajar roles",
+            descripcion: "Acceder al modulo de bajar roles"
+        },
+        {
+            permiso: "actualizar roles",
+            descripcion: "Acceder al modulo de actualizar roles"
+        },
+        {
+            permiso: "Mostrar y Buscar Roles",
+            descripcion: "Acceder al modulo de Mostrar y Buscar Roles"
+        },
+        {
+            permiso: "Crear Talonario",
+            descripcion: "Acceder al modulo de Crear Talonario"
+        },
+        {
+            permiso: "Actualizar Talonario",
+            descripcion: "Acceder al modulo de Actualizar Talonario"
+        },
+        {
+            permiso: "Borrar Talonario",
+            descripcion: "Acceder al modulo de Borrar Talonario"
+        },
+        {
+            permiso: "Mostrar y buscar Talonario",
+            descripcion: "Acceder al modulo de Mostrar y buscar Talonario"
+        },
+        {
+            permiso: "Crear Tipo pago",
+            descripcion: "Acceder al modulo de Crear Tipo pago"
+        },
+        {
+            permiso: "Actualizar Tipo pago",
+            descripcion: "Acceder al modulo de Actualizar Tipo pago"
+        },
+        {
+            permiso: "Borrar Tipo pago",
+            descripcion: "Acceder al modulo de Borrar Tipo pago"
+        },
+        {
+            permiso: "Mostrar y buscar Tipo pago",
+            descripcion: "Acceder al modulo de Mostrar y buscar Tipo pago"
+        },
+        {
+            permiso: "Crear tipo producto",
+            descripcion: "Acceder al modulo de Crear tipo producto"
+        },
+        {
+            permiso: "Actualizar tipo producto",
+            descripcion: "Acceder al modulo de Actualizar tipo producto"
+        },
+        {
+            permiso: "Borrar tipo producto",
+            descripcion: "Acceder al modulo de Borrar tipo producto"
+        },
+        {
+            permiso: "Mostrar y buscar tipo producto",
+            descripcion: "Acceder al modulo de Mostrar y buscar tipo producto"
+        },
+        {
+            permiso: "Crear Detalle Venta",
+            descripcion: "Acceder al modulo de Crear Detalle Venta"
+        },
+        {
+            permiso: "Mostrar detalle ventas",
+            descripcion: "Acceder al modulo de Buscar detalle ventas"
+        },
+        {
+            permiso: "Bajar Usuario",
+            descripcion: "Acceder al modulo de Bajar Usuario"
+        },
+        {
+            permiso: "Crear Usuario",
+            descripcion: "Acceder al modulo de Crear Usuario"
+        },
+
+        {
+            permiso: "Crear Venta",
+            descripcion: "Acceder al modulo de Crear Venta"
+        },
+        {
+            permiso: "Buscar o Mostrar ventas",
+            descripcion: "Acceder al modulo de buscar Venta"
+        },
+        {
+            permiso: "Traer o buscar  Factura",
+            descripcion: "Acceder al modulo de Traer Factura"
+        },
+        {
+            permiso: "Editar Factura",
+            descripcion: "Acceder al modulo de Editar Factura"
+        },
+        {
+            permiso: "Imprimir Factura",
+            descripcion: "Acceder al modulo de Imprimir Factura"
+        },
+    ]);
         await role.addPermisos(permisos[0]);
         await role.addPermisos(permisos[1]);
+        await role.addPermisos(permisos[2]);
+        await role.addPermisos(permisos[3]);
+        await role.addPermisos(permisos[4]);
+        await role.addPermisos(permisos[5]);
+        await role.addPermisos(permisos[6]);
+        await role.addPermisos(permisos[7]);
+        await role.addPermisos(permisos[8]);
+        await role.addPermisos(permisos[9]);
+        await role.addPermisos(permisos[10]);
+        await role.addPermisos(permisos[11]);
+        await role.addPermisos(permisos[12]);
+        await role.addPermisos(permisos[13]);
+        await role.addPermisos(permisos[14]);
+        await role.addPermisos(permisos[15]);
+        await role.addPermisos(permisos[16]);
+        await role.addPermisos(permisos[17]);
+        await role.addPermisos(permisos[18]);
+        await role.addPermisos(permisos[19]);
+        await role.addPermisos(permisos[20]);
+        await role.addPermisos(permisos[21]);
+        await role.addPermisos(permisos[22]);
+        await role.addPermisos(permisos[23]);
+        await role.addPermisos(permisos[24]);
+        await role.addPermisos(permisos[25]);
+        await role.addPermisos(permisos[26]);
+        await role.addPermisos(permisos[27]);
+        await role.addPermisos(permisos[28]);
+        await role.addPermisos(permisos[29]);
+        await role.addPermisos(permisos[30]);
+        await role.addPermisos(permisos[31]);
+        await role.addPermisos(permisos[32]);
+        await role.addPermisos(permisos[33]);
+        await role.addPermisos(permisos[34]);
+        await role.addPermisos(permisos[35]);
+        await role.addPermisos(permisos[36]);
+        await role.addPermisos(permisos[37]);
+        await role.addPermisos(permisos[38]);
+        await role.addPermisos(permisos[39]);
+        await role.addPermisos(permisos[40]);
+        await role.addPermisos(permisos[41]);
+        await role.addPermisos(permisos[42]);
+        await role.addPermisos(permisos[43]);
+        await role.addPermisos(permisos[44]);
+        await role.addPermisos(permisos[45]);
+        await role.addPermisos(permisos[46]);
+        await role.addPermisos(permisos[47]);
+        await role.addPermisos(permisos[48]);
+        await role2.addPermisos(permisos[8]);
+        await role2.addPermisos(permisos[9]);
+        await role2.addPermisos(permisos[10]);
+        await role2.addPermisos(permisos[11]);
         Empleado.create({
             id: 1,
+            dni: "02012",
             nombre: "root",
             apellido: "root",
+            direccion: "La libertad",
+            telefono: "123",
+            fechaNacimiento: "2002-20-2",
+            sexo: "M",
+        });
+        Empleado.create({
+            id: 2,
+            dni: "02013",
+            nombre: "Erick",
+            apellido: "Reyes",
+            direccion: "La libertad",
+            telefono: "123",
+            fechaNacimiento: "2002-20-2",
             sexo: "M",
         });
         User.create({
@@ -49,6 +309,13 @@ exports.initial = async () => {
             email: "root@soft.com",
             idEmpleado: 1,
             idRol: 1
+        });
+        User.create({
+            usuario: "erick",
+            password: bcrypt.hashSync(config.secret, 8),
+            email: "erick@soft.com",
+            idEmpleado: 2,
+            idRol: 2
         });
         //tipo de pago WJOE1995
         TipoPag.create({
