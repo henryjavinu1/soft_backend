@@ -10,7 +10,7 @@ exports.crearol = async (req, res) => {
         const rol = await Role.create({
             rol: req.body.Rol,
             descripcion: req.body.Descripcion,
-            IsDelete: false,
+            IsDelete: false
         });
         return res.status(200).json({
             message: "Rol creado con exito",
@@ -125,4 +125,3 @@ exports.buscarolname = async (req, res) => {
         });
     }
 }
-
