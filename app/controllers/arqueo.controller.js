@@ -1,5 +1,6 @@
 const { query } = require("express");
 const db = require("../models/puntoDeVentas");
+const { sequelize } = require("../models/puntoDeVentas");
 const { impresionArqueo } = require('../helpers/arqueo.helper');
 const Arque = db.arqueo;
 const Sesi = db.sesion;
@@ -155,16 +156,17 @@ exports.deleteArqueo = async (req, res) => {
 exports.mostrarArqueo = async (req, res) => {
     try {
         //mostrar arqueo que su isDelete sea false
-        const arqueo = await Arque.findAll({
+        const arqueos = await Arque.findAll({
             where: {
                 isDelete: false,
             }
         });
-        //validar que el arqueo se mostro correctamente
-            const arqueo1 = impresionArqueo(arqueo);
-            res.json({
-                arqueo1  
+        if(!arqueos){
+            return res.status(404).json({
+                message: "No hay arqueos"
             });
+        }
+        return res.status(200).json({arqueos});
     } catch (error) {
         res.status(500).send({
             message: "Error al mostrar arqueo" + error
