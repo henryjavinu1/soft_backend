@@ -1,8 +1,10 @@
 const { request, response } = require('express');
 const { Op, DataTypes } = require("sequelize");
+const fs = require('fs');
 
 const { impresionDeFacturas, validarCampos, filtrarFacturasPorFechaQuery } = require('../helpers/manipularfactura.helper');
 const db = require('../models/puntoDeVentas');
+const path = require('path');
 const Factura = db.factura;
 const Cliente = db.cliente;
 const Talonario = db.talonario;
@@ -275,8 +277,9 @@ const imprimirUnaFactura = async (req = request, res = response) => {
     console.log(numeroFactura);
     try {
         let facturaBuscada = await Factura.findOne({
-            where: { 
-                [Op.and]:[{isDelete: false}, {numeroFactura: numeroFactura}]},
+            where: {
+                [Op.and]: [{ isDelete: false }, { numeroFactura: numeroFactura }]
+            },
             include: [
                 {
                     model: Venta,
@@ -317,6 +320,18 @@ const imprimirUnaFactura = async (req = request, res = response) => {
             error: error.message,
         });
     }
+}
+
+const descargarFactura = (req = request, res = response) => {
+    console.log('hola');
+    var file = fs.createReadStream('app/pdf_files/prueba.pdf');
+    var stat = fs.statSync('app/pdf_files/prueba.pdf');
+    res.setHeader('Content-Length', stat.size);
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename=factura.pdf');
+    file.pipe(res);
+    console.log(file);
+    // return res.status(200).download(path.join(__dirname, '../pdf_files/prueba.pdf'));
 }
 
 const editarFactura = async (req = request, res = response) => {
@@ -360,5 +375,6 @@ module.exports = {
     buscarFacturaFecha,
     buscarFacturaEmpleado,
     buscarPorTalonario,
-    imprimirUnaFactura
+    imprimirUnaFactura,
+    descargarFactura
 }

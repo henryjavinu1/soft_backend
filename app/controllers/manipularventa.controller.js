@@ -8,31 +8,40 @@ const Cliente = db.cliente;
 
 //const Op = db.Sequelize.Op;
 const { Op } = require("sequelize");
+const { impresionDeVentas } = require("../helpers/extraerventas.helper");
+const { detalleventa } = require("../models/puntoDeVentas");
 
 
-exports.findAll = async (req, res) =>{
+exports.findAllVenta = async (req, res) =>{
     try {
         const ventas = await Ventas.findAll({
             where: {
                 isDelete: false,
-            }
+            }, 
+           include:[{
+               model: db.user,
+                include:[{
+                    model: db.empleado,
+                 
+                }]
+               }, 
+              {
+                model: db.cliente,
+              }, {
+                model: db.detalleventa,
+              }] 
         });
         if (!ventas) {
             return res.status(404).send({
                 message: "No hay registros."
             });
         } else {
-            return res.status(200).send({
-                Ventas: ventas 
-                , include:[{
-                    model: db.cliente,
-                    atributes: ['id','idCliente']
-                   }],
-                include:[{
-                    model: db.user,
-                    atributes: ['id','idUsuario']
-                   }]
-            });
+            
+            const venta = impresionDeVentas(ventas);
+            res.json({
+                venta,
+                detalleventa
+            })
         }
     } catch (error) {
         return res.status(500).send({
@@ -40,5 +49,3 @@ exports.findAll = async (req, res) =>{
         });
     }
 }
-
-

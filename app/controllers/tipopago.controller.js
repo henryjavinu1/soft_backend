@@ -4,6 +4,7 @@ const detalleventaModel = require("../models/detalleventa.model");
 const { ARRAY } = require("sequelize");
 const TipoPago = db.tipopago;
 const { impresionDeTipoPago} = require('../helpers/tipopago.helper');
+const { impresionDeVentas } = require("../helpers/extraerventas.helper");
 const Op = db.Sequelize.Op;
 //Insertar tipo de pago
 exports.insertarTipoPago = async (req, res) => {
@@ -69,7 +70,7 @@ exports.findTipoPago = async (req, res) => {
 //Buscar por id  revisar
 exports.findTipoPagoid = async (req, res) => {
     try {
-        const tipopago = await db.tipopago.findAll({
+        const tipopago = await db.tipopago.findOne({
             where: {
                 idTipoPago: parseInt(req.body.idTipoPago),
                 isDelete: false,
@@ -80,10 +81,8 @@ exports.findTipoPagoid = async (req, res) => {
                 message: "El tipo de pago no existe"
             });
         } else {
-            const tipopagos = impresionDeTipoPago(tipopago);
-            res.json({
-                tipopagos
-            })
+            return res.status(200).json({
+                tipopago});
         }
     } catch (error) {
        
