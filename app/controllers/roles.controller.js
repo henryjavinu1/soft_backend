@@ -121,7 +121,7 @@ exports.buscarolname = async (req, res) => {
         }
     } catch (error){
         return res.status(500).send({
-            message: "Error al intentar conectar al servidor"
+            message: "Error al intentar conectar al servido"
         });
     }
 }
