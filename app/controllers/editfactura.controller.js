@@ -325,7 +325,7 @@ const imprimirUnaFactura = async (req = request, res = response) => {
 const descargarFactura = async (req = request, res = response) => {
 
     const numeroFactura = req.query.numerofactura;
-    console.log('num factura: '+numeroFactura);
+    // console.log('num factura: '+numeroFactura);
     let detallesDeVentas = [];
     let facturaBuscada
     try {
@@ -361,20 +361,27 @@ const descargarFactura = async (req = request, res = response) => {
                 ]
             });
         }
-        construirFacturaEnPDF(facturaBuscada, detallesDeVentas).then(pdfDoc => {
-            var file = fs.createReadStream('app/pdf_files/primera.pdf');
-            // var stat = fs.statSync('app/pdf_files/primera.pdf');
-            // res.setHeader('Content-Length', stat.size);
-            res.setHeader('Content-Type', 'application/pdf');
-            res.setHeader('Content-Disposition', 'attachment; filename=factura1.pdf');
-            file.pipe(res);
-        }).catch(err => {
-            res.status(500).json(
-                {
-                    msg: err
-                }
-            )
-        });
+        if (facturaBuscada) {
+            construirFacturaEnPDF(facturaBuscada, detallesDeVentas).then(pdfDoc => {
+                var file = fs.createReadStream('app/pdf_files/primera.pdf');
+                // var stat = fs.statSync('app/pdf_files/primera.pdf');
+                // res.setHeader('Content-Length', stat.size);
+                res.setHeader('Content-Type', 'application/pdf');
+                res.setHeader('Content-Disposition', `attachment; filename=factura${facturaBuscada.numeroFactura}.pdf`);
+                file.pipe(res);
+                fs.unlinkSync('app/pdf_files/primera.pdf');
+            }).catch(err => {
+                res.status(500).json(
+                    {
+                        msg: err
+                    }
+                )
+            });
+        } else {
+            return res.status(400).json({
+               msg: 'No se encontró el documento solicitado.' 
+            });
+        }
     } catch (error) {
         console.log(error);
         return res.status(500).json({
