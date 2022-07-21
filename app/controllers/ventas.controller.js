@@ -54,9 +54,9 @@ exports.mostrarVentas = async (req = request, res = response) => {
     }
 }
 
-/*Actualizar 
-exports.actualizarCliente = async (req = request, res = response) => {
-    const dni = req.body.dni;
+Actualizar 
+exports.actualizarVenta = async (req = request, res = response) => {
+    const id = req.body.id;
     const { email, rtn, nombreCliente, direccion, telefonoCliente, isDelete } = req.body;
     console.log(dni);
     try {
@@ -84,24 +84,24 @@ exports.actualizarCliente = async (req = request, res = response) => {
     }
 }
 //Eliminar
-exports.eliminarCliente = async (req, res) => {
+exports.eliminarVenta = async (req, res) => {
     try {
-        const eliminarCliente = await Cliente.update({
+        const eliminarVenta = await Ventas.update({
             isDelete: true
         }, {
             where: {
                 id: req.body.id
             }
         });
-        if (eliminarCliente) {
+        if (eliminar) {
             res.status(200).send({
-                message: "Cliente eliminado correctamente"
+                message: "Venta eliminada correctamente"
             });
         }
     } catch (error) {
         console.log(error);
         res.status(401).send({
-            message: "Error al eliminar cliente: " + error.message
+            message: "Error al eliminar la venta: " + error.message
         });
     }
-}*/
+}

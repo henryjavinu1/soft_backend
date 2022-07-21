@@ -14,6 +14,9 @@ const Vents = db.ventas;
 const Sesion = db.sesion;
 const Numer = db.numero;
 const Fact = db.factura;
+const tipoProduc = db.tipoproducto;
+const product = db.producto;
+const detallevent = db.detalleventa;
 
 
 exports.initial = async () => {
@@ -339,12 +342,12 @@ exports.initial = async () => {
             descripcionTipoPago: "Factura que sera pagada al momento de la venta",
         });
         Cliente.create({
-            dni: "1709-1995-00562",
-            email: "wjoe1995@live.com",
-            rtn: "17091995005624",
-            nombreCliente: "Willian Josue",
-            direccion: "San Lorenzo, Valle",
-            telefonoCliente: "9813-9935"
+            dni: "000",
+            email: "email",
+            rtn: "000",
+            nombreCliente: "Consumidor Final",
+            direccion: "Honduras",
+            telefonoCliente: "0000-0000"
         });
         Cliente.create({
             dni: "0611-1955-00493",
@@ -391,6 +394,59 @@ exports.initial = async () => {
             token: "123456789",
             idUsuario: 1
         });
+        tipoProduc.create({
+            tipoProducto: "Refresco",
+            descripcionProducto: "Bebida con Soda",
+            isvTipoProducto: 10
+        });
+        tipoProduc.create({
+            tipoProducto: "Embutidos",
+            descripcionProducto: "Diferentes tipos de carnes",
+            isvTipoProducto: 10
+        });
+
+        tipoProduc.create({
+            tipoProducto: "Lacteos",
+            descripcionProducto: "Productos derivados de la leche",
+            isvTipoProducto: 10
+        });
+
+        product.create({
+            codigoProducto: "4568754",
+            nombreProducto: "Coca Cola",
+            precioProducto: 18,
+            cantidadProducto: 500,
+            isvProducto: 10,
+            descProducto:  0,
+            isExcento: false,
+            idTipoProducto: 1
+        });
+        product.create({
+            codigoProducto: "789456",
+            nombreProducto: "Mortadela",
+            precioProducto: 25,
+            cantidadProducto: 250,
+            isvProducto: 10,
+            descProducto:  0,
+            isExcento: false,
+            idTipoProducto: 2
+        });
+        product.create({
+            codigoProducto: "123456",
+            nombreProducto: "Mantequilla",
+            precioProducto: 45,
+            cantidadProducto: 250,
+            isvProducto: 10,
+            descProducto:  0,
+            isExcento: false,
+            idTipoProducto: 3
+        });
+
+
+
+
+
+
         Vents.create({
             totalISV: 0,
             totalVenta: 5432.23,
@@ -479,6 +535,17 @@ exports.initial = async () => {
             idUsuario: 1,
             idCliente: 3
         });
+
+        detallevent.create({
+            cantidad: 2,
+            precioUnitario: 18,
+            isvAplicado: 10,
+            descuentoAplicado: 10,
+            totalDetalleVenta: 36,
+            idVentas:  1,
+            idProducto: 1
+        });
+
         Numer.create({ 
             puntoEmision: '000',    
             establecimiento: '001', 
