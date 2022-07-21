@@ -77,7 +77,7 @@ exports.actualizacionCerrandoSesion = async (req, res) => {
             if(consult2){
                 if(consult3){
                     //actualizar el arqueo
-                    const arqueo = await sequelize.query(`UPDATE arqueos SET    efectivoCierre = (SELECT SUM(totalFactura) 
+                    const arqueo1 = await sequelize.query(`UPDATE arqueos SET    efectivoCierre = (SELECT SUM(totalFactura) 
                                                                                                   FROM facturas 
                                                                                                   WHERE idTipoPago = 1 AND idSesion = ${req.body.idSesion}),
                                                                                 otrosPagos = (SELECT SUM(totalFactura)
@@ -110,10 +110,17 @@ exports.actualizacionCerrandoSesion = async (req, res) => {
                             id: req.body.idSesion,
                         },
                   });
+                  const arqueos = await Arque.findOne({
+                    where: {
+                        idArqueo: req.body.idArqueo,
+                        isDelete: false
+                    }
+                  });
                     //validar que el arqueo se actualizo correctamente
-                    if (arqueo && arqueo2 && fe && se) {
-                       return res.status(200).json({
+                    if (arqueo1 && arqueo2 && fe && se) {
+                       return res.status(200).send({
                             message: "Arqueo actualizado correctamente",
+                            arqueos
                     });   
                   }
                 }

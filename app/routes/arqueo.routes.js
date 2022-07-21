@@ -8,7 +8,7 @@ module.exports = function(app) {
         next();
     });
     app.post("/api/arqueo/createArqueo", controller.createArqueo);
-    app.post("/api/arqueo/actualizacionCerrandoSesion", controller.actualizacionCerrandoSesion);
+    app.put("/api/arqueo/actualizacionCerrandoSesion", controller.actualizacionCerrandoSesion);
     app.post("/api/arqueo/deleteArqueo", controller.deleteArqueo);
     app.post("/api/arqueo/mostrarArqueo", controller.mostrarArqueo);
     app.post("/api/arqueo/buscarPorFechaInicioFechaFinal", controller.buscarPorFechaInicioFechaFinal);
