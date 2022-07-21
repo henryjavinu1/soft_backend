@@ -20,6 +20,7 @@
     "morgan": "~1.9.1",
     "mysql2": "^2.3.3",
     "numeros_to_words": "^1.0.7",
+    "pdfmake": "^0.2.5",
     "sequelize": "^6.21.0"
   }
 }

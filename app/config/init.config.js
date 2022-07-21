@@ -17,6 +17,7 @@ const Fact = db.factura;
 const tipoProduc = db.tipoproducto;
 const product = db.producto;
 const detallevent = db.detalleventa;
+const Sucursal = db.sucursal;
 
 
 exports.initial = async () => {
@@ -373,11 +374,16 @@ exports.initial = async () => {
             direccion: "Los Limones, Pespire, Choluteca",
             telefonoCliente: "9998-9588"
         });
+        Sucursal.create({
+            nombreSucursal: "X",
+            lemaSucursal: "X"
+        });
         Talonario.create({
             rangoInicialFactura: "00110701",
             rangoFinalFactura: "00112000",
             cai: "EAF199-B70479-5343AB-538F3E-045B55-C6",
             fechaLimiteEmision: "2025-06-03",
+            idSucursal: 1,
             active: true,
             isDelete: false
         });
@@ -386,6 +392,7 @@ exports.initial = async () => {
             rangoFinalFactura: "00112500",
             cai: "EAF199-B70479-5343AB-538F3E-045C35-C6",
             fechaLimiteEmision: "2030-06-03",
+            idSucursal: 1,
             active: false,
             isDelete: false
         });           
