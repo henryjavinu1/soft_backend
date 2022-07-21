@@ -57,9 +57,9 @@ function buildTableBody(data, columns) {
     let listaDeCampos = []; 
     for (let index = 0; index < detallesDeVentas.length; index++) {
         var i = 0;
-        console.log('valor fuera'+i);
+        // console.log('valor fuera'+i);
         for (i = 0; i < 5; i++) {
-            console.log(i);
+            // console.log(i);
             if (i === 0) {
                 valor = detallesDeVentas[index].cantidad.toString();
             } else if(i === 1) {
@@ -79,13 +79,13 @@ function buildTableBody(data, columns) {
               fontSize: 9,
             });
         }
-        console.log('tamaño de lista campos: '+listaDeCampos.length);
-        console.log('lista de campos:'+listaDeCampos);
-        console.log('objeto agregado'+listaDeCampos[0].toString());
+        // console.log('tamaño de lista campos: '+listaDeCampos.length);
+        // console.log('lista de campos:'+listaDeCampos);
+        // console.log('objeto agregado'+listaDeCampos[0].toString());
         externalDataRetrievedFromServer.push(listaDeCampos);
-        console.log(externalDataRetrievedFromServer.length);
+        // console.log(externalDataRetrievedFromServer.length);
         listaDeCampos = [];
-        console.log(listaDeCampos.length);
+        // console.log(listaDeCampos.length);
     }
     
     for (let index = 0; index < externalDataRetrievedFromServer.length; index++) {
@@ -567,7 +567,7 @@ function table(data, columns) {
                               fontSize: 8,
                             },
                             {
-                              text: '0.00',
+                              text: `${(factura.subTotalExonerado)?factura.subTotalExonerado:'0.00'}`,
                               border: [true, true, true, true],
                               alignment: 'right',
                               fillColor: '#eaf2f5',
