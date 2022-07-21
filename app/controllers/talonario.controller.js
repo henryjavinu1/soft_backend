@@ -39,6 +39,7 @@ exports.createTalonario = async (req = request, res = response) => {
         const talonario = await Talonario.create({
             rangoInicialFactura: req.body.rangoInicialFactura,
             rangoFinalFactura: req.body.rangoFinalFactura,
+            idSucursal: req.body.idSucursal,
             cai: req.body.cai,
             fechaLimiteEmision: req.body.fechaLimiteEmision,
         });
