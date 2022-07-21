@@ -160,6 +160,14 @@ db.tipopago.hasMany(db.factura,{
   db.producto.belongsTo(db.tipoproducto, {
     foreignKey: { name: "idTipoProducto", allowNull: false },
   });
+    //una factura tiene una sesion  , una sesion tiene muchas facturas
+  //REVISAR ESTA RELACION
+  db.sesion.hasMany(db.factura,{
+    foreignKey: { name:'idSesion', allowNull: false }
+  });
+  db.factura.belongsTo(db.sesion,{
+    foreignKey: { name:'idSesion', allowNull: false }
+  });
 ////////////////////index.ventas.js///////////////////////////////
 /////// RELACIÓN DE UNO A MUCHOS /////////
 //// UNA VENTA PERTENECE A UNA SESION, UNA SESION PERTENECE A MUCHAS VENTAS(1:N)////

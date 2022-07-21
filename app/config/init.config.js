@@ -313,11 +313,6 @@ exports.initial = async () => {
             tipoDePago: "Credito",
             descripcionTipoPago: "Factura que sera pagada en determinado tiempo",
         });
-        TipoPag.create({
-            idTipoPago: 4,
-            tipoDePago: "Contado",
-            descripcionTipoPago: "Factura que sera pagada al momento de la venta",
-        });
         Cliente.create({
             dni: "1709-1995-00562",
             email: "wjoe1995@live.com",
@@ -370,6 +365,11 @@ exports.initial = async () => {
             fecha: "2020-06-03",
             token: "123456789",
             idUsuario: 1
+        });
+        Sesion.create({
+            fecha: "2020-7-03",
+            token: "123456789",
+            idUsuario: 2
         });
         Vents.create({
             totalISV: 0,
@@ -539,7 +539,8 @@ exports.initial = async () => {
             idEmpleado: 1,
             idVenta: 1,
             idTalonario: 1,
-            idNumero: 1
+            idNumero: 1,
+            idSesion: 1
         });
         Fact.create({
             idFactura: 2,
@@ -557,7 +558,8 @@ exports.initial = async () => {
             idEmpleado: 1,
             idVenta: 2,
             idTalonario: 1,
-            idNumero: 2
+            idNumero: 2,
+            idSesion: 2
         });
         Fact.create({
             idFactura: 3,
@@ -575,7 +577,8 @@ exports.initial = async () => {
             idEmpleado: 1,
             idVenta: 3,
             idTalonario: 1,
-            idNumero: 3
+            idNumero: 3,
+            idSesion: 1
         });
         Fact.create({
             idFactura: 4,
@@ -593,7 +596,8 @@ exports.initial = async () => {
             idEmpleado: 1,
             idVenta: 4,
             idTalonario: 1,
-            idNumero: 4
+            idNumero: 4,
+            idSesion: 2                
         });
         Fact.create({
             idFactura: 5,
@@ -611,7 +615,8 @@ exports.initial = async () => {
             idEmpleado: 1,
             idVenta: 5,
             idTalonario: 1,
-            idNumero: 5
+            idNumero: 5,
+            idSesion: 1
         });
         Fact.create({
             idFactura: 6,
@@ -629,44 +634,9 @@ exports.initial = async () => {
             idEmpleado: 1,
             idVenta: 6,
             idTalonario: 1,
-            idNumero: 6
-        });
-        Fact.create({
-            idFactura: 7,
-            numeroFactura: "001-00110707",
-            fechaFactura: "2020-06-03",
-            descuentoTotalFactura: 0,
-            isvTotalFactura: 0,
-            totalFactura: 9654.23,
-            subTotalFactura: 9654.23,
-            cantidadLetras: "NUEVE MIL SEISCIENTOS CINCUENTA Y CUANTRO 23/100",
-            estado: true,
-            idTipoPago: 4,
-            idCliente: 2,
-            idUsuario: 1,
-            idEmpleado: 1,
-            idVenta: 7,
-            idTalonario: 1,
-            idNumero: 7
-        });
-        Fact.create({
-            idFactura: 8,
-            numeroFactura: "001-00110708",
-            fechaFactura: "2020-06-03",
-            descuentoTotalFactura: 0,
-            isvTotalFactura: 0,
-            totalFactura: 10654.23,
-            subTotalFactura: 10654.23,
-            cantidadLetras: "DIEZ MIL SEISCIENTOS CINCUENTA Y CUANTRO 23/100",
-            estado: true,
-            idTipoPago: 4, 
-            idCliente: 4,
-            idUsuario: 1,
-            idEmpleado: 1,
-            idVenta: 8,
-            idTalonario: 1,
-            idNumero: 8
-        });
+            idNumero: 6,
+            idSesion: 2
+        });        
     } catch (error) {
         console.log(error);
     }
