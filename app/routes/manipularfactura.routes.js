@@ -18,6 +18,6 @@ module.exports = function(app) {
     app.get("/api/buscarfacturaportalonario/:talonario?", [validarCamposTalonario], buscarPorTalonario);
     app.put("/api/manipularfactura/:id", editarFactura);
     app.get("/api/traerunafactura/:id?", imprimirUnaFactura);
-    app.get("/api/descargardactura", descargarFactura);
+    app.get("/api/descargardactura/:numerofactura?", descargarFactura);
   
   };
