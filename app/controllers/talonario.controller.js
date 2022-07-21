@@ -6,7 +6,7 @@ exports.getTalonarios = async (req = request, res = response) => {
     try {
         const talonarios = await Talonario.findAll({
             where: {
-                idDelete: false
+                isDelete: false
             }
         });
         return res.status(200).send({
