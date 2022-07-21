@@ -125,4 +125,3 @@ exports.buscarolname = async (req, res) => {
         });
     }
 }
-
