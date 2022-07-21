@@ -5,6 +5,23 @@ const Talonario = db.talonario;
 exports.getTalonarios = async (req = request, res = response) => {
     try {
         const talonarios = await Talonario.findAll({
+            where: {
+                isDelete: false
+            }
+        });
+        return res.status(200).send({
+            talonarios,
+        });
+    } catch (error) {
+        return res.status(500).send({
+            message: "Error"
+        });
+    }
+}
+
+exports.getTalonariosAll = async (req = request, res = response) => {
+    try {
+        const talonarios = await Talonario.findAll({
             
         });
         return res.status(200).send({
@@ -22,6 +39,7 @@ exports.createTalonario = async (req = request, res = response) => {
         const talonario = await Talonario.create({
             rangoInicialFactura: req.body.rangoInicialFactura,
             rangoFinalFactura: req.body.rangoFinalFactura,
+            idSucursal: req.body.idSucursal,
             cai: req.body.cai,
             fechaLimiteEmision: req.body.fechaLimiteEmision,
         });
