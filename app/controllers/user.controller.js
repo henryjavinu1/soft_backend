@@ -1,8 +1,10 @@
 const db = require("../models/puntoDeVentas");
 const config = require("../config/auth.config");
 const { user } = require("../models/puntoDeVentas");
+const { request, response } = require('express');
+const { Op, DataTypes, Model } = require("sequelize");
 const User = db.user;
-const Op = db.Sequelize.Op;
+
 
 exports.bajauser = async (req, res) => {
   // BAJA a un usuario 
@@ -59,3 +61,24 @@ exports.updateUser = async (req, res) => {
     });
   }
 };
+
+exports.mostrarUser = async (req = request, res = response) => {
+  try {
+    const todoslosUsuarios = await User.findAll({
+      where: {
+        IsDelete: false,
+      }
+    });
+    if (!todoslosUsuarios){
+      return res.status(404).send({
+        message: "Error al crear usuario en el backend"
+      })
+    } 
+      return res.status(200).send({todoslosUsuarios});
+  } catch(error) {
+    console.log(error);
+    return res.status(500).send({
+      message: "ocurrio un error antes de entrar al catch en backend " + error
+    })
+  }
+}
