@@ -8,6 +8,7 @@ const Op = db.Sequelize.Op;
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { sesion } = require("../models/puntoDeVentas");
+const { useInflection } = require("sequelize/types");
 
 exports.signup = async (req, res) => {
   // Save User to Database
@@ -68,23 +69,27 @@ exports.signin = async (req, res) => {
       });
     }
 
-    const token = jwt.sign({
-      id: user.id
-    }, config.secret, {
-      expiresIn: 86400, // 24 horas de ducración de tokens
-    });
-
-    req.session.token = token;
+    
     const ses = await Sesion.create({
       idUsuario:user.id,
       token:token
     });
+
+    const token = jwt.sign({
+      idUsuario: user.id,
+      idEmpleado:user.empleado.id,
+      idSesion:ses.id
+    }, config.secret, {
+      expiresIn: 86400, // 24 horas de ducración de tokens
+    });
+    req.session.token = token;
     const resp = {
       id: user.id,
       usuario: user.usuario,
       empleado: user.empleado,
       rol: user.role,
-      sesion:ses
+      sesion:ses,
+      token: token
     }
     return res.status(200).send(resp);
   } catch (error) {
