@@ -1,6 +1,7 @@
 const { query } = require("express");
 const { factura, sequelize } = require("../models/puntoDeVentas");
 const db = require("../models/puntoDeVentas");
+const { sequelize } = require("../models/puntoDeVentas");
 const { impresionArqueo } = require('../helpers/arqueo.helper');
 const Arque = db.arqueo;
 const Sesi = db.sesion;
@@ -164,6 +165,11 @@ exports.mostrarArqueo = async (req, res) => {
             }
         });
         if(!arqueos){
+            return res.status(404).json({
+                message: "No hay arqueos"
+            });
+        }
+        return res.status(200).json({arqueos});
             res.status(404).send({
                 message: "No hay arqueos"
             });

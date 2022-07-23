@@ -8,42 +8,30 @@ const Op = db.Sequelize.Op;
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { sesion } = require("../models/puntoDeVentas");
+const { useInflection } = require("sequelize/types");
 
 exports.signup = async (req, res) => {
   // Save User to Database
   try {
     const user = await User.create({
-      username: req.body.username,
-      email: req.body.email,
+      usuario: req.body.UserName,
       password: bcrypt.hashSync(req.body.password, 8),
+      email: req.body.email,
+      idEmpleado: req.body.idEmpleado,
+      idRol: req.body.idRol
     });
 
-    if (req.body.roles) {
-      const roles = await Role.findAll({
-        where: {
-          name: {
-            [Op.or]: req.body.roles,
-          },
-        },
-      });
-
-      const result = user.setRoles(roles);
-      if (result) res.send({
-        message: "Usuario registrado satisfactoriamente!"
-      });
-    } else {
-      // user has role = 1
-      const result = user.setRoles([1]);
-      if (result) res.send({
-        message: "User registered successfully!"
-      });
-    }
-  } catch (error) {
-    res.status(500).send({
-      message: error.message
-    });
+    return res.status(200).json({
+      message: "Usuario creado con exito",    
+      data: user
+  });
   }
-};
+catch (error) {
+  return res.status(500).send({
+      message: "Ocurrio un error"
+  });
+}
+}
 
 exports.signin = async (req, res) => {
   try {
@@ -81,23 +69,27 @@ exports.signin = async (req, res) => {
       });
     }
 
-    const token = jwt.sign({
-      id: user.id
-    }, config.secret, {
-      expiresIn: 86400, // 24 horas de ducración de tokens
-    });
-
-    req.session.token = token;
+    
     const ses = await Sesion.create({
       idUsuario:user.id,
       token:token
     });
+
+    const token = jwt.sign({
+      idUsuario: user.id,
+      idEmpleado:user.empleado.id,
+      idSesion:ses.id
+    }, config.secret, {
+      expiresIn: 86400, // 24 horas de ducración de tokens
+    });
+    req.session.token = token;
     const resp = {
       id: user.id,
       usuario: user.usuario,
       empleado: user.empleado,
       rol: user.role,
-      sesion:ses
+      sesion:ses,
+      token: token
     }
     return res.status(200).send(resp);
   } catch (error) {

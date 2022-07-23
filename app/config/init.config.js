@@ -14,6 +14,7 @@ const Vents = db.ventas;
 const Sesion = db.sesion;
 const Numer = db.numero;
 const Fact = db.factura;
+const Sucursal = db.sucursal;
 
 
 exports.initial = async () => {
@@ -204,14 +205,30 @@ exports.initial = async () => {
             permiso: "Bajar Usuario",
             descripcion: "Acceder al modulo de Bajar Usuario"
         },
+        {
+            permiso: "Crear Usuario",
+            descripcion: "Acceder al modulo de Crear Usuario"
+        },
 
         {
             permiso: "Crear Venta",
             descripcion: "Acceder al modulo de Crear Venta"
         },
         {
-            permiso: "Buscar ventas",
+            permiso: "Buscar o Mostrar ventas",
             descripcion: "Acceder al modulo de buscar Venta"
+        },
+        {
+            permiso: "Traer o buscar  Factura",
+            descripcion: "Acceder al modulo de Traer Factura"
+        },
+        {
+            permiso: "Editar Factura",
+            descripcion: "Acceder al modulo de Editar Factura"
+        },
+        {
+            permiso: "Imprimir Factura",
+            descripcion: "Acceder al modulo de Imprimir Factura"
         },
     ]);
         await role.addPermisos(permisos[0]);
@@ -259,6 +276,10 @@ exports.initial = async () => {
         await role.addPermisos(permisos[42]);
         await role.addPermisos(permisos[43]);
         await role.addPermisos(permisos[44]);
+        await role.addPermisos(permisos[45]);
+        await role.addPermisos(permisos[46]);
+        await role.addPermisos(permisos[47]);
+        await role.addPermisos(permisos[48]);
         await role2.addPermisos(permisos[8]);
         await role2.addPermisos(permisos[9]);
         await role2.addPermisos(permisos[10]);
@@ -345,19 +366,25 @@ exports.initial = async () => {
             direccion: "Los Limones, Pespire, Choluteca",
             telefonoCliente: "9998-9588"
         });
+        Sucursal.create({
+            nombreSucursal: "X",
+            lemaSucursal: "X"
+        });
         Talonario.create({
-            rangoInicialFactura: "000-001-01-00110701",
-            rangoFinalFactura: "000-001-01-00112000",
+            rangoInicialFactura: "00110701",
+            rangoFinalFactura: "00112000",
             cai: "EAF199-B70479-5343AB-538F3E-045B55-C6",
             fechaLimiteEmision: "2025-06-03",
+            idSucursal: 1,
             active: true,
             isDelete: false
         });
         Talonario.create({
-            rangoInicialFactura: "000-001-01-00112001",
-            rangoFinalFactura: "000-001-01-00112500",
+            rangoInicialFactura: "00112001",
+            rangoFinalFactura: "00112500",
             cai: "EAF199-B70479-5343AB-538F3E-045C35-C6",
             fechaLimiteEmision: "2030-06-03",
+            idSucursal: 1,
             active: false,
             isDelete: false
         });           
@@ -523,6 +550,7 @@ exports.initial = async () => {
             numero: '001-00110708',
             idTalonario: 1,
         });
+
         Fact.create({
             idFactura: 1,
             numeroFactura: "001-00110701",

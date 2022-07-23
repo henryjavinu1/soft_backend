@@ -9,6 +9,9 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.STRING,
             unique:true
         },
+        idSucursal: {
+            type: Sequelize.INTEGER,
+        },
         rangoFinalFactura: {
             type: Sequelize.STRING,
             unique:true
@@ -21,6 +24,7 @@ module.exports = (sequelize, Sequelize) => {
         },
         active: {
             type: Sequelize.BOOLEAN,
+            defaultValue: false
         },
         isDelete: {
             type: Sequelize.BOOLEAN,

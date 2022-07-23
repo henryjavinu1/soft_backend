@@ -1,18 +1,20 @@
 const { request, response } = require('express');
-const  {Op, DataTypes}  = require("sequelize");
+const { Op, DataTypes } = require("sequelize");
+const fs = require('fs');
 
-const { impresionDeFacturas, validarCampos, filtrarFacturasPorFechaQuery } = require('../helpers/manipularfactura.helper');
+const { impresionDeFacturas, validarCampos, filtrarFacturasPorFechaQuery, construirFacturaEnPDF } = require('../helpers/manipularfactura.helper');
 const db = require('../models/puntoDeVentas');
+const path = require('path');
 const Factura = db.factura;
 const Cliente = db.cliente;
-const Talonario = db.talonario; 
+const Talonario = db.talonario;
 const Empleado = db.empleado;
 const TipoPago = db.tipopago;
 const Venta = db.ventas;
 const DetalleVenta = db.detalleventa;
 const Producto = db.producto;
 
-const traerFacturas = async (req = request, res = response) => { 
+const traerFacturas = async (req = request, res = response) => {
     try {
         const todasLasFacturas = await Factura.findAll({
             where: {
@@ -33,7 +35,7 @@ const traerFacturas = async (req = request, res = response) => {
                 },
                 {
                     model: Cliente,
-                    attributes: ['nombreCliente', 'direccion', 'dni','email','rtn', 'telefonoCliente']
+                    attributes: ['nombreCliente', 'direccion', 'dni', 'email', 'rtn', 'telefonoCliente']
                 }
             ]
         });
@@ -51,60 +53,61 @@ const buscarfactura = async (req = request, res = response) => {
     // const numReq = Object.keys(req.query).length
     try {
         const facturaBuscada = await Factura.findOne({
-            where: { 
-                [Op.and] : [{numeroFactura: numeroFactura}, {isDelete: false}]
+            where: {
+                [Op.and]: [{ numeroFactura: numeroFactura }, { isDelete: false }]
+            },
+            include: [
+                {
+                    model: Empleado,
+                    attributes: ['id', 'nombre', 'apellido'],
                 },
-                include: [
-                    {
-                        model: Empleado,
-                        attributes: ['id', 'nombre', 'apellido'],
-                    },
-                    {
-                        model: TipoPago,
-                        attributes: ['tipoDePago']
-                    },
-                    {
-                        model: Talonario,
-                        attributes: ['cai']
-                    },
-                    {
-                        model: Cliente,
-                        attributes: ['nombreCliente', 'direccion', 'dni','email','rtn', 'telefonoCliente']
-                    }
-                ]
+                {
+                    model: TipoPago,
+                    attributes: ['tipoDePago']
+                },
+                {
+                    model: Talonario,
+                    attributes: ['cai']
+                },
+                {
+                    model: Cliente,
+                    attributes: ['nombreCliente', 'direccion', 'dni', 'email', 'rtn', 'telefonoCliente']
+                }
+            ]
         });
-        if (!facturaBuscada){
+        if (!facturaBuscada) {
             return res.status(404).json({
                 msg: "La factura que intenta buscar no existe"
             })
         }
         return res.status(200).json({
-            unafactura: facturaBuscada});
+            unafactura: facturaBuscada
+        });
     } catch (error) {
         console.log(error);
     }
 }
 
 const buscarFacturaCliente = async (req, res) => {
-    const {nombreCliente, rtn, dni} = req.query;
+    const { nombreCliente, rtn, dni } = req.query;
     let clienteBuscado;
     try {
         if (nombreCliente) {
             clienteBuscado = await Cliente.findOne({
                 where: {
-                    [Op.and] : [{isDelete: false}, {nombreCliente: nombreCliente}]
+                    [Op.and]: [{ isDelete: false }, { nombreCliente: nombreCliente }]
                 }
             });
         } else if (rtn) {
             clienteBuscado = await Cliente.findOne({
                 where: {
-                    [Op.and] : [{isDelete: false}, {rtn: rtn}]
+                    [Op.and]: [{ isDelete: false }, { rtn: rtn }]
                 }
             });
         } else if (dni) {
             clienteBuscado = await Cliente.findOne({
                 where: {
-                    [Op.and] : [{isDelete: false}, {dni: dni}]
+                    [Op.and]: [{ isDelete: false }, { dni: dni }]
                 }
             });
         }
@@ -115,7 +118,7 @@ const buscarFacturaCliente = async (req, res) => {
         }
         const facturasBuscadas = await Factura.findAll({
             where: {
-                [Op.and] : [{idCliente: clienteBuscado.id}, {isDelete: false}]
+                [Op.and]: [{ idCliente: clienteBuscado.id }, { isDelete: false }]
             },
             include: [
                 {
@@ -124,15 +127,15 @@ const buscarFacturaCliente = async (req, res) => {
                 },
                 {
                     model: TipoPago,
-                    attributes: ['idTipoPago','tipoDePago']
+                    attributes: ['idTipoPago', 'tipoDePago']
                 },
                 {
                     model: Talonario,
-                    attributes: ['idTalonario','cai']
+                    attributes: ['idTalonario', 'cai']
                 },
                 {
                     model: Cliente,
-                    attributes: ['id', 'nombreCliente', 'direccion', 'dni','email','rtn', 'telefonoCliente']
+                    attributes: ['id', 'nombreCliente', 'direccion', 'dni', 'email', 'rtn', 'telefonoCliente']
                 }
             ]
         });
@@ -151,7 +154,7 @@ const buscarFacturaCliente = async (req, res) => {
 }
 
 const buscarFacturaFecha = async (req, res) => {
-    const {fecha1, fecha2} = req.query;
+    const { fecha1, fecha2 } = req.query;
     let facturaBuscada = [];
     try {
         if (fecha1 && !fecha2) {
@@ -163,18 +166,18 @@ const buscarFacturaFecha = async (req, res) => {
         if (facturaBuscada.length === 0) {
             return res.status(404).json({
                 msg: (fecha1 && !fecha2)
-                     ?`No hay facturas registradas en la fecha: ${fecha1}`
-                     :`No hay facturas registradas entre las fechas: ${fecha1}, ${fecha2}`
+                    ? `No hay facturas registradas en la fecha: ${fecha1}`
+                    : `No hay facturas registradas entre las fechas: ${fecha1}, ${fecha2}`
             })
         }
         const facturas = impresionDeFacturas(facturaBuscada);
-            return res.status(200).json({
-                facturas
-            });  
+        return res.status(200).json({
+            facturas
+        });
     } catch (error) {
         console.log(error);
     }
-    
+
     // return res.status(200).json({facturaBuscada});
 }
 
@@ -183,7 +186,7 @@ const buscarFacturaEmpleado = async (req = request, res = response) => {
     try {
         const facturasBuscadas = await Factura.findAll({
             where: {
-                [Op.and]: [{idEmpleado: idEmpleado}, {isDelete: false}]
+                [Op.and]: [{ idEmpleado: idEmpleado }, { isDelete: false }]
             },
             include: [
                 {
@@ -200,7 +203,7 @@ const buscarFacturaEmpleado = async (req = request, res = response) => {
                 },
                 {
                     model: Cliente,
-                    attributes: ['nombreCliente', 'direccion', 'dni','email','rtn', 'telefonoCliente']
+                    attributes: ['nombreCliente', 'direccion', 'dni', 'email', 'rtn', 'telefonoCliente']
                 }
             ]
         })
@@ -220,14 +223,15 @@ const buscarFacturaEmpleado = async (req = request, res = response) => {
 }
 
 const buscarPorTalonario = async (req = request, res = response) => {
-    const {idTalonario, cai} = req.query;
+    const { idTalonario, cai } = req.query;
     let talonarioBuscado;
 
     try {
         console.log(idTalonario);
         if (idTalonario) {
             talonarioBuscado = await Talonario.findOne({
-                where: { idTalonario : idTalonario }});
+                where: { idTalonario: idTalonario }
+            });
         } else if (cai) {
             talonarioBuscado = await Talonario.findOne({
                 where: { cai: cai }
@@ -235,7 +239,7 @@ const buscarPorTalonario = async (req = request, res = response) => {
         }
         if (!talonarioBuscado) {
             return res.status(404).json({
-                msg: `No existe el talonario con ${(idTalonario)?`el cai: ${idTalonario}`:`el id: ${cai}`}. Por favor verifique bien los datos del talonario a buscar.` 
+                msg: `No existe el talonario con ${(idTalonario) ? `el cai: ${idTalonario}` : `el id: ${cai}`}. Por favor verifique bien los datos del talonario a buscar.`
             })
         }
         const facturaBuscada = await Factura.findAll({
@@ -255,14 +259,14 @@ const buscarPorTalonario = async (req = request, res = response) => {
                 },
                 {
                     model: Cliente,
-                    attributes: ['nombreCliente', 'direccion', 'dni','email','rtn', 'telefonoCliente']
+                    attributes: ['nombreCliente', 'direccion', 'dni', 'email', 'rtn', 'telefonoCliente']
                 }
             ]
         })
         const facturas = impresionDeFacturas(facturaBuscada);
-            return res.status(200).json({
-                facturas
-            });  
+        return res.status(200).json({
+            facturas
+        });
     } catch (error) {
         console.log(error);
     }
@@ -272,8 +276,10 @@ const imprimirUnaFactura = async (req = request, res = response) => {
     const numeroFactura = req.query.numeroFactura;
     console.log(numeroFactura);
     try {
-        const facturaBuscada = await Factura.findOne({
-            where: { isDelete: false, numeroFactura: numeroFactura},
+        let facturaBuscada = await Factura.findOne({
+            where: {
+                [Op.and]: [{ isDelete: false }, { numeroFactura: numeroFactura }]
+            },
             include: [
                 {
                     model: Venta,
@@ -292,28 +298,104 @@ const imprimirUnaFactura = async (req = request, res = response) => {
                 }
             ]
         });
+        let detallesDeVentas = [];
+        if (facturaBuscada.venta) {
+            detallesDeVentas = await DetalleVenta.findAll({
+                where: { isDelete: false, idVentas: facturaBuscada.venta.id },
+                include: [
+                    {
+                        model: Producto
+                    }
+                ]
+            });
+        }
 
-        const detallesDeVentas = await DetalleVenta.findAll({
-            where: { isDelete: false, idVentas: facturaBuscada.venta.id},
-            include: [
-                {
-                    model: Producto
-                }
-            ]
-        });
-    
         return res.status(200).json({
             facturaConDatos: facturaBuscada,
             detallesDeVentas
-        });  
+        });
     } catch (error) {
-       console.log(error); 
+        console.log(error);
+        return res.status(500).json({
+            error: error.message,
+        });
     }
 }
 
+const descargarFactura = async (req = request, res = response) => {
+
+    const numeroFactura = req.query.numerofactura;
+    // console.log('num factura: '+numeroFactura);
+    let detallesDeVentas = [];
+    let facturaBuscada
+    try {
+        facturaBuscada = await Factura.findOne({
+            where: {
+                [Op.and]: [{ isDelete: false }, { numeroFactura: numeroFactura }]
+            },
+            include: [
+                {
+                    model: Venta,
+                },
+                {
+                    model: Empleado,
+                },
+                {
+                    model: TipoPago,
+                },
+                {
+                    model: Talonario,
+                },
+                {
+                    model: Cliente,
+                }
+            ]
+        });
+        if (facturaBuscada.venta) {
+            detallesDeVentas = await DetalleVenta.findAll({
+                where: { isDelete: false, idVentas: facturaBuscada.venta.id },
+                include: [
+                    {
+                        model: Producto
+                    }
+                ]
+            });
+        }
+        if (facturaBuscada) {
+            construirFacturaEnPDF(facturaBuscada, detallesDeVentas).then(pdfDoc => {
+                var file = fs.createReadStream('app/pdf_files/primera.pdf');
+                // var stat = fs.statSync('app/pdf_files/primera.pdf');
+                // res.setHeader('Content-Length', stat.size);
+                res.setHeader('Content-Type', 'application/pdf');
+                res.setHeader('Content-Disposition', `attachment; filename=factura${facturaBuscada.numeroFactura}.pdf`);
+                file.pipe(res);
+                fs.unlinkSync('app/pdf_files/primera.pdf');
+            }).catch(err => {
+                res.status(500).json(
+                    {
+                        msg: err
+                    }
+                )
+            });
+        } else {
+            return res.status(400).json({
+               msg: 'No se encontró el documento solicitado.' 
+            });
+        }
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            msg: 'Ocurrió un error al buscar el registro en la base de datos comuniquese con el administrador.'
+        });
+    }
+
+
+    // return res.status(200).download(path.join(__dirname, '../pdf_files/prueba.pdf'));
+}
+
 const editarFactura = async (req = request, res = response) => {
-    const  numeroFactura  = req.params.id;
-    const {fechaFactura, descuentoTotalFactura, isvTotalFactura, totalFactura, subTotalFactura, cantidadLetras, isDelete, estado} = req.body;
+    const numeroFactura = req.params.id;
+    const { fechaFactura, descuentoTotalFactura, isvTotalFactura, totalFactura, subTotalFactura, cantidadLetras, isDelete, estado } = req.body;
     console.log(numeroFactura);
     try {
         const facturaBuscada = await Factura.findOne({
@@ -352,5 +434,6 @@ module.exports = {
     buscarFacturaFecha,
     buscarFacturaEmpleado,
     buscarPorTalonario,
-    imprimirUnaFactura
+    imprimirUnaFactura,
+    descargarFactura
 }

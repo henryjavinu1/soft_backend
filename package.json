@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "conversor-numero-a-letras-es-ar": "^1.0.3",
     "cookie-parser": "~1.4.4",
     "cookie-session": "^2.0.0",
     "cors": "^2.8.5",
@@ -15,8 +16,11 @@
     "http-errors": "~1.6.3",
     "jade": "^0.29.0",
     "jsonwebtoken": "^8.5.1",
+    "latin-numeros-a-letras.js": "^0.1.0",
     "morgan": "~1.9.1",
     "mysql2": "^2.3.3",
+    "numeros_to_words": "^1.0.7",
+    "pdfmake": "^0.2.5",
     "sequelize": "^6.21.0"
   }
 }
