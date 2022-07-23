@@ -169,11 +169,6 @@ exports.mostrarArqueo = async (req, res) => {
                 message: "No hay arqueos"
             });
         }
-        return res.status(200).json({arqueos});
-            res.status(404).send({
-                message: "No hay arqueos"
-            });
-        }
         return res.status(200).send({arqueos});
     } catch (error) {
         res.status(500).send({
