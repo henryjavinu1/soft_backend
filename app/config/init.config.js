@@ -334,11 +334,6 @@ exports.initial = async () => {
             tipoDePago: "Credito",
             descripcionTipoPago: "Factura que sera pagada en determinado tiempo",
         });
-        TipoPag.create({
-            idTipoPago: 4,
-            tipoDePago: "Contado",
-            descripcionTipoPago: "Factura que sera pagada al momento de la venta",
-        });
         Cliente.create({
             dni: "1709-1995-00562",
             email: "wjoe1995@live.com",
@@ -397,6 +392,11 @@ exports.initial = async () => {
             fecha: "2020-06-03",
             token: "123456789",
             idUsuario: 1
+        });
+        Sesion.create({
+            fecha: "2020-7-03",
+            token: "123456789",
+            idUsuario: 2
         });
         Vents.create({
             totalISV: 0,
@@ -551,6 +551,120 @@ exports.initial = async () => {
             idTalonario: 1,
         });
 
+        Fact.create({
+            idFactura: 1,
+            numeroFactura: "001-00110701",
+            fechaFactura: "2020-06-03",
+            descuentoTotalFactura: 0,
+            isvTotalFactura: 0,
+            totalFactura: 5432.23,
+            subTotalFactura: 5432.23,
+            cantidadLetras: "CINCO MIL TRESCIENTOS TREINTA Y DOS SOLES CON 23/100",
+            estado: true,
+            idTipoPago: 1,
+            idCliente: 1,
+            idUsuario: 1,
+            idEmpleado: 1,
+            idVenta: 1,
+            idTalonario: 1,
+            idNumero: 1,
+            idSesion: 1
+        });
+        Fact.create({
+            idFactura: 2,
+            numeroFactura: "001-00110702",
+            fechaFactura: "2020-06-03",
+            descuentoTotalFactura: 0,
+            isvTotalFactura: 0,
+            totalFactura: 50000,
+            subTotalFactura: 50000,
+            cantidadLetras: "CINCUENTA MIL 00/100",
+            estado: true,
+            idTipoPago: 1,
+            idCliente: 2,
+            idUsuario: 1,
+            idEmpleado: 1,
+            idVenta: 2,
+            idTalonario: 1,
+            idNumero: 2,
+            idSesion: 2
+        });
+        Fact.create({
+            idFactura: 3,
+            numeroFactura: "001-00110703",
+            fechaFactura: "2020-06-03",
+            descuentoTotalFactura: 0,
+            isvTotalFactura: 0,
+            totalFactura: 23000,
+            subTotalFactura: 23000,
+            cantidadLetras: "VEINTITRES MIL 00/100",
+            estado: true,
+            idTipoPago: 2,
+            idCliente: 3,
+            idUsuario: 1,
+            idEmpleado: 1,
+            idVenta: 3,
+            idTalonario: 1,
+            idNumero: 3,
+            idSesion: 1
+        });
+        Fact.create({
+            idFactura: 4,
+            numeroFactura: "001-00110704",
+            fechaFactura: "2020-06-03",
+            descuentoTotalFactura: 0,
+            isvTotalFactura: 0,
+            totalFactura: 5654.23,
+            subTotalFactura: 5654.23,
+            cantidadLetras:"CINCO MIL SEISCIENTOS CINCUENTA Y CUANTRO 23/100",
+            estado: true,
+            idTipoPago: 2,
+            idCliente: 4,
+            idUsuario: 1,
+            idEmpleado: 1,
+            idVenta: 4,
+            idTalonario: 1,
+            idNumero: 4,
+            idSesion: 2                
+        });
+        Fact.create({
+            idFactura: 5,
+            numeroFactura: "001-00110705",
+            fechaFactura: "2020-06-03",
+            descuentoTotalFactura: 0,
+            isvTotalFactura: 0,
+            totalFactura: 7654.23,
+            subTotalFactura: 7654.23,
+            cantidadLetras: "SIETE MIL SEISCIENTOS CINCUENTA Y CUANTRO 23/100",
+            estado: true,
+            idTipoPago: 3,
+            idCliente: 2,
+            idUsuario: 1,
+            idEmpleado: 1,
+            idVenta: 5,
+            idTalonario: 1,
+            idNumero: 5,
+            idSesion: 1
+        });
+        Fact.create({
+            idFactura: 6,
+            numeroFactura: "001-00110706",
+            fechaFactura: "2020-06-03",
+            descuentoTotalFactura: 0,
+            isvTotalFactura: 0,
+            totalFactura: 8654.23,
+            subTotalFactura: 8654.23,
+            cantidadLetras: "OCHO MIL SEISCIENTOS CINCUENTA Y CUANTRO 23/100",
+            estado: true,
+            idTipoPago: 3,
+            idCliente: 4,
+            idUsuario: 1,
+            idEmpleado: 1,
+            idVenta: 6,
+            idTalonario: 1,
+            idNumero: 6,
+            idSesion: 2
+        });        
     } catch (error) {
         console.log(error);
     }
