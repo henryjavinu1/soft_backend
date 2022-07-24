@@ -14,6 +14,7 @@ const Vents = db.ventas;
 const Sesion = db.sesion;
 const Numer = db.numero;
 const Fact = db.factura;
+const Sucursal = db.sucursal;
 
 
 exports.initial = async () => {
@@ -333,11 +334,6 @@ exports.initial = async () => {
             tipoDePago: "Credito",
             descripcionTipoPago: "Factura que sera pagada en determinado tiempo",
         });
-        TipoPag.create({
-            idTipoPago: 4,
-            tipoDePago: "Contado",
-            descripcionTipoPago: "Factura que sera pagada al momento de la venta",
-        });
         Cliente.create({
             dni: "1709-1995-00562",
             email: "wjoe1995@live.com",
@@ -370,19 +366,25 @@ exports.initial = async () => {
             direccion: "Los Limones, Pespire, Choluteca",
             telefonoCliente: "9998-9588"
         });
+        Sucursal.create({
+            nombreSucursal: "X",
+            lemaSucursal: "X"
+        });
         Talonario.create({
-            rangoInicialFactura: "000-001-01-00110701",
-            rangoFinalFactura: "000-001-01-00112000",
+            rangoInicialFactura: "00110701",
+            rangoFinalFactura: "00112000",
             cai: "EAF199-B70479-5343AB-538F3E-045B55-C6",
             fechaLimiteEmision: "2025-06-03",
+            idSucursal: 1,
             active: true,
             isDelete: false
         });
         Talonario.create({
-            rangoInicialFactura: "000-001-01-00112001",
-            rangoFinalFactura: "000-001-01-00112500",
+            rangoInicialFactura: "00112001",
+            rangoFinalFactura: "00112500",
             cai: "EAF199-B70479-5343AB-538F3E-045C35-C6",
             fechaLimiteEmision: "2030-06-03",
+            idSucursal: 1,
             active: false,
             isDelete: false
         });           
@@ -390,6 +392,11 @@ exports.initial = async () => {
             fecha: "2020-06-03",
             token: "123456789",
             idUsuario: 1
+        });
+        Sesion.create({
+            fecha: "2020-7-03",
+            token: "123456789",
+            idUsuario: 2
         });
         Vents.create({
             totalISV: 0,
@@ -543,6 +550,7 @@ exports.initial = async () => {
             numero: '001-00110708',
             idTalonario: 1,
         });
+
         Fact.create({
             idFactura: 1,
             numeroFactura: "001-00110701",
@@ -559,7 +567,8 @@ exports.initial = async () => {
             idEmpleado: 1,
             idVenta: 1,
             idTalonario: 1,
-            idNumero: 1
+            idNumero: 1,
+            idSesion: 1
         });
         Fact.create({
             idFactura: 2,
@@ -577,7 +586,8 @@ exports.initial = async () => {
             idEmpleado: 1,
             idVenta: 2,
             idTalonario: 1,
-            idNumero: 2
+            idNumero: 2,
+            idSesion: 2
         });
         Fact.create({
             idFactura: 3,
@@ -595,7 +605,8 @@ exports.initial = async () => {
             idEmpleado: 1,
             idVenta: 3,
             idTalonario: 1,
-            idNumero: 3
+            idNumero: 3,
+            idSesion: 1
         });
         Fact.create({
             idFactura: 4,
@@ -613,7 +624,8 @@ exports.initial = async () => {
             idEmpleado: 1,
             idVenta: 4,
             idTalonario: 1,
-            idNumero: 4
+            idNumero: 4,
+            idSesion: 2                
         });
         Fact.create({
             idFactura: 5,
@@ -631,7 +643,8 @@ exports.initial = async () => {
             idEmpleado: 1,
             idVenta: 5,
             idTalonario: 1,
-            idNumero: 5
+            idNumero: 5,
+            idSesion: 1
         });
         Fact.create({
             idFactura: 6,
@@ -649,44 +662,9 @@ exports.initial = async () => {
             idEmpleado: 1,
             idVenta: 6,
             idTalonario: 1,
-            idNumero: 6
-        });
-        Fact.create({
-            idFactura: 7,
-            numeroFactura: "001-00110707",
-            fechaFactura: "2020-06-03",
-            descuentoTotalFactura: 0,
-            isvTotalFactura: 0,
-            totalFactura: 9654.23,
-            subTotalFactura: 9654.23,
-            cantidadLetras: "NUEVE MIL SEISCIENTOS CINCUENTA Y CUANTRO 23/100",
-            estado: true,
-            idTipoPago: 4,
-            idCliente: 2,
-            idUsuario: 1,
-            idEmpleado: 1,
-            idVenta: 7,
-            idTalonario: 1,
-            idNumero: 7
-        });
-        Fact.create({
-            idFactura: 8,
-            numeroFactura: "001-00110708",
-            fechaFactura: "2020-06-03",
-            descuentoTotalFactura: 0,
-            isvTotalFactura: 0,
-            totalFactura: 10654.23,
-            subTotalFactura: 10654.23,
-            cantidadLetras: "DIEZ MIL SEISCIENTOS CINCUENTA Y CUANTRO 23/100",
-            estado: true,
-            idTipoPago: 4, 
-            idCliente: 4,
-            idUsuario: 1,
-            idEmpleado: 1,
-            idVenta: 8,
-            idTalonario: 1,
-            idNumero: 8
-        });
+            idNumero: 6,
+            idSesion: 2
+        });        
     } catch (error) {
         console.log(error);
     }

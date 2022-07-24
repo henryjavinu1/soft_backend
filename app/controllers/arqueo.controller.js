@@ -1,4 +1,5 @@
 const { query } = require("express");
+// const { factura, sequelize } = require("../models/puntoDeVentas");
 const db = require("../models/puntoDeVentas");
 const { sequelize } = require("../models/puntoDeVentas");
 const { impresionArqueo } = require('../helpers/arqueo.helper');
@@ -77,23 +78,24 @@ exports.actualizacionCerrandoSesion = async (req, res) => {
             if(consult2){
                 if(consult3){
                     //actualizar el arqueo
-                    const arqueo = await sequelize.query(`UPDATE arqueos SET    efectivoCierre = (SELECT SUM(totalFactura) 
+                    const arqueo1 = await sequelize.query(`UPDATE arqueos SET    efectivoCierre = (SELECT SUM(totalFactura) 
                                                                                                   FROM facturas 
-                                                                                                  WHERE idTipoPago = 1),
+                                                                                                  WHERE idTipoPago = 1 AND idSesion = ${req.body.idSesion}),
                                                                                 otrosPagos = (SELECT SUM(totalFactura)
                                                                                               FROM facturas
-                                                                                              WHERE idTipoPago = 2),
+                                                                                              WHERE idTipoPago = 2 AND idSesion = ${req.body.idSesion}),
                                                                                 ventaCredito = (SELECT SUM(totalFactura)
                                                                                                 FROM facturas
-                                                                                                WHERE idTipoPago = 3),
-                                                                                ventaTotal = (SELECT SUM(totalFactura)
-                                                                                              FROM facturas
-                                                                                              WHERE idTipoPago = 1 OR idTipoPago = 2 OR idTipoPago = 3 OR idTipoPago = 4)
-                                                        WHERE arqueos.idArqueo = ${req.body.idArqueo}  AND arqueos.idSesion = ${req.body.idSesion}`);
+                                                                                                WHERE idTipoPago = 3 AND idSesion = ${req.body.idSesion})
+                                                        WHERE idArqueo = ${req.body.idArqueo}`);
                     const arqueo2 = await sequelize.query(`UPDATE arqueos SET efectivoTotal = (SELECT SUM(efectivoApertura + efectivoCierre)
                                                                                                 FROM arqueos
-                                                                                                WHERE arqueos.idArqueo = ${req.body.idArqueo})
-                                                                                                WHERE arqueos.idArqueo = ${req.body.idArqueo}`);
+                                                                                                WHERE arqueos.idArqueo = ${req.body.idArqueo}),
+                                                                                ventaTotal = (SELECT SUM(efectivoCierre + otrosPagos + ventaCredito)
+                                                                                              FROM arqueos
+                                                                                              WHERE idSesion = ${req.body.idSesion})
+                                                            WHERE arqueos.idArqueo = ${req.body.idArqueo}`);
+                                                                                                
 
                     const fe = await Arque.update({
                       fechaFinal: new Date(),
@@ -102,24 +104,25 @@ exports.actualizacionCerrandoSesion = async (req, res) => {
                         idArqueo: req.body.idArqueo,
                       },
                     });
+                   const se = await Sesi.update({
+                        isActive: false,
+                    },{
+                        where: {
+                            id: req.body.idSesion,
+                        },
+                  });
+                  const arqueos = await Arque.findOne({
+                    where: {
+                        idArqueo: req.body.idArqueo,
+                        isDelete: false
+                    }
+                  });
                     //validar que el arqueo se actualizo correctamente
-                    if (arqueo && fe) {
-                        res.status(200).json({
+                    if (arqueo1 && arqueo2 && fe && se) {
+                       return res.status(200).send({
                             message: "Arqueo actualizado correctamente",
-                            data: await Arque.findOne({
-                                where: {
-                                    idArqueo: req.body.idArqueo,
-                                },
-                            }),
-                        });
-                        //actualizar la sesion
-                        Sesi.update({
-                            isActive: false,
-                        },{
-                            where: {
-                                id: req.body.idSesion,
-                            },
-                      });
+                            arqueos
+                    });   
                   }
                 }
             }
@@ -166,7 +169,7 @@ exports.mostrarArqueo = async (req, res) => {
                 message: "No hay arqueos"
             });
         }
-        return res.status(200).json({arqueos});
+        return res.status(200).send({arqueos});
     } catch (error) {
         res.status(500).send({
             message: "Error al mostrar arqueo" + error
@@ -203,23 +206,19 @@ exports.buscarPorFechaInicioFechaFinal = async (req, res) => {
 exports.buscarPorUsuario = async (req, res) => {
     try{
         //buscar arqueo por usuario
-        const arqueo = await Arque.findAll({
+        const use = await Arque.findAll({
             where: {
                 idUsuario: req.body.idUsuario,
                 isDelete: false
             }
         });
         //validar que el arqueo se mostro correctamente
-        if(!arqueo){
-            res.status(404).json({
+        if(!use){
+            res.status(404).send({
                 message: "No se encontro ningun arqueo"
             });
-        } else{
-            const arqueo1 = impresionArqueo(arqueo);
-            res.json({
-                arqueo1
-            });
-        }
+        } 
+        return res.status(200).send({use});
     } catch (error) {
         //enviar respuesta al cliente
         return res.status(500).json({
