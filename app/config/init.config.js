@@ -338,6 +338,7 @@ exports.initial = async () => {
             descripcionTipoPago: "Factura que sera pagada en determinado tiempo",
         });
         Cliente.create({
+<<<<<<< HEAD
             dni: "000",
             email: "email",
             rtn: "000",
@@ -346,6 +347,14 @@ exports.initial = async () => {
             telefonoCliente: "0000-0000",
             idUsuario: 2,
             idSesion: 2,
+=======
+            dni: "1709-1995-00562",
+            email: "wjoe1995@live.com",
+            rtn: "17091995005624",
+            nombreCliente: "Willian Josue",
+            direccion: "San Lorenzo, Valle",
+            telefonoCliente: "9813-9935"
+>>>>>>> main
         });
         Cliente.create({
             dni: "0611-1955-00493",
@@ -353,9 +362,7 @@ exports.initial = async () => {
             rtn: "0611955004930",
             nombreCliente: "Pedro Juan",
             direccion: "San Lorenzo, Valle",
-            telefonoCliente: "9825-6668",
-            idUsuario: 2,
-            idSesion: 2,
+            telefonoCliente: "9825-6668"
         });
         Cliente.create({
             dni: "1709-1969-00551",
@@ -363,9 +370,7 @@ exports.initial = async () => {
             rtn: "17091969005512",
             nombreCliente: "Ana Pastora Euceda Mata",
             direccion: "El Tular, Nacaome, Valle",
-            telefonoCliente: "8766-6076",
-            idUsuario: 2,
-            idSesion: 2,
+            telefonoCliente: "8766-6076"
         });
         Cliente.create({
             dni: "0611-1986-00847",
@@ -373,9 +378,7 @@ exports.initial = async () => {
             rtn: "0611986008472",
             nombreCliente: "Mayti Melissa Rivera Carbajal",
             direccion: "Los Limones, Pespire, Choluteca",
-            telefonoCliente: "9998-9588",
-            idUsuario: 1,
-            idSesion: 1,
+            telefonoCliente: "9998-9588"
         });
         Sucursal.create({
             nombreSucursal: "X",
