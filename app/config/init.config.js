@@ -343,7 +343,9 @@ exports.initial = async () => {
             rtn: "000",
             nombreCliente: "Consumidor Final",
             direccion: "Honduras",
-            telefonoCliente: "0000-0000"
+            telefonoCliente: "0000-0000",
+            idUsuario: 2,
+            idSesion: 2,
         });
         Cliente.create({
             dni: "0611-1955-00493",
