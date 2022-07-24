@@ -27,6 +27,7 @@ const signup = async (req, res) => {
   });
   }
 catch (error) {
+  console.log(error);
   return res.status(500).send({
       message: "Ocurrio un error"
   });
@@ -93,6 +94,7 @@ const signin = async (req, res) => {
     }
     return res.status(200).send(resp);
   } catch (error) {
+    console.log(error);
     return res.status(500).send({
       message: error.message
     });
@@ -106,6 +108,7 @@ const signout = async (req, res) => {
       message: "You've been signed out!"
     });
   } catch (err) {
+    console.log(error);
     this.next(err);
   }
 };
