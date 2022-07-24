@@ -1,5 +1,5 @@
 const { query } = require("express");
-const { factura, sequelize } = require("../models/puntoDeVentas");
+// const { factura, sequelize } = require("../models/puntoDeVentas");
 const db = require("../models/puntoDeVentas");
 const { sequelize } = require("../models/puntoDeVentas");
 const { impresionArqueo } = require('../helpers/arqueo.helper');
