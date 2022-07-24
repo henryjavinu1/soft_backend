@@ -1,6 +1,6 @@
 const { fs } = require('fs');
 const PdfPrinter = require("pdfmake");
-const contenidoFactura = require('../pdf_files/pdf_styles/contenido.factura');
+const {contenidoFactura, contenidoSinDetalles} = require('../pdf_files/pdf_styles/contenido.factura');
 const fonts = require('../pdf_files/pdf_styles/fonts');
 
 const filtrarFacturas = async (Factura, parametroBuscado = Factura, valorBuscado, Empleado, TipoPago, Talonario, Cliente) => {
@@ -181,9 +181,14 @@ const construirFacturaEnPDF = (factura, detallesDeVentas) => {
     var PdfPrinter = require('pdfmake');
     var printer = new PdfPrinter(fonts);
     var fs = require('fs');
-
-    let content = contenidoFactura(factura, detallesDeVentas);
-    // console.log(content.content);s
+    let content;
+    if (detallesDeVentas.length > 0) {
+        console.log('detalle de ventas: '+detallesDeVentas.length);
+        content = contenidoFactura(factura, detallesDeVentas);
+    } else {
+        content = contenidoSinDetalles(factura);
+    }
+    // console.log(content.content);
 
     var docDefinition = {
         watermark: 'COPIA',

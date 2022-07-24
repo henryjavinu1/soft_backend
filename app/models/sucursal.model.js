@@ -13,6 +13,26 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.STRING,
             defaultValue: 'X'
         },
+        direccion: {
+            type: Sequelize.STRING,
+            defaultValue: 'X'
+        },
+        telefono: {
+            type: Sequelize.STRING,
+            defaultValue: 'X'
+        },
+        email: {
+            type: Sequelize.STRING,
+            defaultValue: 'X'
+        },
+        rtn: {
+            type: Sequelize.STRING,
+            defaultValue: 'X'
+        },
+        logo: {
+            type: Sequelize.STRING, // almacena una URL en donde se almacena la imagen
+            defaultValue: 'X'
+        },
     });
 
     return Sucural;

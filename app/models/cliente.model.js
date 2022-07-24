@@ -26,6 +26,14 @@ module.exports = (sequelize, Sequelize) => {
         telefonoCliente: {
             type: Sequelize.STRING,
         },
+        idUsuario: {
+            type: Sequelize.INTEGER,
+            allowNull: false,
+        },
+        idSesion: {
+            type: Sequelize.INTEGER,
+            allowNull: false,
+        },
         isDelete: {
             type: Sequelize.BOOLEAN,
             allowNull: false,  //no permite valores nulos
