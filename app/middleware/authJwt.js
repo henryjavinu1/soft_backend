@@ -4,8 +4,8 @@ const db = require("../models/puntoDeVentas");
 const User = db.user;
 
 verifyToken = (req, res, next) => {
-  //let token = req.session.token;
-  let token = req.body.token;
+  let token = req.session.token;
+  //let token = req.body.token;
 
   if (!token) {
     return res.status(403).send({
@@ -21,7 +21,6 @@ verifyToken = (req, res, next) => {
     }
     req.idUsuario = decoded.idUsuario;
     req.idEmpleado = decoded.idEmpleado;
-    req.idSesion = decoded.idSesion;
     next();
   });
 };
