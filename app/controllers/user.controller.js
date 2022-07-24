@@ -1,6 +1,6 @@
 const db = require("../models/puntoDeVentas");
 const config = require("../config/auth.config");
-const { user } = require("../models/puntoDeVentas");
+const { user, producto } = require("../models/puntoDeVentas");
 const { request, response } = require('express');
 const { Op, DataTypes, Model } = require("sequelize");
 const User = db.user;
@@ -31,34 +31,49 @@ exports.bajauser = async (req, res) => {
 
 
 
-exports.updateUser = async (req = request, res = response) => {
+exports.updateUser = async (req, res) => {
   // ACTUALIZAR UN USUARIO  
-  const id = req.body.id;
-  const { usuario, password, email, idEmpleado, idRol } = req.body;
-  console.log(id);
-  try {
+   try {
       const updateUser = await User.findOne({
-        where: {
-          id: req.body.id,
-        },
-    });
-    if (!updateUser){
-      return res.status(404).send({
-        message: "Error al encontrar el usuario"
-      })
-    }
-    //validaUser(updateUser, usuario, password, email,idEmpleado, idRol)
-    updateUser.save();
-    return res.status(200).send({
-      updateUser,
-    });
+            where: {
+              id: req.body.id,
+            }
+        });
+        if (!updateUser){
+          return res.status(404).send({
+            message: "Error al encontrar el usuario"
+          });
+        }else{
+             try{
+                const updateUser = await User.update({
+                  usuario: req.body.usuario,
+                  password: req.body.password,
+                  email: req.body.email,
+                  isDelete: false,
+                  idEmpleado: req.body.idEmpleado,
+                  idRol: req.body.idRol
+                },{
+                  where: {
+                    id: req.body.id
+                  }
+                });
+                  return res.status(200).send({
+                    message: "Usuario Actualizado en el backend"
+                  });
+              } catch(error){
+                 return res.status(500).send({
+                  message: "Ocurrio un error en backend al actualizar"
+            });
+          }
+        }
+        //validaUser(updateUser, usuario, password, email,idEmpleado, idRol)
   } catch (error) {
     console.log(error);
     return res.status(500).send({
-      message: "Ocurrio un error en el backend" + error.message + 'validaUser'
-    })
+      message: "Ocurrio un error en el backend" + error
+    });
   }
-};
+}
 
 exports.mostrarUser = async (req = request, res = response) => {
   try {
