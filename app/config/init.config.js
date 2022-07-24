@@ -419,7 +419,7 @@ exports.initial = async () => {
         });
 
         product.create({
-            codigoProducto: "4568754",
+            codigoProducto: "1",
             nombreProducto: "Coca Cola",
             precioProducto: 18,
             cantidadProducto: 500,
@@ -429,7 +429,7 @@ exports.initial = async () => {
             idTipoProducto: 1
         });
         product.create({
-            codigoProducto: "789456",
+            codigoProducto: "2",
             nombreProducto: "Mortadela",
             precioProducto: 25,
             cantidadProducto: 250,
@@ -439,7 +439,7 @@ exports.initial = async () => {
             idTipoProducto: 2
         });
         product.create({
-            codigoProducto: "123456",
+            codigoProducto: "3",
             nombreProducto: "Mantequilla",
             precioProducto: 45,
             cantidadProducto: 250,

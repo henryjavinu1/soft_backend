@@ -21,9 +21,10 @@ exports.crearVenta = async (req, res) => {
             idCliente: req.body.idCliente,
         });
         return res.status(200).send({
-            message: "Venta creada"
+            id: ventas.id
         });
     } catch (error) {
+        console.log(error);
         res.status(500).send({
             message: error.message
         });
@@ -54,33 +55,33 @@ exports.mostrarVentas = async (req = request, res = response) => {
     }
 }
 
-Actualizar 
+// Actualizar 
 exports.actualizarVenta = async (req = request, res = response) => {
-    const id = req.body.id;
-    const { email, rtn, nombreCliente, direccion, telefonoCliente, isDelete } = req.body;
-    console.log(dni);
+   // const id = req.body.id;
+   // const { email, rtn, nombreCliente, direccion, telefonoCliente, isDelete } = req.body;
+   // console.log(dni);
     try {
-        const clienteBuscado = await Cliente.findOne({
+        const ventaActualizar = await Ventas.update({
+            totalISV: req.body.totalISV,
+            totalVenta: req.body.totalVenta,
+            totalDescuentoVenta: req.body.totalDescuentoVenta,
+            puntoDeEmision: req.body.puntoDeEmision,
+            establecimiento: req.body.establecimiento,
+            tipo: req.body.tipo,
+            idSesion: req.body.idSesion,
+            idUsuario: req.body.idUsuario,
+            idCliente: req.body.idCliente,
+        },{
             where: {
                 id: req.body.id
-            },
+            }
         });
-        if (!clienteBuscado) {
-            return res.status(404).send({
-                msg: "Cliente no existe"
-            })
-        }
-        validarCamposCliente(clienteBuscado, dni, email, rtn, nombreCliente, direccion, telefonoCliente, isDelete)
-        clienteBuscado.save();
-        return res.status(200).send({
-            clienteBuscado,
-        });
-
-    } catch (error) {
-        console.log(error);
+        return res.status(200).send(ventaActualizar);
+        } catch (error) {
+        
         return res.status(500).send({
             message: "Ocurrio un error" + error
-        })
+        });
     }
 }
 //Eliminar
@@ -93,7 +94,7 @@ exports.eliminarVenta = async (req, res) => {
                 id: req.body.id
             }
         });
-        if (eliminar) {
+        if (eliminarVenta) {
             res.status(200).send({
                 message: "Venta eliminada correctamente"
             });
