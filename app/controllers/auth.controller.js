@@ -7,9 +7,9 @@ const Op = db.Sequelize.Op;
 
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-const { sesion } = require("../models/puntoDeVentas");
+const { sesion, empleado } = require("../models/puntoDeVentas");
 
-exports.signup = async (req, res) => {
+const signup = async (req, res) => {
   // Save User to Database
   try {
     const user = await User.create({
@@ -32,7 +32,7 @@ catch (error) {
 }
 }
 
-exports.signin = async (req, res) => {
+const signin = async (req, res) => {
   try {
     const user = await User.findOne({
       where: {
@@ -67,10 +67,12 @@ exports.signin = async (req, res) => {
         message: "Warning! Invalid Password!",
       });
     }
-
     const token = jwt.sign({
-      id: user.id
-    }, config.secret, {
+      idUsuario: user.id,
+      idEmpleado:user.empleado.id,
+    }, 
+    
+    config.secret, {
       expiresIn: 86400, // 24 horas de ducración de tokens
     });
 
@@ -79,12 +81,16 @@ exports.signin = async (req, res) => {
       idUsuario:user.id,
       token:token
     });
+    
+    
+
     const resp = {
       id: user.id,
       usuario: user.usuario,
       empleado: user.empleado,
       rol: user.role,
-      sesion:ses
+      sesion:ses,
+      token: token
     }
     return res.status(200).send(resp);
   } catch (error) {
@@ -94,7 +100,7 @@ exports.signin = async (req, res) => {
   }
 };
 
-exports.signout = async (req, res) => {
+const signout = async (req, res) => {
   try {
     req.session = null;
     return res.status(200).send({
@@ -104,3 +110,9 @@ exports.signout = async (req, res) => {
     this.next(err);
   }
 };
+
+module.exports = {
+  signout,
+  signin,
+  signup
+}

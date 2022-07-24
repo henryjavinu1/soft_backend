@@ -12,6 +12,7 @@ module.exports = function(app) {
   });
   app.post("/api/talonarios/create", controller.createTalonario);    //C
   app.get("/api/talonarios/get", controller.getTalonarios);          //R
+  app.get("/api/talonarios/getAll", controller.getTalonariosAll);    //R
   app.post("/api/talonarios/update", controller.updateTalonario);    //U
   app.get("/api/talonarios/delete", controller.deleteTalonario);     //D
   app.post("/api/talonarios/activate", controller.activateTalonario);     
