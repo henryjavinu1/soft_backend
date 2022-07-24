@@ -13,9 +13,7 @@ exports.crearCliente = async (req = request, res = response) => {
             rtn: req.body.rtn,
             nombreCliente: req.body.nombreCliente,
             direccion: req.body.direccion,
-            telefonoCliente: req.body.telefonoCliente,
-            idUsuario: req.idUsuario,
-            idSesion: req.idSesion
+            telefonoCliente: req.body.telefonoCliente
         });
         return res.status(200).send({
             message: "Cliente añadido con exito",
