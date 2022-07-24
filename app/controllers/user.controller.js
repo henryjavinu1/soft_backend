@@ -10,55 +10,53 @@ exports.bajauser = async (req, res) => {
   // BAJA a un usuario 
   try {
       const userUpdate = await User.update({
-      IsDelete: true,
+          isDelete: true
     },{
-      where: 
-        username = req.body.username,
+      where: {
+        id: req.body.id
+      }
     });
-    if (!bajauser){
-      return res.status(404).send({
-        message: "No se pudo dar de baja al usuario"
-      })
-    }else {
-      return res.send({
-        message: "Se le dio de baja exitosamente"
-      })
+    if (userUpdate){
+        res.status(200).send({
+          message: "Usuario baja en el backend"
+      });
     }
   } catch (error) {
-    res.status(500).send({
-      message: error.message
+    console.log(error);
+    res.status(401).send({
+      message: "Error al elimiar el usuario " + error.message
     });
   }
 };
 
 
 
-exports.updateUser = async (req, res) => {
+exports.updateUser = async (req = request, res = response) => {
   // ACTUALIZAR UN USUARIO  
+  const id = req.body.id;
+  const { usuario, password, email, idEmpleado, idRol } = req.body;
+  console.log(id);
   try {
-      const updateUser = await User.update({
-        Usuario: req.body.username,
-        password: req.body.password,
-        email: req.body.email,
-        IsDelete: true,
-
-    },{
-      where: 
-        username = req.body.username,
+      const updateUser = await User.findOne({
+        where: {
+          id: req.body.id,
+        },
     });
     if (!updateUser){
       return res.status(404).send({
-        message: "Error al actualizar informacion del usuario"
-      })
-    }else {
-      return res.send({
-        message: "Actualizacion exitosa"
+        message: "Error al encontrar el usuario"
       })
     }
-  } catch (error) {
-    res.status(500).send({
-      message: error.message
+    //validaUser(updateUser, usuario, password, email,idEmpleado, idRol)
+    updateUser.save();
+    return res.status(200).send({
+      updateUser,
     });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({
+      message: "Ocurrio un error en el backend" + error.message + 'validaUser'
+    })
   }
 };
 
