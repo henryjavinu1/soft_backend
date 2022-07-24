@@ -44,7 +44,7 @@ const traerFacturas = async (req = request, res = response) => {
             facturas
         })
     } catch (error) {
-        console.error(error);
+        console.log(error);
     }
 }
 
