@@ -15,6 +15,8 @@ const Sesion = db.sesion;
 const Numer = db.numero;
 const Fact = db.factura;
 const Sucursal = db.sucursal;
+const tipoProduc = db.tipoproducto;
+const product = db.producto;
 
 
 exports.initial = async () => {
@@ -672,6 +674,53 @@ exports.initial = async () => {
             idTalonario: 1,
             idNumero: 6,
             idSesion: 2
+        });
+        tipoProduc.create({
+            tipoProducto: "Refresco",
+            descripcionProducto: "Bebida con Soda",
+            isvTipoProducto: 10
+        });
+        tipoProduc.create({
+            tipoProducto: "Embutidos",
+            descripcionProducto: "Diferentes tipos de carnes",
+            isvTipoProducto: 10
+        });
+
+        tipoProduc.create({
+            tipoProducto: "Lacteos",
+            descripcionProducto: "Productos derivados de la leche",
+            isvTipoProducto: 10
+        });
+
+        product.create({
+            codigoProducto: "1",
+            nombreProducto: "Coca Cola",
+            precioProducto: 18,
+            cantidadProducto: 500,
+            isvProducto: 10,
+            descProducto:  0,
+            isExcento: false,
+            idTipoProducto: 1
+        });
+        product.create({
+            codigoProducto: "2",
+            nombreProducto: "Mortadela",
+            precioProducto: 25,
+            cantidadProducto: 250,
+            isvProducto: 10,
+            descProducto:  0,
+            isExcento: false,
+            idTipoProducto: 2
+        });
+        product.create({
+            codigoProducto: "3",
+            nombreProducto: "Mantequilla",
+            precioProducto: 45,
+            cantidadProducto: 250,
+            isvProducto: 10,
+            descProducto:  0,
+            isExcento: false,
+            idTipoProducto: 3
         });        
     } catch (error) {
         console.log(error);

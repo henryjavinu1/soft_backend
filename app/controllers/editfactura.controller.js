@@ -298,22 +298,28 @@ const imprimirUnaFactura = async (req = request, res = response) => {
                 }
             ]
         });
-        let detallesDeVentas = [];
-        if (facturaBuscada.venta) {
-            detallesDeVentas = await DetalleVenta.findAll({
-                where: { isDelete: false, idVentas: facturaBuscada.venta.id },
-                include: [
-                    {
-                        model: Producto
-                    }
-                ]
+        if (facturaBuscada) {
+            let detallesDeVentas = [];
+            if (facturaBuscada.venta) {
+                detallesDeVentas = await DetalleVenta.findAll({
+                    where: { isDelete: false, idVentas: facturaBuscada.venta.id },
+                    include: [
+                        {
+                            model: Producto
+                        }
+                    ]
+                });
+            }
+    
+            return res.status(200).json({
+                facturaConDatos: facturaBuscada,
+                detallesDeVentas
+            });
+        } else {
+            return res.status(404).json({
+                msg: 'No existe una factura con el número indicado.'
             });
         }
-
-        return res.status(200).json({
-            facturaConDatos: facturaBuscada,
-            detallesDeVentas
-        });
     } catch (error) {
         console.log(error);
         return res.status(500).json({
@@ -370,6 +376,7 @@ const descargarFactura = async (req = request, res = response) => {
                 res.setHeader('Content-Disposition', `attachment; filename=factura${facturaBuscada.numeroFactura}.pdf`);
                 file.pipe(res);
                 fs.unlinkSync('app/pdf_files/primera.pdf');
+                // fs.unlinkSync('app/pdf_files/primera.pdf');
             }).catch(err => {
                 res.status(500).json(
                     {
