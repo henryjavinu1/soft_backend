@@ -200,7 +200,7 @@ const construirFacturaEnPDF = (factura, detallesDeVentas) => {
     }
 
     var pdfDoc = printer.createPdfKitDocument(docDefinition, options);
-    pdfDoc.pipe(fs.createWriteStream('app/pdf_files/primera.pdf'));
+    pdfDoc.pipe(fs.createWriteStream('./app/pdf_files/primera.pdf'));
     pdfDoc.end();
 
     const promesa = new Promise((resolve, reject) => {
