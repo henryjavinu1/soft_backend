@@ -288,51 +288,51 @@ exports.initial = async () => {
         await role2.addPermisos(permisos[9]);
         await role2.addPermisos(permisos[10]);
         await role2.addPermisos(permisos[11]);
-        Empleado.create({
+        await Empleado.create({
             id: 1,
             dni: "02012",
             nombre: "root",
             apellido: "root",
             direccion: "La libertad",
             telefono: "123",
-            fechaNacimiento: "2002-20-2",
+            fechaNacimiento:  Date("2002-20-2"),
             sexo: "M",
         });
-        Empleado.create({
+        await Empleado.create({
             id: 2,
             dni: "02013",
             nombre: "Erick",
             apellido: "Reyes",
             direccion: "La libertad",
             telefono: "123",
-            fechaNacimiento: "2002-20-2",
+            fechaNacimiento: Date("2002-20-2"),
             sexo: "M",
         });
-        Empleado.create({
+        await Empleado.create({
             id: 3,
             dni: "1709-1995-00562",
             nombre: "Willian Josue",
             apellido: "Ortez Euceda",
             direccion: "San Lorenzo, Valle",
             telefono: "98139935",
-            fechaNacimiento: "1995-08-07",
+            fechaNacimiento: Date("1995-08-07"),
             sexo: "M",
         });
-        User.create({
+        await User.create({
             usuario: "root",
             password: bcrypt.hashSync(config.secret, 8),
             email: "root@soft.com",
             idEmpleado: 1,
             idRol: 1
         });
-        User.create({
+        await User.create({
             usuario: "erick",
             password: bcrypt.hashSync(config.secret, 8),
             email: "erick@soft.com",
             idEmpleado: 2,
             idRol: 2
         });
-        User.create({
+        await User.create({
             usuario: "Willian Josue",
             password: bcrypt.hashSync(config.secret, 8),
             email: "wjoe1995@live.com",
@@ -340,22 +340,22 @@ exports.initial = async () => {
             idRol: 2
         });
         //tipo de pago WJOE1995
-        TipoPag.create({
+        await TipoPag.create({
             idTipoPago: 1,
             tipoDePago: "Efectivo",
             descripcionTipoPago: "Pago en efectivo",
         });
-        TipoPag.create({
+        await TipoPag.create({
             idTipoPago: 2,
             tipoDePago: "Tarjeta Credito/Debito",
             descripcionTipoPago: "Pago con tarjeta de credito/debito",
         });
-        TipoPag.create({
+        await TipoPag.create({
             idTipoPago: 3,
             tipoDePago: "Credito",
             descripcionTipoPago: "Factura que sera pagada en determinado tiempo",
         });
-        Cliente.create({
+        await Cliente.create({
             dni: "000",
             email: "email",
             rtn: "000",
@@ -363,7 +363,7 @@ exports.initial = async () => {
             direccion: "Honduras",
             telefonoCliente: "0000-0000",
         });
-        Cliente.create({
+        await Cliente.create({
             dni: "0611-1955-00493",
             email: "pedroortez174@gmail.com",
             rtn: "0611955004930",
@@ -371,7 +371,7 @@ exports.initial = async () => {
             direccion: "San Lorenzo, Valle",
             telefonoCliente: "9825-6668"
         });
-        Cliente.create({
+        await Cliente.create({
             dni: "1709-1969-00551",
             email: "anapastoraeuceda16@gmail.com",
             rtn: "17091969005512",
@@ -379,7 +379,7 @@ exports.initial = async () => {
             direccion: "El Tular, Nacaome, Valle",
             telefonoCliente: "8766-6076"
         });
-        Cliente.create({
+        await Cliente.create({
             dni: "0611-1986-00847",
             email: "maytirivera0611@gmail.com",
             rtn: "0611986008472",
@@ -387,11 +387,11 @@ exports.initial = async () => {
             direccion: "Los Limones, Pespire, Choluteca",
             telefonoCliente: "9998-9588"
         });
-        Sucursal.create({
+        await Sucursal.create({
             nombreSucursal: "X",
             lemaSucursal: "X"
         });
-        Talonario.create({
+        await Talonario.create({
             rangoInicialFactura: "00110701",
             idSucursal: 1,
             rangoFinalFactura: "00112000",
@@ -400,7 +400,7 @@ exports.initial = async () => {
             active: true,
             isDelete: false
         });
-        Talonario.create({
+        await Talonario.create({
             rangoInicialFactura: "00112001",
             idSucursal: 1,
             rangoFinalFactura: "00112500",            
@@ -409,29 +409,29 @@ exports.initial = async () => {
             active: false,
             isDelete: false
         });           
-        Sesion.create({
+        await Sesion.create({
             fecha: "2020-06-03",
             token: "123456789",
             idUsuario: 1
         });
-        tipoProduc.create({
+        await tipoProduc.create({
             tipoProducto: "Refresco",
             descripcionProducto: "Bebida con Soda",
             isvTipoProducto: 10
         });
-        tipoProduc.create({
+        await tipoProduc.create({
             tipoProducto: "Embutidos",
             descripcionProducto: "Diferentes tipos de carnes",
             isvTipoProducto: 10
         });
 
-        tipoProduc.create({
+        await tipoProduc.create({
             tipoProducto: "Lacteos",
             descripcionProducto: "Productos derivados de la leche",
             isvTipoProducto: 10
         });
 
-        product.create({
+        await product.create({
             codigoProducto: "1",
             nombreProducto: "Coca Cola",
             precioProducto: 18,
@@ -441,7 +441,7 @@ exports.initial = async () => {
             isExcento: false,
             idTipoProducto: 1
         });
-        product.create({
+        await product.create({
             codigoProducto: "2",
             nombreProducto: "Mortadela",
             precioProducto: 25,
@@ -451,7 +451,7 @@ exports.initial = async () => {
             isExcento: false,
             idTipoProducto: 2
         });
-        product.create({
+        await product.create({
             codigoProducto: "3",
             nombreProducto: "Mantequilla",
             precioProducto: 45,
@@ -467,32 +467,32 @@ exports.initial = async () => {
 
 
 
-        Sesion.create({
+        await Sesion.create({
             fecha: "2020-7-03",
             token: "123456789",
             idUsuario: 2
         });
-        Sesion.create({
+        await Sesion.create({
             fecha: "2020-8-03",
             token: "123456789",
             idUsuario: 2
         });
-        Sesion.create({
+        await Sesion.create({
             fecha: "2020-9-03",
             token: "123456789",
             idUsuario: 2
         });
-        Sesion.create({
+        await Sesion.create({
             fecha: "2020-10-03",
             token: "123456789",
             idUsuario: 2
         });
-        Sesion.create({
+        await Sesion.create({
             fecha: "2020-11-03",
             token: "123456789",
             idUsuario: 2
         });
-        Arqueo.create({
+        await Arqueo.create({
             fechaInicio: "2020-06-03",
             fechaFinal: null,
             efectivoApertura: 25000,
@@ -504,7 +504,7 @@ exports.initial = async () => {
             idUsuario: 1,
             idSesion: 1,
         });
-        Arqueo.create({
+        await Arqueo.create({
             fechaInicio: "2020-06-03",
             fechaFinal: null,
             efectivoApertura: 20000,
@@ -516,7 +516,7 @@ exports.initial = async () => {
             idUsuario: 1,
             idSesion: 2,
         });
-        Arqueo.create({
+        await Arqueo.create({
             fechaInicio: "2020-06-03",
             fechaFinal: "2020-06-03",
             efectivoApertura: 10000,
@@ -528,7 +528,7 @@ exports.initial = async () => {
             idUsuario: 2,
             idSesion: 3,
         });
-        Arqueo.create({
+        await Arqueo.create({
             fechaInicio: "2020-06-03",
             fechaFinal: "2020-06-03",
             efectivoApertura: 10000,
@@ -540,7 +540,7 @@ exports.initial = async () => {
             idUsuario: 2,
             idSesion: 4,
         });
-        Arqueo.create({
+        await Arqueo.create({
             fechaInicio: "2020-06-03",
             fechaFinal: "2020-06-03",
             efectivoApertura: 10000,
@@ -552,7 +552,7 @@ exports.initial = async () => {
             idUsuario: 3,
             idSesion: 5,
         });
-        Arqueo.create({
+        await Arqueo.create({
             fechaInicio: "2020-06-03",
             fechaFinal: "2020-06-03",
             efectivoApertura: 10000,
@@ -564,7 +564,7 @@ exports.initial = async () => {
             idUsuario: 3,
             idSesion: 6,
         });
-        Vents.create({
+        await Vents.create({
             totalISV: 0,
             totalVenta: 5432.23,
             totalDescuentoVenta: 0,
@@ -575,7 +575,7 @@ exports.initial = async () => {
             idUsuario: 1,
             idCliente: 1
         });
-        Vents.create({
+        await Vents.create({
             totalISV: 500,
             totalVenta: 50000,
             totalDescuentoVenta: 5076.23,
@@ -586,7 +586,7 @@ exports.initial = async () => {
             idUsuario: 1,
             idCliente: 2
         });
-        Vents.create({
+        await Vents.create({
             totalISV: 2300,
             totalVenta: 23000,
             totalDescuentoVenta: 2376.23,
@@ -597,7 +597,7 @@ exports.initial = async () => {
             idUsuario: 1,
             idCliente: 3
         });
-        Vents.create({
+        await Vents.create({
             totalISV: 0,
             totalVenta: 5765.23,
             totalDescuentoVenta: 0,
@@ -608,7 +608,7 @@ exports.initial = async () => {
             idUsuario: 1,
             idCliente: 4
         });
-        Vents.create({
+        await Vents.create({
             totalISV: 0,
             totalVenta: 5654.23,
             totalDescuentoVenta: 0,
@@ -619,7 +619,7 @@ exports.initial = async () => {
             idUsuario: 1,
             idCliente: 4
         });
-        Vents.create({
+        await Vents.create({
             totalISV: 0,
             totalVenta: 4564.23,
             totalDescuentoVenta: 0,
@@ -630,7 +630,7 @@ exports.initial = async () => {
             idUsuario: 1,
             idCliente: 1
         });
-        Vents.create({
+        await Vents.create({
             totalISV: 0,
             totalVenta: 2345.53,
             totalDescuentoVenta: 0,
@@ -641,7 +641,7 @@ exports.initial = async () => {
             idUsuario: 1,
             idCliente: 2
         });
-        Vents.create({
+        await Vents.create({
             totalISV: 0,
             totalVenta: 45000.23,
             totalDescuentoVenta: 0,
@@ -653,7 +653,7 @@ exports.initial = async () => {
             idCliente: 3
         });
 
-        detallevent.create({
+        await detallevent.create({
             cantidad: 2,
             precioUnitario: 18,
             isvAplicado: 10,
@@ -663,7 +663,7 @@ exports.initial = async () => {
             idProducto: 1
         });
 
-        Numer.create({ 
+        await Numer.create({ 
             puntoEmision: '000',    
             establecimiento: '001', 
             tipo: '01', 
@@ -671,7 +671,7 @@ exports.initial = async () => {
             numero: '001-00110701',
             idTalonario: 1, 
         });
-        Numer.create({
+        await Numer.create({
             puntoEmision: '000',
             establecimiento: '001',
             tipo: '01',
@@ -679,7 +679,7 @@ exports.initial = async () => {
             numero: '001-00110702',
             idTalonario: 1,
         });
-        Numer.create({
+        await Numer.create({
             puntoEmision: '000',
             establecimiento: '001',
             tipo: '01',
@@ -687,7 +687,7 @@ exports.initial = async () => {
             numero: '001-00110703',
             idTalonario: 1,
         });
-        Numer.create({
+        await Numer.create({
             puntoEmision: '000',
             establecimiento: '001',
             tipo: '01',
@@ -695,7 +695,7 @@ exports.initial = async () => {
             numero: '001-00110704',
             idTalonario: 1,
         });
-        Numer.create({
+        await Numer.create({
             puntoEmision: '000',
             establecimiento: '001',
             tipo: '01',
@@ -703,7 +703,7 @@ exports.initial = async () => {
             numero: '001-00110705',
             idTalonario: 1,
         });
-        Numer.create({
+        await Numer.create({
             puntoEmision: '000',
             establecimiento: '001',
             tipo: '01',
@@ -711,7 +711,7 @@ exports.initial = async () => {
             numero: '001-00110706',
             idTalonario: 1,
         });
-        Numer.create({
+        await Numer.create({
             puntoEmision: '000',
             establecimiento: '001',
             tipo: '01',
@@ -719,7 +719,7 @@ exports.initial = async () => {
             numero: '001-00110707',
             idTalonario: 1,
         });
-        Numer.create({
+        await Numer.create({
             puntoEmision: '000',
             establecimiento: '001',
             tipo: '01',
@@ -728,7 +728,7 @@ exports.initial = async () => {
             idTalonario: 1,
         });
 
-        Fact.create({
+        await Fact.create({
             idFactura: 1,
             numeroFactura: "001-00110701",
             fechaFactura: "2020-06-03",
@@ -747,7 +747,7 @@ exports.initial = async () => {
             idNumero: 1,
             idSesion: 1
         });
-        Fact.create({
+        await Fact.create({
             idFactura: 2,
             numeroFactura: "001-00110702",
             fechaFactura: "2020-06-03",
@@ -766,7 +766,7 @@ exports.initial = async () => {
             idNumero: 2,
             idSesion: 2
         });
-        Fact.create({
+        await Fact.create({
             idFactura: 3,
             numeroFactura: "001-00110703",
             fechaFactura: "2020-06-03",
@@ -785,7 +785,7 @@ exports.initial = async () => {
             idNumero: 3,
             idSesion: 1
         });
-        Fact.create({
+        await Fact.create({
             idFactura: 4,
             numeroFactura: "001-00110704",
             fechaFactura: "2020-06-03",
@@ -804,7 +804,7 @@ exports.initial = async () => {
             idNumero: 4,
             idSesion: 2                
         });
-        Fact.create({
+        await Fact.create({
             idFactura: 5,
             numeroFactura: "001-00110705",
             fechaFactura: "2020-06-03",
@@ -823,7 +823,7 @@ exports.initial = async () => {
             idNumero: 5,
             idSesion: 1
         });
-        Fact.create({
+        await Fact.create({
             idFactura: 6,
             numeroFactura: "001-00110706",
             fechaFactura: "2020-06-03",
