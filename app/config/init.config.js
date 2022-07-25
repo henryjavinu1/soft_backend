@@ -15,6 +15,7 @@ const Sesion = db.sesion;
 const Numer = db.numero;
 const Fact = db.factura;
 const Sucursal = db.sucursal;
+const Arqueo = db.arqueo;
 
 
 exports.initial = async () => {
@@ -304,6 +305,16 @@ exports.initial = async () => {
             fechaNacimiento: "2002-20-2",
             sexo: "M",
         });
+        Empleado.create({
+            id: 3,
+            dni: "1709-1995-00562",
+            nombre: "Willian Josue",
+            apellido: "Ortez Euceda",
+            direccion: "San Lorenzo, Valle",
+            telefono: "98139935",
+            fechaNacimiento: "1995-08-07",
+            sexo: "M",
+        });
         User.create({
             usuario: "root",
             password: bcrypt.hashSync(config.secret, 8),
@@ -316,6 +327,13 @@ exports.initial = async () => {
             password: bcrypt.hashSync(config.secret, 8),
             email: "erick@soft.com",
             idEmpleado: 2,
+            idRol: 2
+        });
+        User.create({
+            usuario: "Willian Josue",
+            password: bcrypt.hashSync(config.secret, 8),
+            email: "wjoe1995@live.com",
+            idEmpleado: 3,
             idRol: 2
         });
         //tipo de pago WJOE1995
@@ -340,9 +358,7 @@ exports.initial = async () => {
             rtn: "17091995005624",
             nombreCliente: "Willian Josue",
             direccion: "San Lorenzo, Valle",
-            telefonoCliente: "9813-9935",
-            idUsuario: 1,
-            idSesion: 1,
+            telefonoCliente: "9813-9935"
         });
         Cliente.create({
             dni: "0611-1955-00493",
@@ -350,9 +366,7 @@ exports.initial = async () => {
             rtn: "0611955004930",
             nombreCliente: "Pedro Juan",
             direccion: "San Lorenzo, Valle",
-            telefonoCliente: "9825-6668",
-            idUsuario: 2,
-            idSesion: 2,
+            telefonoCliente: "9825-6668"
         });
         Cliente.create({
             dni: "1709-1969-00551",
@@ -360,9 +374,7 @@ exports.initial = async () => {
             rtn: "17091969005512",
             nombreCliente: "Ana Pastora Euceda Mata",
             direccion: "El Tular, Nacaome, Valle",
-            telefonoCliente: "8766-6076",
-            idUsuario: 2,
-            idSesion: 2,
+            telefonoCliente: "8766-6076"
         });
         Cliente.create({
             dni: "0611-1986-00847",
@@ -370,9 +382,7 @@ exports.initial = async () => {
             rtn: "0611986008472",
             nombreCliente: "Mayti Melissa Rivera Carbajal",
             direccion: "Los Limones, Pespire, Choluteca",
-            telefonoCliente: "9998-9588",
-            idUsuario: 1,
-            idSesion: 1,
+            telefonoCliente: "9998-9588"
         });
         Sucursal.create({
             nombreSucursal: "X",
@@ -380,19 +390,19 @@ exports.initial = async () => {
         });
         Talonario.create({
             rangoInicialFactura: "00110701",
+            idSucursal: 1,
             rangoFinalFactura: "00112000",
             cai: "EAF199-B70479-5343AB-538F3E-045B55-C6",
-            fechaLimiteEmision: "2025-06-03",
-            idSucursal: 1,
+            fechaLimiteEmision: "2025-06-03",            
             active: true,
             isDelete: false
         });
         Talonario.create({
             rangoInicialFactura: "00112001",
-            rangoFinalFactura: "00112500",
-            cai: "EAF199-B70479-5343AB-538F3E-045C35-C6",
-            fechaLimiteEmision: "2030-06-03",
             idSucursal: 1,
+            rangoFinalFactura: "00112500",            
+            cai: "EAF199-B70479-5343AB-538F3E-045C35-C6",
+            fechaLimiteEmision: "2030-06-03",            
             active: false,
             isDelete: false
         });           
@@ -405,6 +415,98 @@ exports.initial = async () => {
             fecha: "2020-7-03",
             token: "123456789",
             idUsuario: 2
+        });
+        Sesion.create({
+            fecha: "2020-8-03",
+            token: "123456789",
+            idUsuario: 2
+        });
+        Sesion.create({
+            fecha: "2020-9-03",
+            token: "123456789",
+            idUsuario: 2
+        });
+        Sesion.create({
+            fecha: "2020-10-03",
+            token: "123456789",
+            idUsuario: 2
+        });
+        Sesion.create({
+            fecha: "2020-11-03",
+            token: "123456789",
+            idUsuario: 2
+        });
+        Arqueo.create({
+            fechaInicio: "2020-06-03",
+            fechaFinal: null,
+            efectivoApertura: 25000,
+            efectivoCierre: null,
+            otrosPagos: null,
+            ventaCredito: null,
+            ventaTotal: null,
+            efectivoTotal: null,
+            idUsuario: 1,
+            idSesion: 1,
+        });
+        Arqueo.create({
+            fechaInicio: "2020-06-03",
+            fechaFinal: null,
+            efectivoApertura: 20000,
+            efectivoCierre: null,
+            otrosPagos: null,
+            ventaCredito: null,
+            ventaTotal: null,
+            efectivoTotal: null,
+            idUsuario: 1,
+            idSesion: 2,
+        });
+        Arqueo.create({
+            fechaInicio: "2020-06-03",
+            fechaFinal: "2020-06-03",
+            efectivoApertura: 10000,
+            efectivoCierre: 10000,
+            otrosPagos: 20000,
+            ventaCredito: 2345,
+            ventaTotal: 5678,
+            efectivoTotal: 10000,
+            idUsuario: 2,
+            idSesion: 3,
+        });
+        Arqueo.create({
+            fechaInicio: "2020-06-03",
+            fechaFinal: "2020-06-03",
+            efectivoApertura: 10000,
+            efectivoCierre: 10000,
+            otrosPagos: 20000,
+            ventaCredito: 2345,
+            ventaTotal: 5678,
+            efectivoTotal: 10000,
+            idUsuario: 2,
+            idSesion: 4,
+        });
+        Arqueo.create({
+            fechaInicio: "2020-06-03",
+            fechaFinal: "2020-06-03",
+            efectivoApertura: 10000,
+            efectivoCierre: 10000,
+            otrosPagos: 20000,
+            ventaCredito: 2345,
+            ventaTotal: 5678,
+            efectivoTotal: 10000,
+            idUsuario: 3,
+            idSesion: 5,
+        });
+        Arqueo.create({
+            fechaInicio: "2020-06-03",
+            fechaFinal: "2020-06-03",
+            efectivoApertura: 10000,
+            efectivoCierre: 10000,
+            otrosPagos: 20000,
+            ventaCredito: 2345,
+            ventaTotal: 5678,
+            efectivoTotal: 10000,
+            idUsuario: 3,
+            idSesion: 6,
         });
         Vents.create({
             totalISV: 0,
