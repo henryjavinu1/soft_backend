@@ -14,5 +14,6 @@ module.exports = function(app) {
 
   app.post("/api/ventas",controller.crearVenta);
   app.post("/api/mostrarVentas",controller.mostrarVentas);
+  app.post("/api/eliminarVenta", controller.eliminarVenta);
   
 };

@@ -363,13 +363,13 @@ const descargarFactura = async (req = request, res = response) => {
         }
         if (facturaBuscada) {
             construirFacturaEnPDF(facturaBuscada, detallesDeVentas).then(pdfDoc => {
-                var file = fs.createReadStream('app/pdf_files/primera.pdf');
-                // var stat = fs.statSync('app/pdf_files/primera.pdf');
+                var file = fs.createReadStream('./app/pdf_files/primera.pdf');
+                // var stat = fs.statSync('./app/pdf_files/primera.pdf');
                 // res.setHeader('Content-Length', stat.size);
                 res.setHeader('Content-Type', 'application/pdf');
                 res.setHeader('Content-Disposition', `attachment; filename=factura${facturaBuscada.numeroFactura}.pdf`);
                 file.pipe(res);
-                fs.unlinkSync('app/pdf_files/primera.pdf');
+                // fs.unlinkSync('./app/pdf_files/primera.pdf');
             }).catch(err => {
                 res.status(500).json(
                     {

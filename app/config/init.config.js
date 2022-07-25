@@ -14,7 +14,11 @@ const Vents = db.ventas;
 const Sesion = db.sesion;
 const Numer = db.numero;
 const Fact = db.factura;
+const tipoProduc = db.tipoproducto;
+const product = db.producto;
+const detallevent = db.detalleventa;
 const Sucursal = db.sucursal;
+const Arqueo = db.arqueo;
 
 
 exports.initial = async () => {
@@ -304,6 +308,16 @@ exports.initial = async () => {
             fechaNacimiento: "2002-20-2",
             sexo: "M",
         });
+        Empleado.create({
+            id: 3,
+            dni: "1709-1995-00562",
+            nombre: "Willian Josue",
+            apellido: "Ortez Euceda",
+            direccion: "San Lorenzo, Valle",
+            telefono: "98139935",
+            fechaNacimiento: "1995-08-07",
+            sexo: "M",
+        });
         User.create({
             usuario: "root",
             password: bcrypt.hashSync(config.secret, 8),
@@ -316,6 +330,13 @@ exports.initial = async () => {
             password: bcrypt.hashSync(config.secret, 8),
             email: "erick@soft.com",
             idEmpleado: 2,
+            idRol: 2
+        });
+        User.create({
+            usuario: "Willian Josue",
+            password: bcrypt.hashSync(config.secret, 8),
+            email: "wjoe1995@live.com",
+            idEmpleado: 3,
             idRol: 2
         });
         //tipo de pago WJOE1995
@@ -335,12 +356,12 @@ exports.initial = async () => {
             descripcionTipoPago: "Factura que sera pagada en determinado tiempo",
         });
         Cliente.create({
-            dni: "1709-1995-00562",
-            email: "wjoe1995@live.com",
-            rtn: "17091995005624",
-            nombreCliente: "Willian Josue",
-            direccion: "San Lorenzo, Valle",
-            telefonoCliente: "9813-9935"
+            dni: "000",
+            email: "email",
+            rtn: "000",
+            nombreCliente: "Consumidor Final",
+            direccion: "Honduras",
+            telefonoCliente: "0000-0000",
         });
         Cliente.create({
             dni: "0611-1955-00493",
@@ -372,19 +393,19 @@ exports.initial = async () => {
         });
         Talonario.create({
             rangoInicialFactura: "00110701",
+            idSucursal: 1,
             rangoFinalFactura: "00112000",
             cai: "EAF199-B70479-5343AB-538F3E-045B55-C6",
-            fechaLimiteEmision: "2025-06-03",
-            idSucursal: 1,
+            fechaLimiteEmision: "2025-06-03",            
             active: true,
             isDelete: false
         });
         Talonario.create({
             rangoInicialFactura: "00112001",
-            rangoFinalFactura: "00112500",
-            cai: "EAF199-B70479-5343AB-538F3E-045C35-C6",
-            fechaLimiteEmision: "2030-06-03",
             idSucursal: 1,
+            rangoFinalFactura: "00112500",            
+            cai: "EAF199-B70479-5343AB-538F3E-045C35-C6",
+            fechaLimiteEmision: "2030-06-03",            
             active: false,
             isDelete: false
         });           
@@ -393,10 +414,155 @@ exports.initial = async () => {
             token: "123456789",
             idUsuario: 1
         });
+        tipoProduc.create({
+            tipoProducto: "Refresco",
+            descripcionProducto: "Bebida con Soda",
+            isvTipoProducto: 10
+        });
+        tipoProduc.create({
+            tipoProducto: "Embutidos",
+            descripcionProducto: "Diferentes tipos de carnes",
+            isvTipoProducto: 10
+        });
+
+        tipoProduc.create({
+            tipoProducto: "Lacteos",
+            descripcionProducto: "Productos derivados de la leche",
+            isvTipoProducto: 10
+        });
+
+        product.create({
+            codigoProducto: "1",
+            nombreProducto: "Coca Cola",
+            precioProducto: 18,
+            cantidadProducto: 500,
+            isvProducto: 10,
+            descProducto:  0,
+            isExcento: false,
+            idTipoProducto: 1
+        });
+        product.create({
+            codigoProducto: "2",
+            nombreProducto: "Mortadela",
+            precioProducto: 25,
+            cantidadProducto: 250,
+            isvProducto: 10,
+            descProducto:  0,
+            isExcento: false,
+            idTipoProducto: 2
+        });
+        product.create({
+            codigoProducto: "3",
+            nombreProducto: "Mantequilla",
+            precioProducto: 45,
+            cantidadProducto: 250,
+            isvProducto: 10,
+            descProducto:  0,
+            isExcento: false,
+            idTipoProducto: 3
+        });
+
+
+
+
+
+
         Sesion.create({
             fecha: "2020-7-03",
             token: "123456789",
             idUsuario: 2
+        });
+        Sesion.create({
+            fecha: "2020-8-03",
+            token: "123456789",
+            idUsuario: 2
+        });
+        Sesion.create({
+            fecha: "2020-9-03",
+            token: "123456789",
+            idUsuario: 2
+        });
+        Sesion.create({
+            fecha: "2020-10-03",
+            token: "123456789",
+            idUsuario: 2
+        });
+        Sesion.create({
+            fecha: "2020-11-03",
+            token: "123456789",
+            idUsuario: 2
+        });
+        Arqueo.create({
+            fechaInicio: "2020-06-03",
+            fechaFinal: null,
+            efectivoApertura: 25000,
+            efectivoCierre: null,
+            otrosPagos: null,
+            ventaCredito: null,
+            ventaTotal: null,
+            efectivoTotal: null,
+            idUsuario: 1,
+            idSesion: 1,
+        });
+        Arqueo.create({
+            fechaInicio: "2020-06-03",
+            fechaFinal: null,
+            efectivoApertura: 20000,
+            efectivoCierre: null,
+            otrosPagos: null,
+            ventaCredito: null,
+            ventaTotal: null,
+            efectivoTotal: null,
+            idUsuario: 1,
+            idSesion: 2,
+        });
+        Arqueo.create({
+            fechaInicio: "2020-06-03",
+            fechaFinal: "2020-06-03",
+            efectivoApertura: 10000,
+            efectivoCierre: 10000,
+            otrosPagos: 20000,
+            ventaCredito: 2345,
+            ventaTotal: 5678,
+            efectivoTotal: 10000,
+            idUsuario: 2,
+            idSesion: 3,
+        });
+        Arqueo.create({
+            fechaInicio: "2020-06-03",
+            fechaFinal: "2020-06-03",
+            efectivoApertura: 10000,
+            efectivoCierre: 10000,
+            otrosPagos: 20000,
+            ventaCredito: 2345,
+            ventaTotal: 5678,
+            efectivoTotal: 10000,
+            idUsuario: 2,
+            idSesion: 4,
+        });
+        Arqueo.create({
+            fechaInicio: "2020-06-03",
+            fechaFinal: "2020-06-03",
+            efectivoApertura: 10000,
+            efectivoCierre: 10000,
+            otrosPagos: 20000,
+            ventaCredito: 2345,
+            ventaTotal: 5678,
+            efectivoTotal: 10000,
+            idUsuario: 3,
+            idSesion: 5,
+        });
+        Arqueo.create({
+            fechaInicio: "2020-06-03",
+            fechaFinal: "2020-06-03",
+            efectivoApertura: 10000,
+            efectivoCierre: 10000,
+            otrosPagos: 20000,
+            ventaCredito: 2345,
+            ventaTotal: 5678,
+            efectivoTotal: 10000,
+            idUsuario: 3,
+            idSesion: 6,
         });
         Vents.create({
             totalISV: 0,
@@ -486,6 +652,17 @@ exports.initial = async () => {
             idUsuario: 1,
             idCliente: 3
         });
+
+        detallevent.create({
+            cantidad: 2,
+            precioUnitario: 18,
+            isvAplicado: 10,
+            descuentoAplicado: 10,
+            totalDetalleVenta: 36,
+            idVentas:  1,
+            idProducto: 1
+        });
+
         Numer.create({ 
             puntoEmision: '000',    
             establecimiento: '001', 
