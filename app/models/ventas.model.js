@@ -1,17 +1,17 @@
 module.exports = (sequelize, Sequelize) => {
     const Venta = sequelize.define("ventas", {
         totalISV: { // es el total calculado del ISV de todos los productos
-            type: Sequelize.DECIMAL,
+            type: Sequelize.DECIMAL(10,2),
             allowNull: false,
           //  defaultValue : 0,
         },
         totalVenta: { /// es el total a pagar de toda la factura incluye SUBTOTAl+ISB-DES
-            type: Sequelize.DECIMAL,
+            type: Sequelize.DECIMAL(10,2),
             allowNull: false,
           //  defaultValue : 0,
         },
         totalDescuentoVenta: { // la suma de de todos los descuentos aplicados por producto
-            type: Sequelize.DECIMAL,
+            type: Sequelize.DECIMAL(10,2),
             allowNull: false,
      //       defaultValue : 0,
         },

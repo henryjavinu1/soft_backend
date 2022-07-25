@@ -5,19 +5,19 @@ module.exports = (sequelize, Sequelize) => {
             allowNull: false, //no permite nulos
         },
         precioUnitario:{
-            type: Sequelize.DECIMAL,
+            type: Sequelize.DECIMAL(10,2),
             allowNull: false, //no permite nulos
         },
         isvAplicado: {
-            type: Sequelize.DECIMAL,
+            type: Sequelize.DECIMAL(10,2),
             allowNull: false, //no permite nulos
         },
         descuentoAplicado: {
-            type: Sequelize.DECIMAL,
+            type: Sequelize.DECIMAL(10,2),
             allowNull: false, //no permite nulos
         },
         totalDetalleVenta: { // multiplicacion (cantidad* precioUnitario) +ISV -DESC
-            type: Sequelize.DECIMAL,
+            type: Sequelize.DECIMAL(10,2),
         },
 
         isDelete: {

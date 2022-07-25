@@ -36,8 +36,12 @@ exports.mostrarDetalles = async (req = request, res = response) => {
     try {
         const todosLosDetalles = await DetalleVenta.findAll({
             where: {
+                idVentas: req.body.idVenta,
                 isDelete : false,
-            },
+            }, include:[{
+                model: db.producto,
+                atributes: [ 'id','nombreProducto']
+            }]
 
         });
         if (!todosLosDetalles) {
@@ -45,7 +49,7 @@ exports.mostrarDetalles = async (req = request, res = response) => {
                 msg: "No hay ningun detalle de venta creado"
             })
         }
-        return res.status(200).send({todosLosDetalles});
+        return res.status(200).send({detalleDeVentaNueva: todosLosDetalles});
     } catch (error) {
         console.log(error);
         return res.status(500).send({

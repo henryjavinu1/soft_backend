@@ -338,23 +338,12 @@ exports.initial = async () => {
             descripcionTipoPago: "Factura que sera pagada en determinado tiempo",
         });
         Cliente.create({
-<<<<<<< HEAD
             dni: "000",
             email: "email",
             rtn: "000",
             nombreCliente: "Consumidor Final",
             direccion: "Honduras",
             telefonoCliente: "0000-0000",
-            idUsuario: 2,
-            idSesion: 2,
-=======
-            dni: "1709-1995-00562",
-            email: "wjoe1995@live.com",
-            rtn: "17091995005624",
-            nombreCliente: "Willian Josue",
-            direccion: "San Lorenzo, Valle",
-            telefonoCliente: "9813-9935"
->>>>>>> main
         });
         Cliente.create({
             dni: "0611-1955-00493",
