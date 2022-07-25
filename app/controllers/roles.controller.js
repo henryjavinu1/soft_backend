@@ -125,3 +125,24 @@ exports.buscarolname = async (req, res) => {
         });
     }
 }
+
+exports.mostrarRol = async (req = request, res = response) => {
+    try {
+      const todoslosRoles = await Role.findAll({
+        where: {
+          IsDelete: false,
+        }
+      });
+      if (!todoslosRoles){
+        return res.status(404).send({
+          message: "Error al crear usuario en el backend"
+        })
+      } 
+        return res.status(200).send({todoslosRoles});
+    } catch(error) {
+      console.log(error);
+      return res.status(500).send({
+        message: "ocurrio un error antes de entrar al catch en backend " + error
+      })
+    }
+  }

@@ -15,4 +15,5 @@ module.exports = function(app) {
   app.post("/api/roles/update", controller.updaterol);//Actualiza campo rol y descripcion
   app.get("/api/roles/buscarol", controller.buscarol);//trae todos los roles 
   app.get("/api/roles/buscarolname",[authJwt.verifyToken,],[permisosJwt.isPermisos("28")], controller.buscarolname);//trae todos los roles 
+  app.post("/api/roles/mostrarroles", controller.mostrarRol);//crea un rol
 };
