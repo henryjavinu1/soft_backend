@@ -1,7 +1,8 @@
 const db = require("../models/puntoDeVentas");
 const config = require("../config/auth.config");
 const Role = db.role;
-const Op = db.Sequelize.Op;
+const { request, response } = require('express');
+const { Op, DataTypes, Model } = require("sequelize");
 
 //Creando un rool de usuario 
 
