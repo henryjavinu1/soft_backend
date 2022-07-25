@@ -393,7 +393,7 @@ exports.initial = async () => {
         });
         Talonario.create({
             rangoInicialFactura: "00110701",
-            idSucursal: 1,
+            idSucursal: '1',
             rangoFinalFactura: "00112000",
             cai: "EAF199-B70479-5343AB-538F3E-045B55-C6",
             fechaLimiteEmision: "2025-06-03",            
@@ -402,7 +402,7 @@ exports.initial = async () => {
         });
         Talonario.create({
             rangoInicialFactura: "00112001",
-            idSucursal: 1,
+            idSucursal: '1',
             rangoFinalFactura: "00112500",            
             cai: "EAF199-B70479-5343AB-538F3E-045C35-C6",
             fechaLimiteEmision: "2030-06-03",            
@@ -662,6 +662,57 @@ exports.initial = async () => {
             idVentas:  1,
             idProducto: 1
         });
+
+        
+        detallevent.create({
+            cantidad: 3,
+            precioUnitario: 25,
+            isvAplicado: 10,
+            descuentoAplicado: 0,
+            totalDetalleVenta: 75,
+            idVentas:  1,
+            idProducto: 2
+        });
+        
+        detallevent.create({
+            cantidad: 1,
+            precioUnitario: 45,
+            isvAplicado: 10,
+            descuentoAplicado: 0,
+            totalDetalleVenta: 45,
+            idVentas:  1,
+            idProducto: 3
+        });
+        detallevent.create({
+            cantidad: 5,
+            precioUnitario: 18,
+            isvAplicado: 10,
+            descuentoAplicado: 10,
+            totalDetalleVenta: 90,
+            idVentas:  2,
+            idProducto: 1
+        });
+        detallevent.create({
+            cantidad: 7,
+            precioUnitario: 25,
+            isvAplicado: 10,
+            descuentoAplicado: 10,
+            totalDetalleVenta: 175,
+            idVentas:  2,
+            idProducto: 1
+        });
+        detallevent.create({
+            cantidad: 4,
+            precioUnitario: 45,
+            isvAplicado: 10,
+            descuentoAplicado: 10,
+            totalDetalleVenta: 180,
+            idVentas:  2,
+            idProducto: 1
+        });
+
+
+
 
         Numer.create({ 
             puntoEmision: '000',    
