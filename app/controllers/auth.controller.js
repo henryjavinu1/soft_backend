@@ -7,14 +7,13 @@ const Op = db.Sequelize.Op;
 
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-// const { sesion } = require("../models/puntoDeVentas");
-// const { useInflection } = require("sequelize/types");
+const { sesion, empleado } = require("../models/puntoDeVentas");
 
 const signup = async (req, res) => {
   // Save User to Database
   try {
     const user = await User.create({
-      usuario: req.body.UserName,
+      usuario: req.body.usuario,
       password: bcrypt.hashSync(req.body.password, 8),
       email: req.body.email,
       idEmpleado: req.body.idEmpleado,
@@ -28,7 +27,7 @@ const signup = async (req, res) => {
   }
 catch (error) {
   return res.status(500).send({
-      message: "Ocurrio un error"
+      message: "Ocurrio un error en el controlador de backend"
   });
 }
 }
@@ -68,21 +67,23 @@ const signin = async (req, res) => {
         message: "Warning! Invalid Password!",
       });
     }
-
+    const token = jwt.sign({
+      idUsuario: user.id,
+      idEmpleado:user.empleado.id,
+    }, 
     
+    config.secret, {
+      expiresIn: 86400, // 24 horas de ducración de tokens
+    });
+
+    req.session.token = token;
     const ses = await Sesion.create({
       idUsuario:user.id,
       token:token
     });
+    
+    
 
-    const token = jwt.sign({
-      idUsuario: user.id,
-      idEmpleado:user.empleado.id,
-      idSesion:ses.id
-    }, config.secret, {
-      expiresIn: 86400, // 24 horas de ducración de tokens
-    });
-    req.session.token = token;
     const resp = {
       id: user.id,
       usuario: user.usuario,
