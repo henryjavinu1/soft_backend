@@ -29,25 +29,24 @@ exports.crearol = async (req, res) => {
 exports.bajarol = async (req, res) => {
     try {
         const bajarol = await Role.update({
-            IsDelete: true,
+            isDelete: true
+        },{
+            where: {
+                id:req.body.id
+            }
         });
-        if (!bajarol){
-            return res.status(404).send({
-              message: "No se pudo dar de baja al rol"
-            })
-          }else {
-            return res.status(200).json({
-              message: "Se le dio de baja exitosamente",
-              data: bajarol
-            })
+        if (bajarol){
+            res.status(200).send({
+              message: "baja al rol en backend"
+            });
           }
-    }
-    catch (error) {
-        return res.status(500).send({
-            message: "Ocurrio un error"
+    }catch (error) {
+        console.log(error);
+        res.status(401).send({
+            message: "Ocurrio un error al dar de baja" + error.message
         });
     }
-}
+};
 
 exports.updaterol = async (req, res) => {
     try {

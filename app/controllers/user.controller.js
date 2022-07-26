@@ -29,8 +29,6 @@ exports.bajauser = async (req, res) => {
   }
 };
 
-
-
 exports.updateUser = async (req, res) => {
   // ACTUALIZAR UN USUARIO  
    try {
@@ -49,7 +47,6 @@ exports.updateUser = async (req, res) => {
                   usuario: req.body.usuario,
                   password: req.body.password,
                   email: req.body.email,
-                  isDelete: false,
                   idEmpleado: req.body.idEmpleado,
                   idRol: req.body.idRol
                 },{
