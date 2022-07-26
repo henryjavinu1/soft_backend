@@ -1,4 +1,5 @@
 const { editarFactura, traerFacturas, buscarfactura, buscarFacturaCliente, buscarFacturaFecha, buscarFacturaEmpleado, buscarPorTalonario, imprimirUnaFactura, descargarFactura } = require("../controllers/editfactura.controller");
+const { verifyToken } = require("../middleware/authJwt");
 const { validarCamposTalonario, validarCamposCliente, validarCamposFecha, validarCamposIdEmpleado, validarCamposNumeroFactura } = require("../middleware/manipularfactura.middleware");
 
 module.exports = function(app) {
@@ -10,7 +11,7 @@ module.exports = function(app) {
       next();
     });
   
-    app.get("/api/traerFacturas", traerFacturas);
+    app.get("/api/traerFacturas", [verifyToken], traerFacturas);
     app.get("/api/buscarfactura/:id?", [validarCamposNumeroFactura], buscarfactura);
     app.get("/api/buscarfacturaporcliente/:cliente?", [validarCamposCliente], buscarFacturaCliente);
     app.get("/api/buscarfacturaporfecha/:fecha?", [validarCamposFecha], buscarFacturaFecha);
