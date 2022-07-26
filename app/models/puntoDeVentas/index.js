@@ -40,11 +40,7 @@ db.tipopago = require("../../models/tipopago.model.js")(sequelize, Sequelize);
 db.tipoproducto = require("../../models/tipoproducto.model.js")(sequelize, Sequelize);
 db.numero = require("../../models/numerosFactura.model.js")(sequelize, Sequelize);
 db.roles_permisos = require("../../models/rolpermiso.model")(sequelize, Sequelize);
-<<<<<<< HEAD
-db.imagenproducto = require("../../models/imagenproducto.model.js")(sequelize, Sequelize);
-=======
 db.sucursal = require("../../models/sucursal.model")(sequelize, Sequelize);
->>>>>>> main
 ///////////////////////////////index.user.js//////////////////////////////
 /////// RELACIÓN DE UNO A UNO /////////
 //// UN USUARIO PERTENECE A UN EMPLEADO, UN EMPLEADO TIENE UN USUARIO ////
@@ -267,13 +263,5 @@ db.talonario.belongsTo(db.sucursal, {
   foreignKey: { name: 'idSucursal', allowNull: false }
 });
 
-////////// Relacion de 1 a 1 ////////////////////
-// El produto tiene un tipo de producto//////////
-db.producto.hasOne(db.imagenproducto, {
-  foreignKey: { name: "idProducto", allowNull: false },
-});
-db.imagenproducto.belongsTo(db.producto, {
-  foreignKey: { name: "idProducto", allowNull: false },
-});
 
 
