@@ -8,6 +8,7 @@ module.exports = function(app) {
     );
     next();
   });
-  app.post("/api/sucursales/get", controller.getSucursal);    
+  app.post("/api/sucursales/get", controller.getSucursal);
+  app.get("/api/sucursales/getAll", controller.getSucursales);
   app.post("/api/sucursales/update", controller.updateSucursal);   
 };
