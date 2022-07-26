@@ -57,9 +57,7 @@ exports.mostrarVentas = async (req = request, res = response) => {
 
 // Actualizar 
 exports.actualizarVenta = async (req = request, res = response) => {
-   // const id = req.body.id;
-   // const { email, rtn, nombreCliente, direccion, telefonoCliente, isDelete } = req.body;
-   // console.log(dni);
+
     try {
         const ventaActualizar = await Ventas.update({
             totalISV: req.body.totalISV,
