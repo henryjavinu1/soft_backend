@@ -2,6 +2,7 @@ module.exports = (sequelize, Sequelize) => {
     const Producto = sequelize.define("productos", {
       codigoProducto: {
         type: Sequelize.STRING,
+        unique: true,
         allowNull: false 
       },
       nombreProducto: {
