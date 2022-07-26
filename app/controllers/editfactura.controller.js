@@ -2,7 +2,7 @@ const { request, response } = require('express');
 const { Op, DataTypes } = require("sequelize");
 const fs = require('fs');
 
-const { impresionDeFacturas, validarCampos, filtrarFacturasPorFechaQuery } = require('../helpers/manipularfactura.helper');
+const { impresionDeFacturas, validarCampos, filtrarFacturasPorFechaQuery, construirFacturaEnPDF } = require('../helpers/manipularfactura.helper');
 const db = require('../models/puntoDeVentas');
 const path = require('path');
 const Factura = db.factura;
@@ -44,7 +44,7 @@ const traerFacturas = async (req = request, res = response) => {
             facturas
         })
     } catch (error) {
-        console.error(error);
+        console.log(error);
     }
 }
 
@@ -322,15 +322,74 @@ const imprimirUnaFactura = async (req = request, res = response) => {
     }
 }
 
-const descargarFactura = (req = request, res = response) => {
-    console.log('hola');
-    var file = fs.createReadStream('app/pdf_files/prueba.pdf');
-    var stat = fs.statSync('app/pdf_files/prueba.pdf');
-    res.setHeader('Content-Length', stat.size);
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', 'attachment; filename=factura.pdf');
-    file.pipe(res);
-    console.log(file);
+const descargarFactura = async (req = request, res = response) => {
+
+    const numeroFactura = req.query.numerofactura;
+    // console.log('num factura: '+numeroFactura);
+    let detallesDeVentas = [];
+    let facturaBuscada
+    try {
+        facturaBuscada = await Factura.findOne({
+            where: {
+                [Op.and]: [{ isDelete: false }, { numeroFactura: numeroFactura }]
+            },
+            include: [
+                {
+                    model: Venta,
+                },
+                {
+                    model: Empleado,
+                },
+                {
+                    model: TipoPago,
+                },
+                {
+                    model: Talonario,
+                },
+                {
+                    model: Cliente,
+                }
+            ]
+        });
+        if (facturaBuscada.venta) {
+            detallesDeVentas = await DetalleVenta.findAll({
+                where: { isDelete: false, idVentas: facturaBuscada.venta.id },
+                include: [
+                    {
+                        model: Producto
+                    }
+                ]
+            });
+        }
+        if (facturaBuscada) {
+            construirFacturaEnPDF(facturaBuscada, detallesDeVentas).then(pdfDoc => {
+                var file = fs.createReadStream('./app/pdf_files/primera.pdf');
+                // var stat = fs.statSync('./app/pdf_files/primera.pdf');
+                // res.setHeader('Content-Length', stat.size);
+                res.setHeader('Content-Type', 'application/pdf');
+                res.setHeader('Content-Disposition', `attachment; filename=factura${facturaBuscada.numeroFactura}.pdf`);
+                file.pipe(res);
+                fs.unlinkSync('./app/pdf_files/primera.pdf');
+            }).catch(err => {
+                res.status(500).json(
+                    {
+                        msg: err
+                    }
+                )
+            });
+        } else {
+            return res.status(400).json({
+               msg: 'No se encontró el documento solicitado.' 
+            });
+        }
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            msg: 'Ocurrió un error al buscar el registro en la base de datos comuniquese con el administrador.'
+        });
+    }
+
+
     // return res.status(200).download(path.join(__dirname, '../pdf_files/prueba.pdf'));
 }
 

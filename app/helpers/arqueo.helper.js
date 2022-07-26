@@ -1,7 +1,7 @@
 const impresionArqueo = (arqueo) => {
     const arqueoImpresion = arqueo.map((arqueo) => {
         return {
-            id: arqueo.id,
+            idArqueo: arqueo.idArqueo,
             fechaInicio: arqueo.fechaInicio,
             fechaFinal: arqueo.fechaFinal,
             efectivoApertura: arqueo.efectivoApertura,

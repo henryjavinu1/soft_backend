@@ -1,6 +1,7 @@
 const db = require("../models/puntoDeVentas");
 //const db = require("../models/detalleventa");
 const config = require("../config/auth.config");
+const { detalleventa } = require("../models/puntoDeVentas");
 const Ventas = db.ventas;
 const DetalleVenta = db.detalleventa;
 const Role = db.role;
@@ -34,6 +35,13 @@ exports.creardetalleventa = async (req, res) => {
 exports.mostrarDetalles = async (req = request, res = response) => {
     try {
         const todosLosDetalles = await DetalleVenta.findAll({
+            where: {
+                idVentas: req.body.idVenta,
+                isDelete : false,
+            }, include:[{
+                model: db.producto,
+                atributes: [ 'id','nombreProducto']
+            }]
 
         });
         if (!todosLosDetalles) {
@@ -41,11 +49,58 @@ exports.mostrarDetalles = async (req = request, res = response) => {
                 msg: "No hay ningun detalle de venta creado"
             })
         }
-        return res.status(200).send(todosLosDetalles);
+        return res.status(200).send({detalleDeVentaNueva: todosLosDetalles});
     } catch (error) {
         console.log(error);
         return res.status(500).send({
             message: "Ocurrio un error" + error
         })
+    }
+}
+
+
+exports.actualizarDetalle = async (req = request, res = response) => {
+     try {
+         const detalleActualizar = await DetalleVenta.update({
+            cantidad: req.body.cantidad,
+            precioUnitario: req.body.precioUnitario,
+            isvAplicado: req.body.isvAplicado,
+            descuentoAplicado: req.body.descuentoAplicado,
+            totalDetalleVenta: req.body.totalDetalleVenta,
+            idVentas: req.body.idVentas,
+            idProducto: req.body.idProducto,
+         },{
+             where: {
+                 id: req.body.id
+             }
+         });
+         return res.status(200).send(detalleActualizar);
+         } catch (error) {
+         
+         return res.status(500).send({
+             message: "Ocurrio un error" + error
+         });
+     }
+ }
+//Eliminar
+exports.eliminarDetalle = async (req, res) => {
+    try {
+        const eliminarDetalle = await DetalleVenta.update({
+            isDelete: true
+        }, {
+            where: {
+                id: req.body.id
+            }
+        });
+        if (eliminarDetalle) {
+            res.status(200).send({
+                message: "Detalle eliminado correctamente"
+            });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(401).send({
+            message: "Error al eliminar el Detalle: " + error.message
+        });
     }
 }

@@ -51,7 +51,13 @@ require("./app/routes/cliente.routes")(app);
 require("./app/routes/empleado.routes")(app);
 require("./app/routes/permisos.routes")(app);
 require("./app/routes/roles.routes")(app);
+<<<<<<< HEAD
 require("./app/routes/imagenproducto.routes")(app);
+=======
+require("./app/routes/sucursal.routes")(app);
+
+
+>>>>>>> main
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
