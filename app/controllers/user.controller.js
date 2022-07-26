@@ -68,7 +68,7 @@ exports.updateUser = async (req, res) => {
     console.log(error);
     return res.status(500).send({
       message: "Ocurrio un error en el backend" + error
-    });
+    })
   }
 }
 
