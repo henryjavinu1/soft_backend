@@ -63,7 +63,7 @@ exports.updateUser = async (req, res) => {
             });
           }
         }
-        //validaUser(updateUser, usuario, password, email,idEmpleado, idRol)
+       
   } catch (error) {
     console.log(error);
     return res.status(500).send({

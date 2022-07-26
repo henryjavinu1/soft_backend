@@ -3,6 +3,7 @@ const config = require("../config/auth.config");
 const Role = db.role;
 const { request, response } = require('express');
 const { Op, DataTypes, Model } = require("sequelize");
+const { user } = require("../models/puntoDeVentas");
 
 //Creando un rool de usuario 
 
@@ -48,32 +49,44 @@ exports.bajarol = async (req, res) => {
     }
 };
 
-exports.updaterol = async (req, res) => {
+exports.updateRol = async (req, res) => {
     try {
-        const updaterol = await Role.update({
+        const updateRol = await Role.findOne({
+            where:{
+                id: req.body.id,
+            }             
+        });
+        if(!updateRol){
+            return res.status(404).send({
+                message: "Error al encontrar el usuario"
+            });
+        }else{
+            try {
+            const updateRol = await Role.update({
             rol: req.body.rol,
             descripcion: req.body.descripcion,
-        },{
-           where:
-            id = req.body.id, 
+            }, {
+                where: {
+                    id: req.body.id
+                }
         });
-        if (!updaterol){
-            return res.status(404).send({
-              message: "Error al actualizar el rol"
-            })
-          }else {
-            return res.status(200).json({
-              message: "Actualizacion exitosa",
-              data: updaterol
-            })
-          }
-    }
-    catch (error) {
+        return res.status(200).send({
+            message: "Rol Actualizado en el backend"
+        });
+    } catch(error){
         return res.status(500).send({
-            message: "Ocurrio un error"
+            message: "Ocurrio un error al actualizar en el backend"
         });
     }
 }
+    }catch(error){
+        console.log(error);
+        return res.status(500).send({
+            message: "ocurrio error en el backend"
+        })
+    } 
+}       
+
 
 // Consulta que me trae todos los roles activos
 exports.buscarol = async (req, res) => {
