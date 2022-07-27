@@ -263,18 +263,12 @@ const buscarPorTalonario = async (req = request, res = response) => {
                 }
             ]
         })
-        if (facturaBuscada.length === 0) {
-            return res.status(404).json({
-                msg: `No hay facturas asociadas con el talonario con ${(idTalonario) ? `el cai: ${idTalonario}` : `el id: ${cai}`}. `
-            })
-        }
         const facturas = impresionDeFacturas(facturaBuscada);
         return res.status(200).json({
             facturas
         });
     } catch (error) {
         console.log(error);
-        res.status(500).json({ error: error.message });
     }
 }
 
