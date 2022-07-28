@@ -21,6 +21,11 @@ module.exports = (sequelize, Sequelize) => {
             allowNull: false,  //no permite valores nulos
             defaultValue: false //establece el valor por defecto en false
         },
+        isActive: {
+            type: Sequelize.BOOLEAN,
+            allowNull: false,  //no permite valores nulos
+            defaultValue: false //establece el valor por defecto en false
+        },
         puntoDeEmision: {       //donde se esta emitiendo
             type: Sequelize.STRING,
         //    defaultValue : 0,

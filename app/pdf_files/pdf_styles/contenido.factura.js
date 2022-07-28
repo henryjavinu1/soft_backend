@@ -1,4 +1,23 @@
+// const db = require('../models/puntoDeVentas');
+// const DetalleVenta = db.detalleventa;
 
+// const totalesFactura = async () => {
+//   try {
+//     const todosLosDetalles = await DetalleVenta.findAll({
+//       where: {
+//         idVentas: req.body.idVenta,
+//         isDelete: false,
+//       }, include: [{
+//         model: db.producto,
+//         atributes: ['id', 'nombreProducto']
+//       }]
+  
+//     });
+
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }
 
 const contenidoFactura = (factura, detallesDeVentas) => {
 
@@ -890,7 +909,7 @@ const contenidoSinDetalles = (factura) => {
             alignment: 'left',
           },
           {
-            text: `${(factura.talonario)?factura.talonario.cai.toString():''}`,
+            text: `${(factura.talonario) ? factura.talonario.cai.toString() : ''}`,
             bold: true,
             color: '#333333',
             fontSize: 7,
@@ -910,7 +929,7 @@ const contenidoSinDetalles = (factura) => {
             alignment: 'left',
           },
           {
-            text: (factura.talonario)?`${factura.talonario.rangoInicialFactura.toString()} AL ${factura.talonario.rangoFinalFactura.toString()}`:'',
+            text: (factura.talonario) ? `${factura.talonario.rangoInicialFactura.toString()} AL ${factura.talonario.rangoFinalFactura.toString()}` : '',
             bold: true,
             color: '#333333',
             fontSize: 7,
@@ -930,7 +949,7 @@ const contenidoSinDetalles = (factura) => {
             alignment: 'left',
           },
           {
-            text: (factura.talonario)?`${factura.talonario.fechaLimiteEmision.toString().substring(8, 16)}`:'',
+            text: (factura.talonario) ? `${factura.talonario.fechaLimiteEmision.toString().substring(8, 16)}` : '',
             bold: true,
             color: '#333333',
             fontSize: 7,
@@ -952,7 +971,7 @@ const contenidoSinDetalles = (factura) => {
                 color: '#aaaaab'
               },
               {
-                text: (factura.cliente)?`${(factura.cliente.nombreCliente)?factura.cliente.nombreCliente:''}`:'',
+                text: (factura.cliente) ? `${(factura.cliente.nombreCliente) ? factura.cliente.nombreCliente : ''}` : '',
                 bold: true,
                 fontSize: 9,
                 width: 345,
@@ -971,7 +990,7 @@ const contenidoSinDetalles = (factura) => {
                 color: '#aaaaab'
               },
               {
-                text: (factura.cliente)?`${(factura.cliente.rtn)?factura.cliente.rtn:''}`:'',
+                text: (factura.cliente) ? `${(factura.cliente.rtn) ? factura.cliente.rtn : ''}` : '',
                 bold: true,
                 fontSize: 9,
                 width: 120,
@@ -1012,7 +1031,7 @@ const contenidoSinDetalles = (factura) => {
                 color: '#aaaaab'
               },
               {
-                text: `${(factura.cliente)?(factura.cliente.telefonoCliente)?factura.cliente.telefonoCliente:'':''}`,
+                text: `${(factura.cliente) ? (factura.cliente.telefonoCliente) ? factura.cliente.telefonoCliente : '' : ''}`,
                 bold: true,
                 fontSize: 9,
                 width: 120,

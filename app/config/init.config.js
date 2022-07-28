@@ -337,7 +337,7 @@ exports.initial = async () => {
             password: bcrypt.hashSync(config.secret, 8),
             email: "wjoe1995@live.com",
             idEmpleado: 3,
-            idRol: 2
+            idRol: 1
         });
         //tipo de pago WJOE1995
         await TipoPag.create({
