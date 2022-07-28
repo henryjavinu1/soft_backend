@@ -67,16 +67,15 @@ exports.actualizacionCerrandoSesion = async (req, res) => {
                 isDelete: false
             }
         });
-        const consult3 = await Arque.findOne({
+        /*const consult3 = await Arque.findOne({
             where: {
                 idArqueo: req.body.idArqueo,
                 isDelete: false
             }
-        });
+        });*/
         //si el id del usuario y la sesion iniciada estan en la base de datos
         if (consult) {
             if(consult2){
-                if(consult3){
                     //actualizar el arqueo
                     const arqueo1 = await sequelize.query(`UPDATE arqueos SET    efectivoCierre = (SELECT SUM(totalFactura) 
                                                                                                   FROM facturas 
@@ -87,26 +86,26 @@ exports.actualizacionCerrandoSesion = async (req, res) => {
                                                                                 ventaCredito = (SELECT SUM(totalFactura)
                                                                                                 FROM facturas
                                                                                                 WHERE idTipoPago = 3 AND idSesion = ${req.body.idSesion})
-                                                        WHERE idArqueo = ${req.body.idArqueo}`);
+                                                        WHERE idSesion = ${req.body.idSesion}`);
                     const arqueo2 = await sequelize.query(`UPDATE arqueos SET efectivoTotal = (SELECT SUM(efectivoApertura + efectivoCierre)
                                                                                                 FROM arqueos
-                                                                                                WHERE arqueos.idArqueo = ${req.body.idArqueo}),
+                                                                                                WHERE arqueos.idSesion = ${req.body.idSesion}),
                                                                                 ventaTotal = (SELECT SUM(efectivoCierre + otrosPagos + ventaCredito)
                                                                                               FROM arqueos
                                                                                               WHERE idSesion = ${req.body.idSesion})
-                                                            WHERE arqueos.idArqueo = ${req.body.idArqueo}`);
+                                                            WHERE arqueos.idSesion = ${req.body.idSesion}`);
                                                                                                 
 
                     const fe = await Arque.update({
                       fechaFinal: new Date(),
                     },{
                       where: {
-                        idArqueo: req.body.idArqueo,
+                        idSesion: req.body.idSesion,
                       },
                     });
                   const arqueos = await Arque.findOne({
                     where: {
-                        idArqueo: req.body.idArqueo,
+                        idSesion: req.body.idSesion,
                         isDelete: false
                     }
                   });
@@ -117,7 +116,7 @@ exports.actualizacionCerrandoSesion = async (req, res) => {
                             arqueos
                     });   
                   }
-                }
+                
             }
         }
     } catch (error) {
