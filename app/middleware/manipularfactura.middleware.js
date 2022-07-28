@@ -87,9 +87,9 @@ const validarCamposNumeroFactura = (req, res, next) => {
 }
 
 const validarCamposIdEmpleado = (req, res, next) => {
-    const idEmpleado = req.query.idEmpleado;
+    const nombreEmpleado = req.query.nombre;
 
-    if (!idEmpleado) return res.status(400).json({
+    if (!nombreEmpleado) return res.status(400).json({
         msg: 'Debe indicar el id de empleado para realizar la búsqueda.'
     });
     next();
