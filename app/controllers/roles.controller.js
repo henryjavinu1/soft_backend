@@ -10,7 +10,6 @@ const { user } = require("../models/puntoDeVentas");
 exports.crearol = async (req, res) => {
     try {
         const rol = await Role.create({
-            id: req.body.id,
             rol: req.body.rol,
             descripcion: req.body.descripcion,
         });
