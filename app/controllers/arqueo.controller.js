@@ -104,13 +104,6 @@ exports.actualizacionCerrandoSesion = async (req, res) => {
                         idArqueo: req.body.idArqueo,
                       },
                     });
-                   const se = await Sesi.update({
-                        isActive: false,
-                    },{
-                        where: {
-                            id: req.body.idSesion,
-                        },
-                  });
                   const arqueos = await Arque.findOne({
                     where: {
                         idArqueo: req.body.idArqueo,
@@ -118,7 +111,7 @@ exports.actualizacionCerrandoSesion = async (req, res) => {
                     }
                   });
                     //validar que el arqueo se actualizo correctamente
-                    if (arqueo1 && arqueo2 && fe && se) {
+                    if (arqueo1 && arqueo2 && fe) {
                        return res.status(200).send({
                             message: "Arqueo actualizado correctamente",
                             arqueos
