@@ -13,7 +13,7 @@ const signup = async (req, res) => {
   // Save User to Database
   try {
     const user = await User.create({
-      usuario: req.body.UserName,
+      usuario: req.body.usuario,
       password: bcrypt.hashSync(req.body.password, 8),
       email: req.body.email,
       idEmpleado: req.body.idEmpleado,
@@ -28,7 +28,7 @@ const signup = async (req, res) => {
 catch (error) {
   console.log(error);
   return res.status(500).send({
-      message: "Ocurrio un error"
+      message: "Ocurrio un error en el controlador de backend"
   });
 }
 }

@@ -28,17 +28,17 @@ validarDuplicadosDniOrEmail = async (req, res, next) => {
             });
           }
         //RTN
-         cliente = await Cliente.findOne({
-            where: {
-              rtn: req.body.rtn
-            }
-          });
+        //  cliente = await Cliente.findOne({
+        //     where: {
+        //       rtn: req.body.rtn
+        //     }
+        //   });
       
-          if (cliente) {
-            return res.status(400).send({
-              message: "Error! el RTN ya existe!"
-            });
-          }
+        //   if (cliente) {
+        //     return res.status(400).send({
+        //       message: "Error! el RTN ya existe!"
+        //     });
+        //   }
         next();
     }
     catch(error){

@@ -1,16 +1,17 @@
 const db = require("../models/puntoDeVentas");
 const config = require("../config/auth.config");
 const Role = db.role;
-const Op = db.Sequelize.Op;
+const { request, response } = require('express');
+const { Op, DataTypes, Model } = require("sequelize");
 
 //Creando un rool de usuario 
 
 exports.crearol = async (req, res) => {
     try {
         const rol = await Role.create({
-            rol: req.body.Rol,
-            descripcion: req.body.Descripcion,
-            IsDelete: false
+            id: req.body.id,
+            rol: req.body.rol,
+            descripcion: req.body.descripcion,
         });
         return res.status(200).json({
             message: "Rol creado con exito",
@@ -19,7 +20,7 @@ exports.crearol = async (req, res) => {
     }
     catch (error) {
         return res.status(500).send({
-            message: "Ocurrio un error"
+            message: "Ocurrio un error en el backend"
         });
     }
 }
@@ -28,25 +29,24 @@ exports.crearol = async (req, res) => {
 exports.bajarol = async (req, res) => {
     try {
         const bajarol = await Role.update({
-            IsDelete: true,
+            isDelete: true
+        },{
+            where: {
+                id:req.body.id
+            }
         });
-        if (!bajarol){
-            return res.status(404).send({
-              message: "No se pudo dar de baja al rol"
-            })
-          }else {
-            return res.status(200).json({
-              message: "Se le dio de baja exitosamente",
-              data: bajarol
-            })
+        if (bajarol){
+            res.status(200).send({
+              message: "baja al rol en backend"
+            });
           }
-    }
-    catch (error) {
-        return res.status(500).send({
-            message: "Ocurrio un error"
+    }catch (error) {
+        console.log(error);
+        res.status(401).send({
+            message: "Ocurrio un error al dar de baja" + error.message
         });
     }
-}
+};
 
 exports.updaterol = async (req, res) => {
     try {
@@ -89,7 +89,7 @@ exports.buscarol = async (req, res) => {
             });
         } else {
             return res.status(200).json({
-                message: "Roles encontrados",
+                message: "Roles encontrados en el backend",
                 data: buscarol
             });
         }
@@ -125,3 +125,24 @@ exports.buscarolname = async (req, res) => {
         });
     }
 }
+
+exports.mostrarRol = async (req = request, res = response) => {
+    try {
+      const todoslosRoles = await Role.findAll({
+        where: {
+          IsDelete: false,
+        }
+      });
+      if (!todoslosRoles){
+        return res.status(404).send({
+          message: "Error al crear usuario en el backend"
+        })
+      } 
+        return res.status(200).send({todoslosRoles});
+    } catch(error) {
+      console.log(error);
+      return res.status(500).send({
+        message: "ocurrio un error antes de entrar al catch en backend " + error
+      })
+    }
+  }

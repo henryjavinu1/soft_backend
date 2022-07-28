@@ -182,35 +182,54 @@ const buscarFacturaFecha = async (req, res) => {
 }
 
 const buscarFacturaEmpleado = async (req = request, res = response) => {
-    const idEmpleado = req.query.idEmpleado;
+    const nombre = req.query.nombre;
     try {
-        const facturasBuscadas = await Factura.findAll({
+        const empleadoBuscado = await Empleado.findAll({
             where: {
-                [Op.and]: [{ idEmpleado: idEmpleado }, { isDelete: false }]
-            },
-            include: [
-                {
-                    model: Empleado,
-                    attributes: ['id', 'nombre', 'apellido'],
+                nombre: nombre,
+            }
+        });
+
+        if (empleadoBuscado.length === 0) {
+            return res.status(404).json({
+                msg: 'No existe el empleado indicado',
+            });
+        }
+
+        let facturasBuscadas = [];
+        for (let i = 0; i < empleadoBuscado.length; i++) {
+            let idEmpleado2 = empleadoBuscado[i].id;
+            console.log(idEmpleado2);
+            facturasBuscadas = await Factura.findAll({
+                where: {
+                    [Op.and]: [{ idEmpleado: idEmpleado2 }, { isDelete: false }]
                 },
-                {
-                    model: TipoPago,
-                    attributes: ['tipoDePago']
-                },
-                {
-                    model: Talonario,
-                    attributes: ['cai']
-                },
-                {
-                    model: Cliente,
-                    attributes: ['nombreCliente', 'direccion', 'dni', 'email', 'rtn', 'telefonoCliente']
-                }
-            ]
-        })
+                include: [
+                    {
+                        model: Empleado,
+                        attributes: ['id', 'nombre', 'apellido'],
+                    },
+                    {
+                        model: TipoPago,
+                        attributes: ['tipoDePago']
+                    },
+                    {
+                        model: Talonario,
+                        attributes: ['cai']
+                    },
+                    {
+                        model: Cliente,
+                        attributes: ['nombreCliente', 'direccion', 'dni', 'email', 'rtn', 'telefonoCliente']
+                    }
+                ]
+            })
+        }
+
+        console.log(facturasBuscadas);
 
         if (facturasBuscadas.length === 0) {
             return res.status(404).json({
-                msg: `No hay facturas generadas por el empleado con id ${idEmpleado}`
+                msg: `No hay facturas generadas para la búsqueda realizada.`
             });
         }
         const facturas = impresionDeFacturas(facturasBuscadas);
@@ -369,13 +388,13 @@ const descargarFactura = async (req = request, res = response) => {
         }
         if (facturaBuscada) {
             construirFacturaEnPDF(facturaBuscada, detallesDeVentas).then(pdfDoc => {
-                var file = fs.createReadStream('app/pdf_files/primera.pdf');
-                // var stat = fs.statSync('app/pdf_files/primera.pdf');
+                var file = fs.createReadStream('./app/pdf_files/primera.pdf');
+                // var stat = fs.statSync('./app/pdf_files/primera.pdf');
                 // res.setHeader('Content-Length', stat.size);
                 res.setHeader('Content-Type', 'application/pdf');
                 res.setHeader('Content-Disposition', `attachment; filename=factura${facturaBuscada.numeroFactura}.pdf`);
                 file.pipe(res);
-                fs.unlinkSync('app/pdf_files/primera.pdf');
+                // fs.unlinkSync('app/pdf_files/primera.pdf');
                 // fs.unlinkSync('app/pdf_files/primera.pdf');
             }).catch(err => {
                 res.status(500).json(
