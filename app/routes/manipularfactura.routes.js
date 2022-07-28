@@ -11,14 +11,14 @@ module.exports = function(app) {
       next();
     });
   
-    app.post("/api/traerFacturas", [verifyToken], traerFacturas);
-    app.post("/api/buscarfactura/:id?", [validarCamposNumeroFactura, verifyToken], buscarfactura);
-    app.post("/api/buscarfacturaporcliente/:cliente?", [validarCamposCliente, verifyToken], buscarFacturaCliente);
-    app.post("/api/buscarfacturaporfecha/:fecha?", [validarCamposFecha, verifyToken], buscarFacturaFecha);
-    app.post("/api/buscarfacturaporempleado/:empleado?", [validarCamposIdEmpleado, verifyToken], buscarFacturaEmpleado);
-    app.post("/api/buscarfacturaportalonario/:talonario?", [validarCamposTalonario, verifyToken], buscarPorTalonario);
+    app.get("/api/traerFacturas", [verifyToken], traerFacturas);
+    app.get("/api/buscarfactura/:id?", [validarCamposNumeroFactura], buscarfactura);
+    app.get("/api/buscarfacturaporcliente/:cliente?", [validarCamposCliente], buscarFacturaCliente);
+    app.get("/api/buscarfacturaporfecha/:fecha?", [validarCamposFecha], buscarFacturaFecha);
+    app.get("/api/buscarfacturaporempleado/:empleado?", [validarCamposIdEmpleado], buscarFacturaEmpleado);
+    app.get("/api/buscarfacturaportalonario/:talonario?", [validarCamposTalonario], buscarPorTalonario);
     app.put("/api/manipularfactura/:id", editarFactura);
-    app.post("/api/traerunafactura/:id?", [verifyToken], imprimirUnaFactura);
+    app.get("/api/traerunafactura/:id?", imprimirUnaFactura);
     app.get("/api/descargardactura/:numerofactura?", descargarFactura);
   
   };
