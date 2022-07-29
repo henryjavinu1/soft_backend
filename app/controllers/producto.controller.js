@@ -78,11 +78,9 @@ exports.buscarxcodigo = async (req, res) =>{
         });
         if (!producto) {
             return res.status(404).send({
-                message: "El producto no existe."
             });
         } else {
             return res.status(200).send({
-                message: "El producto existe.",
                 producto: producto
             });
         }
@@ -229,4 +227,42 @@ exports.delete = async (req, res) => {
             message: "Ocurrio un error al eliminar el producto."  + error
         });
     }
+}
+
+exports.updateSaldo = async (req, res) => {
+    try {
+        const producto = await Producto.findOne({
+            where: {
+                codigoProducto: req.body.codigoProducto,
+                isDelete: false
+            }
+        });
+        if (!producto) {
+            return res.status(404).send({
+                message: "No existe el producto ingresado."
+            });
+        } else {
+            try {
+                const producto = await Producto.update({
+                    cantidadProducto: req.body.cantidadProducto,
+                },  {
+                    where: {
+                        codigoProducto: req.body.codigoProducto
+                    }
+                });
+                return res.status(200).send({
+                    message: "Producto actualizado."
+                });
+    
+            } catch (error) {
+                return res.status(500).send({
+                    message: "Ocurrio un error al actualizar el producto."  + error
+                });
+            }
+        }
+    } catch (error) {
+        return res.status(500).send({
+            message: "Ocurrio un error" + error
+        });
+    }   
 }
