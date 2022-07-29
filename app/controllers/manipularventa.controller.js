@@ -9,7 +9,7 @@ const Cliente = db.cliente;
 //const Op = db.Sequelize.Op;
 const { Op } = require("sequelize");
 const { impresionDeVentas } = require("../helpers/extraerventas.helper");
-const { detalleventa } = require("../models/puntoDeVentas");
+const { detalleventa, ventas } = require("../models/puntoDeVentas");
 
 
 exports.findAllVenta = async (req, res) =>{

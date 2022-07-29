@@ -20,7 +20,7 @@ module.exports = function(app) {
   //app.post("/api/gene/convertirString", controller.convertirString); //Genera numumero factura y lo ingresa en tabla numero
   app.post("/api/gene/buscar", controller.buscar); // Apoyo
   app.post("/api/gene/nuevo", controller.nuevo);
-  app.post("/api/descargardactura", controller.descargarFactura);
+  
 
  
 
