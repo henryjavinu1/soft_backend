@@ -1,21 +1,11 @@
-// const db = require('../models/puntoDeVentas');
-// const DetalleVenta = db.detalleventa;
-
-// const totalesFactura = async () => {
-//   try {
-//     const todosLosDetalles = await DetalleVenta.findAll({
-//       where: {
-//         idVentas: req.body.idVenta,
-//         isDelete: false,
-//       }, include: [{
-//         model: db.producto,
-//         atributes: ['id', 'nombreProducto']
-//       }]
-  
-//     });
-
-//   } catch (error) {
-//     console.log(error);
+// const totalesFactura = async (detallesDeVentas) => {
+//   let totalFactura;
+//   if (detallesDeVentas.length !== 0) {
+//     for (let i = 0; i < detallesDeVentas.length; i++) {
+//       totalFactura = detallesDeVentas[i].totalDetalleVenta;
+//     }
+//   } else {
+//     totalFactura = '0.00';
 //   }
 // }
 
