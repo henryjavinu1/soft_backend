@@ -4,16 +4,25 @@ const { venta, talonario, tipopago, detalleventa, numero, user, empleado } = req
 const detalleventaModel = require("../models/detalleventa.model");
 const talonarioModel = require("../models/talonario.model");
 const User = db.user;
+const Empleado = db.empleado;
 const Role = db.role;
 const Sesion = db.sesion;
 const Factura = db.factura;
-const cliente = db.cliente;
+const Cliente = db.cliente;
 const TipoPago = db.tipopago;
 const Numero = db.numero;
 const Venta = db.venta;
+const DetalleVenta = db.detalleventa;
+const Talonario = db.Talonario;
 const Op = db.Sequelize.Op;
 
 const conversor = require('conversor-numero-a-letras-es-ar');
+
+const { request, response } = require('express');
+const fs = require('fs');
+const { construirFacturaEnPDF } = require('../helpers/manipularfactura.helper');
+const path = require('path');
+const Producto = db.producto;
 
 
 //crear funcion para generar factura //Inserta datos en factura desde el cuerpo de la factura
@@ -75,11 +84,17 @@ exports.insertFactura = async (req, res) => {
                 idTalonario: numero.idTalonario,
                 idSesion: sesion.id,
                 idNumero: numero.id,
+
                 
-        });
+        },
+       
+        );
         return res.status(200).send({
-            insertfactura: insertfactura,
-        });
+            insertfactura: insertfactura
+        }
+      );
+
+     
     } catch (error) {
         return res.status(500).send({
             message: "Ocurrio un error" + error
@@ -263,3 +278,75 @@ exports.nuevo = async (req) => {
                 }
             }  }   
         } 
+
+exports.descargarFactura = async (req, res) => {
+            
+            // console.log('num factura: '+numeroFactura);
+            let detallesDeVentas = [];
+            let facturaBuscada
+            try {
+                facturaBuscada = await Factura.findOne({
+                    where: {
+                         isDelete: false , 
+                         numeroFactura: req.body.numeroFactura
+                    },
+                    include: [
+                        {
+                            model: Venta,
+                        },
+                        {
+                            model: Empleado,
+                        },
+                        {
+                            model: TipoPago,
+                        },
+                        {
+                            model: Talonario,
+                        },
+                        {
+                            model: Cliente,
+                        }
+                    ]
+                });
+                if (facturaBuscada.venta) {
+                    detallesDeVentas = await DetalleVenta.findAll({
+                        where: { isDelete: false, idVentas: facturaBuscada.venta.id },
+                        include: [
+                            {
+                                model: Producto
+                            }
+                        ]
+                    });
+                }
+                if (facturaBuscada) {
+                    construirFacturaEnPDF(facturaBuscada, detallesDeVentas).then(pdfDoc => {
+                        var file = fs.createReadStream('./app/pdf_files/primera.pdf');
+                        // var stat = fs.statSync('./app/pdf_files/primera.pdf');
+                        // res.setHeader('Content-Length', stat.size);
+                        res.setHeader('Content-Type', 'application/pdf');
+                        res.setHeader('Content-Disposition', `attachment; filename=factura${facturaBuscada.numeroFactura}.pdf`);
+                        file.pipe(res);
+                        // fs.unlinkSync('./app/pdf_files/primera.pdf');
+                    }).catch(err => {
+                        res.status(500).json(
+                            {
+                                msg: err
+                            }
+                        )
+                    });
+                } else {
+                    return res.status(400).json({
+                       msg: 'No se encontró el documento solicitado.' 
+                    });
+                }
+            } catch (error) {
+                console.log(error);
+                return res.status(500).json({
+                    msg: 'Ocurrió un error al buscar el registro en la base de datos comuniquese con el administrador.'
+                });
+            }
+        
+        
+            // return res.status(200).download(path.join(__dirname, '../pdf_files/prueba.pdf'));
+        }
+        

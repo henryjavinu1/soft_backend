@@ -2,6 +2,8 @@ const { verifySignUp } = require("../middleware");
 const controller = require("../controllers/genefactura.controller");
 const { permisosJwt } = require("../middleware");
 const { authJwt } = require("../middleware");
+const { editarFactura, traerFacturas, buscarfactura, buscarFacturaCliente, buscarFacturaFecha, buscarFacturaEmpleado, buscarPorTalonario, imprimirUnaFactura, descargarFactura } = require("../controllers/editfactura.controller");
+const { validarCamposTalonario, validarCamposCliente, validarCamposFecha, validarCamposIdEmpleado, validarCamposNumeroFactura } = require("../middleware/manipularfactura.middleware");
 
 module.exports = function(app) {
   app.use(function(req, res, next) {
@@ -18,6 +20,8 @@ module.exports = function(app) {
   //app.post("/api/gene/convertirString", controller.convertirString); //Genera numumero factura y lo ingresa en tabla numero
   app.post("/api/gene/buscar", controller.buscar); // Apoyo
   app.post("/api/gene/nuevo", controller.nuevo);
+  
+
  
 
 };
