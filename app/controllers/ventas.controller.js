@@ -82,7 +82,29 @@ exports.actualizarVenta = async (req = request, res = response) => {
         });
     }
 }
-//Eliminar
+//Eliminar modifica un isActive para poder procesar una factura de venta
+exports.eliminarVentaProcesar = async (req, res) => {
+    try {
+        const procesarVenta = await Ventas.update({
+            isActive: true
+        }, {
+            where: {
+                id: req.body.id
+            }
+        });
+        if (procesarVenta) {
+            res.status(200).send({
+                message: "Venta procesada"
+            });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(401).send({
+            message: "Error en la venta: " + error.message
+        });
+    }
+}
+//Eliminar is delete
 exports.eliminarVenta = async (req, res) => {
     try {
         const eliminarVenta = await Ventas.update({
