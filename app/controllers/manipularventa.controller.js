@@ -9,7 +9,7 @@ const Cliente = db.cliente;
 //const Op = db.Sequelize.Op;
 const { Op } = require("sequelize");
 const { impresionDeVentas } = require("../helpers/extraerventas.helper");
-const { detalleventa, ventas } = require("../models/puntoDeVentas");
+const { detalleventa } = require("../models/puntoDeVentas");
 
 
 exports.findAllVenta = async (req, res) =>{
@@ -17,6 +17,7 @@ exports.findAllVenta = async (req, res) =>{
         const ventas = await Ventas.findAll({
             where: {
                 isDelete: false,
+                isActive: false
             }, 
            include:[{
                model: db.user,
