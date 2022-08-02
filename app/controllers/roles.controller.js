@@ -47,7 +47,7 @@ exports.bajarol = async (req, res) => {
     }
 };
 exports.updaterol = async (req, res) => {
-    // ACTUALIZAR UN USUARIO  
+    // ACTUALIZAR UN ROL
      try {
         const updateRol = await Role.findOne({
               where: {

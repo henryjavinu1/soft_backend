@@ -1,9 +1,9 @@
 const db = require("../models/puntoDeVentas");
 const config = require("../config/auth.config");
-const { user, producto } = require("../models/puntoDeVentas");
 const { request, response } = require('express');
 const { Op, DataTypes, Model } = require("sequelize");
 const User = db.user;
+const bcrypt = require("bcryptjs");
 
 
 exports.bajauser = async (req, res) => {
@@ -29,7 +29,7 @@ exports.bajauser = async (req, res) => {
   }
 };
 
-exports.updateUser = async (req, res) => {
+exports.updateuser = async (req, res) => {
   // ACTUALIZAR UN USUARIO  
    try {
       const updateUser = await User.findOne({
@@ -45,7 +45,7 @@ exports.updateUser = async (req, res) => {
              try{
                 const updateUser = await User.update({
                   usuario: req.body.usuario,
-                  password: req.body.password,
+                  password: bcrypt.hashSync(req.body.password, 8),
                   email: req.body.email,
                   idEmpleado: req.body.idEmpleado,
                   idRol: req.body.idRol
@@ -63,7 +63,6 @@ exports.updateUser = async (req, res) => {
             });
           }
         }
-        //validaUser(updateUser, usuario, password, email,idEmpleado, idRol)
   } catch (error) {
     console.log(error);
     return res.status(500).send({
@@ -77,7 +76,11 @@ exports.mostrarUser = async (req = request, res = response) => {
     const todoslosUsuarios = await User.findAll({
       where: {
         IsDelete: false,
-      }
+      }, include: [{
+        model: db.role,
+      }, {
+        model: db.empleado,
+      }]
     });
     if (!todoslosUsuarios){
       return res.status(404).send({
