@@ -17,6 +17,7 @@ exports.findAllVenta = async (req, res) =>{
         const ventas = await Ventas.findAll({
             where: {
                 isDelete: false,
+                isActive: false
             }, 
            include:[{
                model: db.user,

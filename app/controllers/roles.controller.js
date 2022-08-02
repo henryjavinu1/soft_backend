@@ -9,7 +9,6 @@ const { Op, DataTypes, Model } = require("sequelize");
 exports.crearol = async (req, res) => {
     try {
         const rol = await Role.create({
-            id: req.body.id,
             rol: req.body.rol,
             descripcion: req.body.descripcion,
         });
@@ -47,35 +46,45 @@ exports.bajarol = async (req, res) => {
         });
     }
 };
-
 exports.updaterol = async (req, res) => {
-    try {
-        const updaterol = await Role.update({
-            rol: req.body.rol,
-            descripcion: req.body.descripcion,
-        },{
-           where:
-            id = req.body.id, 
-        });
-        if (!updaterol){
+    // ACTUALIZAR UN ROL
+     try {
+        const updateRol = await Role.findOne({
+              where: {
+                id: req.body.id,
+              }
+          });
+          if (!updateRol){
             return res.status(404).send({
-              message: "Error al actualizar el rol"
-            })
-          }else {
-            return res.status(200).json({
-              message: "Actualizacion exitosa",
-              data: updaterol
-            })
+              message: "Error al encontrar el Rol"
+            });
+          }else{
+               try{
+                  const updateRol = await Role.update({
+                    rol: req.body.rol,
+                    descripcion: req.body.descripcion,                    
+                  },{
+                    where: {
+                      id: req.body.id
+                    }
+                  });
+                    return res.status(200).send({
+                      message: "Rol Actualizado en el backend"
+                    });
+                } catch(error){
+                   return res.status(500).send({
+                    message: "Ocurrio un error en backend al actualizar"
+              });
+            }
           }
+          //validaUser(updateUser, usuario, password, email,idEmpleado, idRol)
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send({
+        message: "Ocurrio un error en el backend" + error
+      });
     }
-    catch (error) {
-        return res.status(500).send({
-            message: "Ocurrio un error"
-        });
-    }
-}
-
-// Consulta que me trae todos los roles activos
+  }// Consulta que me trae todos los roles activos
 exports.buscarol = async (req, res) => {
     try {
         const buscarol = await Role.findAll({

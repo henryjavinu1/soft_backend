@@ -14,5 +14,5 @@ module.exports = function(app) {
   app.post("/api/user/bajauser",controller.bajauser);
   app.post("/api/user/crearuser", controllerauth.signup);
   app.post("/api/user/mostraruser",controller.mostrarUser);
-  app.put("/api/user/updateuser", controller.updateUser);
+  app.put("/api/user/updateuser", controller.updateuser);
 };
