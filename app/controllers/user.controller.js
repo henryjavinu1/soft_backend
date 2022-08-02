@@ -45,7 +45,7 @@ exports.updateuser = async (req, res) => {
              try{
                 const updateUser = await User.update({
                   usuario: req.body.usuario,
-                  password: bcrypt.hashSync(req.body.password, 8),
+                  //password: bcrypt.hashSync(req.body.password, 8),
                   email: req.body.email,
                   idEmpleado: req.body.idEmpleado,
                   idRol: req.body.idRol
