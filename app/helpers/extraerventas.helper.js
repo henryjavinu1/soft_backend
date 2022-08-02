@@ -57,6 +57,7 @@ const impresionDeVentas = (ventaBuscado) => {
             idSesion: ventas.idSesion,
             idUsuario: ventas.idUsuario,
             idCliente: ventas.idCliente,
+            isActive: ventas.isActive,
             nombreCliente: (!existeCliente) ? "No existe cliente" : ventas.cliente.nombreCliente,
             dni: (!existeDni) ? "" : ventas.cliente.dni,
             rtn: (!existeRtn) ? "" : ventas.cliente.rtn,

@@ -21,6 +21,7 @@ verifyToken = (req, res, next) => {
     }
     req.idUsuario = decoded.idUsuario;
     req.idEmpleado = decoded.idEmpleado;
+    req.idSesion = decoded.idSesion;
     next();
   });
 };

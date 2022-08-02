@@ -68,9 +68,14 @@ const signin = async (req, res) => {
         message: "Warning! Invalid Password!",
       });
     }
+    const ses = await Sesion.create({
+      idUsuario:user.id,
+      token:"temp"
+    });
     const token = jwt.sign({
       idUsuario: user.id,
       idEmpleado:user.empleado.id,
+      idSesion: ses.id
     }, 
     
     config.secret, {
@@ -78,10 +83,10 @@ const signin = async (req, res) => {
     });
 
     req.session.token = token;
-    const ses = await Sesion.create({
-      idUsuario:user.id,
-      token:token
+    await ses.update({
+      token: token
     });
+    
     
     
 

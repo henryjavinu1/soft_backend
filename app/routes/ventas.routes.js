@@ -14,6 +14,7 @@ module.exports = function(app) {
 
   app.post("/api/ventas",controller.crearVenta);
   app.post("/api/mostrarVentas",controller.mostrarVentas);
+  app.post("/api/procesarVenta", controller.eliminarVentaProcesar);
   app.post("/api/eliminarVenta", controller.eliminarVenta);
   app.post("/api/actualizarVenta", controller.actualizarVenta);
   
