@@ -4,7 +4,7 @@ module.exports =(sequelize, Sequelize) => {
             type: Sequelize.INTEGER,
             primaryKey: true,
             autoIncrement: true
-          },
+        },
         fechaInicio: {//fecha de inicio el turno
             type: Sequelize.DATE,
             allowNull: false
@@ -41,6 +41,11 @@ module.exports =(sequelize, Sequelize) => {
             type: Sequelize.BOOLEAN,
             allowNull: false,
             defaultValue: false
+        },
+        isActive: {
+            type: Sequelize.BOOLEAN,
+            allowNull: false,
+            defaultValue: true
         },
     });
     return Arqueo;

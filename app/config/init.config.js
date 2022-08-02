@@ -503,6 +503,7 @@ exports.initial = async () => {
             efectivoTotal: null,
             idUsuario: 1,
             idSesion: 1,
+            isActive: true
         });
         await Arqueo.create({
             fechaInicio: "2020-06-03",
@@ -515,6 +516,7 @@ exports.initial = async () => {
             efectivoTotal: null,
             idUsuario: 1,
             idSesion: 2,
+            isActive: true
         });
         await Arqueo.create({
             fechaInicio: "2020-06-03",
@@ -527,6 +529,7 @@ exports.initial = async () => {
             efectivoTotal: 10000,
             idUsuario: 2,
             idSesion: 3,
+            isActive: false
         });
         await Arqueo.create({
             fechaInicio: "2020-06-03",
@@ -539,6 +542,7 @@ exports.initial = async () => {
             efectivoTotal: 10000,
             idUsuario: 2,
             idSesion: 4,
+            isActive: false
         });
         await Arqueo.create({
             fechaInicio: "2020-06-03",
@@ -551,6 +555,7 @@ exports.initial = async () => {
             efectivoTotal: 10000,
             idUsuario: 3,
             idSesion: 5,
+            isActive: false
         });
         await Arqueo.create({
             fechaInicio: "2020-06-03",
@@ -563,6 +568,7 @@ exports.initial = async () => {
             efectivoTotal: 10000,
             idUsuario: 3,
             idSesion: 6,
+            isActive: false
         });
         await Vents.create({
             totalISV: 0,
