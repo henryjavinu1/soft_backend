@@ -4,7 +4,7 @@ const db = require("../models/puntoDeVentas");
 const User = db.user;
 
 verifyToken = (req, res, next) => {
-  //let token = req.session.token;
+  // let token = req.session.token;
   let token = req.body.token;
 
   if (!token) {

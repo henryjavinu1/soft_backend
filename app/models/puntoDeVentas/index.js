@@ -264,3 +264,4 @@ db.talonario.belongsTo(db.sucursal, {
 });
 
 
+

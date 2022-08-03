@@ -12,10 +12,10 @@ module.exports = function(app) {
         next();
     });
       
-    app.post("/api/cliente/crearcliente", [authJwt.verifyToken, verifyClients.validarDuplicadosDniOrEmail], controller.crearCliente);
-    app.post("/api/cliente/buscarcliente",[authJwt.verifyToken], controller.buscarCliente);
-    app.post("/api/cliente/buscarClientePorNombre",[authJwt.verifyToken], controller.buscarClientePorNombre);
-    app.post("/api/cliente/traerTodosLosClientes",[authJwt.verifyToken], controller.traerTodosLosClientes); 
-    app.put("/api/cliente/actualizarCliente",[authJwt.verifyToken], controller.actualizarCliente); 
-    app.post("/api/cliente/eliminarCliente",[authJwt.verifyToken], controller.eliminarCliente);
+    app.post("/api/cliente/crearcliente", [verifyClients.validarDuplicadosDniOrEmail], controller.crearCliente);
+    app.post("/api/cliente/buscarcliente", controller.buscarCliente);
+    app.post("/api/cliente/buscarClientePorNombre", controller.buscarClientePorNombre);
+    app.post("/api/cliente/traerTodosLosClientes", controller.traerTodosLosClientes); 
+    app.put("/api/cliente/actualizarCliente", controller.actualizarCliente); 
+    app.post("/api/cliente/eliminarCliente", controller.eliminarCliente);
 };

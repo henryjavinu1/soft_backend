@@ -18,7 +18,7 @@ const isPermisos = (permisos) => {
       const user = await User.findOne({
         raw: true,
         where: {
-          id: decoded.id
+          id: decoded.idUsuario
         }
       })
   

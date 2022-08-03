@@ -13,7 +13,7 @@ module.exports = (sequelize, Sequelize) => {
         rtn: {
             type: Sequelize.STRING,
             allowNull: true, // permite nulos
-            unique: true 
+            unique: false
         },
         nombreCliente:{
             type: Sequelize.STRING,
@@ -25,14 +25,6 @@ module.exports = (sequelize, Sequelize) => {
         },
         telefonoCliente: {
             type: Sequelize.STRING,
-        },
-        idUsuario: {
-            type: Sequelize.INTEGER,
-            allowNull: false,
-        },
-        idSesion: {
-            type: Sequelize.INTEGER,
-            allowNull: false,
         },
         isDelete: {
             type: Sequelize.BOOLEAN,

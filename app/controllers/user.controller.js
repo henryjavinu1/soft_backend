@@ -1,61 +1,97 @@
 const db = require("../models/puntoDeVentas");
 const config = require("../config/auth.config");
-const { user } = require("../models/puntoDeVentas");
+const { request, response } = require('express');
+const { Op, DataTypes, Model } = require("sequelize");
 const User = db.user;
-const Op = db.Sequelize.Op;
+const bcrypt = require("bcryptjs");
+
 
 exports.bajauser = async (req, res) => {
   // BAJA a un usuario 
   try {
       const userUpdate = await User.update({
-      IsDelete: true,
+          isDelete: true
     },{
-      where: 
-        username = req.body.username,
+      where: {
+        id: req.body.id
+      }
     });
-    if (!bajauser){
-      return res.status(404).send({
-        message: "No se pudo dar de baja al usuario"
-      })
-    }else {
-      return res.send({
-        message: "Se le dio de baja exitosamente"
-      })
+    if (userUpdate){
+        res.status(200).send({
+          message: "Usuario baja en el backend"
+      });
     }
   } catch (error) {
-    res.status(500).send({
-      message: error.message
+    console.log(error);
+    res.status(401).send({
+      message: "Error al elimiar el usuario " + error.message
     });
   }
 };
 
-
-
-exports.updateUser = async (req, res) => {
+exports.updateuser = async (req, res) => {
   // ACTUALIZAR UN USUARIO  
-  try {
-      const updateUser = await User.update({
-        Usuario: req.body.username,
-        password: req.body.password,
-        email: req.body.email,
-        IsDelete: true,
-
-    },{
-      where: 
-        username = req.body.username,
-    });
-    if (!updateUser){
-      return res.status(404).send({
-        message: "Error al actualizar informacion del usuario"
-      })
-    }else {
-      return res.send({
-        message: "Actualizacion exitosa"
-      })
-    }
+   try {
+      const updateUser = await User.findOne({
+            where: {
+              id: req.body.id,
+            }
+        });
+        if (!updateUser){
+          return res.status(404).send({
+            message: "Error al encontrar el usuario"
+          });
+        }else{
+             try{
+                const updateUser = await User.update({
+                  usuario: req.body.usuario,
+                  //password: bcrypt.hashSync(req.body.password, 8),
+                  email: req.body.email,
+                  idEmpleado: req.body.idEmpleado,
+                  idRol: req.body.idRol
+                },{
+                  where: {
+                    id: req.body.id
+                  }
+                });
+                  return res.status(200).send({
+                    message: "Usuario Actualizado en el backend"
+                  });
+              } catch(error){
+                 return res.status(500).send({
+                  message: "Ocurrio un error en backend al actualizar"
+            });
+          }
+        }
   } catch (error) {
-    res.status(500).send({
-      message: error.message
+    console.log(error);
+    return res.status(500).send({
+      message: "Ocurrio un error en el backend" + error
     });
   }
-};
+}
+
+exports.mostrarUser = async (req = request, res = response) => {
+  try {
+    const todoslosUsuarios = await User.findAll({
+      where: {
+        IsDelete: false,
+      }, include: [{
+        model: db.role,
+      }, {
+        model: db.empleado,
+      }]
+    });
+    if (!todoslosUsuarios){
+      return res.status(404).send({
+        message: "Error al crear usuario en el backend"
+      })
+    } 
+      return res.status(200).send({todoslosUsuarios});
+  } catch(error) {
+    console.log(error);
+    return res.status(500).send({
+      message: "ocurrio un error antes de entrar al catch en backend " + error
+    })
+  }
+}

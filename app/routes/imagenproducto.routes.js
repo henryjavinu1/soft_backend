@@ -1,5 +1,5 @@
 const { verifySignUp } = require("../middleware");
-const controller = require("../controllers/auth.controller");
+const controller = require("../controllers/imagenproducto.controller");
 const { permisosJwt } = require("../middleware");
 const { authJwt } = require("../middleware");
 
@@ -11,8 +11,6 @@ module.exports = function(app) {
     );
     next();
   });
-
-  app.post("/api/user/login",controller.signin);
-  app.get("/api/user/login",controller.signout);
-
+  app.post("/api/imagenproducto/crearimagenproducto", controller.upload, controller.createimage);
+  app.post("/api/imagenproducto/buscarimagenes", controller.findOne);
 };

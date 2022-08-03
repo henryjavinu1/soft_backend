@@ -1,6 +1,80 @@
 
+const totalesFactura = async (detallesDeVentas = detalleventa) => {
+  let totalFactura = 0.00;
+  let totalExcento = 0.00;
+  let importeGravado15 = 0.00;
+  let importeGravado18 = 0.00;
+  let isv15 = 0.00;
+  let isv18 = 0.00;
+  if (detallesDeVentas.length !== 0) {
+    for (let i = 0; i < detallesDeVentas.length; i++) {
+      totalFactura += Number(detallesDeVentas[i].totalDetalleVenta);
+
+
+      if (detallesDeVentas[i].producto.isExcento) {
+        totalExcento += Number(detallesDeVentas[i].totalDetalleVenta);
+      } else {
+        if (Number(detallesDeVentas[i].producto.isvProducto) === 18) {
+          importeGravado18 += (Number(detallesDeVentas[i].totalDetalleVenta) / 1.18);
+          isv18 += (importeGravado18 * 0.18);
+        } else {
+          importeGravado15 += (Number(detallesDeVentas[i].totalDetalleVenta) / 1.15);
+          isv15 += (importeGravado15 * 0.15);
+        }
+      }
+    }
+    console.log('totalFactura: ' + totalFactura.toFixed(2));
+    console.log('total excento: ' + totalExcento.toFixed(2));
+    console.log('importe gravado 15%: ' + importeGravado15.toFixed(2));
+    console.log('importe gravado 18%: ' + importeGravado18.toFixed(2));
+    console.log('isv 15%: ' + isv15.toFixed(2));
+    console.log('isv 18%: ' + isv18.toFixed(2));
+  } else {
+    totalFactura = 0.00;
+    totalExcento = 0.00;
+    importeGravado15 = 0.00;
+    importeGravado18 = 0.00;
+    isv15 = 0.00;
+    isv18 = 0.00;
+  }
+}
+
 
 const contenidoFactura = (factura, detallesDeVentas) => {
+  totalesFactura(detallesDeVentas);
+  let totalFactura = 0.00;
+  let subTotal = 0.00;
+  let totalExcento = 0.00;
+  let importeGravado15 = 0.00;
+  let importeGravado18 = 0.00;
+  let isv15 = 0.00;
+  let isv18 = 0.00;
+  if (detallesDeVentas.length !== 0) {
+    for (let i = 0; i < detallesDeVentas.length; i++) {
+      totalFactura += Number(detallesDeVentas[i].totalDetalleVenta);
+      if (detallesDeVentas[i].producto.isExcento) {
+        totalExcento += Number(detallesDeVentas[i].totalDetalleVenta);
+      } else {
+        if (Number(detallesDeVentas[i].isvAplicado) === 18) {
+          importeGravado18 += (Number(detallesDeVentas[i].totalDetalleVenta) / 1.18);
+          isv18 += (importeGravado18 * 0.18);
+        } else {
+          importeGravado15 += (Number(detallesDeVentas[i].totalDetalleVenta) / 1.15);
+          isv15 += (importeGravado15 * 0.15);
+        }
+      }
+    }
+    subTotal = (totalExcento + importeGravado15 + importeGravado18).toFixed(2);
+  } else {
+    totalFactura = 0.00;
+    subTotal = 0.00;
+    totalExcento = 0.00;
+    importeGravado15 = 0.00;
+    importeGravado18 = 0.00;
+    isv15 = 0.00;
+    isv18 = 0.00;
+  }
+
 
   var externalDataRetrievedFromServer = [];
 
@@ -69,7 +143,7 @@ const contenidoFactura = (factura, detallesDeVentas) => {
         } else if (i === 3) {
           valor = detallesDeVentas[index].descuentoAplicado.toString();
         } else if (i === 4) {
-          valor = `${Number(detallesDeVentas[index].cantidad) * Number(detallesDeVentas[index].precioUnitario)}`
+          valor = `${(Number(detallesDeVentas[index].cantidad) * Number(detallesDeVentas[index].precioUnitario)).toFixed(2)}`
         }
         listaDeCampos.push({
           text: valor,
@@ -587,7 +661,7 @@ const contenidoFactura = (factura, detallesDeVentas) => {
                     fontSize: 8,
                   },
                   {
-                    text: '0.00',
+                    text: totalExcento.toFixed(2),
                     border: [true, true, true, true],
                     alignment: 'right',
                     fillColor: '#eaf2f5',
@@ -607,7 +681,7 @@ const contenidoFactura = (factura, detallesDeVentas) => {
                     fontSize: 8,
                   },
                   {
-                    text: `0.00`,
+                    text: importeGravado15.toFixed(2),
                     border: [true, true, true, true],
                     alignment: 'right',
                     fillColor: '#eaf2f5',
@@ -627,7 +701,7 @@ const contenidoFactura = (factura, detallesDeVentas) => {
                     fontSize: 8,
                   },
                   {
-                    text: '0.00',
+                    text: importeGravado18.toFixed(2),
                     border: [true, true, true, true],
                     alignment: 'right',
                     fillColor: '#eaf2f5',
@@ -647,7 +721,7 @@ const contenidoFactura = (factura, detallesDeVentas) => {
                     fontSize: 7,
                   },
                   {
-                    text: `${(factura.isvTotalFactura) ? factura.isvTotalFactura : '0.00'}`,
+                    text: isv15.toFixed(2),
                     border: [true, true, true, true],
                     alignment: 'right',
                     fillColor: '#eaf2f5',
@@ -667,7 +741,7 @@ const contenidoFactura = (factura, detallesDeVentas) => {
                     fontSize: 7,
                   },
                   {
-                    text: '0.00',
+                    text: isv18.toFixed(2),
                     border: [true, true, true, true],
                     alignment: 'right',
                     fillColor: '#eaf2f5',
@@ -687,7 +761,7 @@ const contenidoFactura = (factura, detallesDeVentas) => {
                     fontSize: 7,
                   },
                   {
-                    text: `${(factura.subTotalFactura) ? factura.subTotalFactura : '0.00'}`,
+                    text: subTotal,
                     border: [true, true, true, true],
                     alignment: 'right',
                     fillColor: '#eaf2f5',
@@ -708,7 +782,7 @@ const contenidoFactura = (factura, detallesDeVentas) => {
                     fontSize: 7,
                   },
                   {
-                    text: `${(factura.totalFactura) ? factura.totalFactura : '0.00'}`,
+                    text: totalFactura.toFixed(2),
                     border: [true, true, true, true],
                     alignment: 'right',
                     fillColor: '#eaf2f5',
@@ -890,7 +964,7 @@ const contenidoSinDetalles = (factura) => {
             alignment: 'left',
           },
           {
-            text: `${(factura.talonario)?factura.talonario.cai.toString():''}`,
+            text: `${(factura.talonario) ? factura.talonario.cai.toString() : ''}`,
             bold: true,
             color: '#333333',
             fontSize: 7,
@@ -910,7 +984,7 @@ const contenidoSinDetalles = (factura) => {
             alignment: 'left',
           },
           {
-            text: (factura.talonario)?`${factura.talonario.rangoInicialFactura.toString()} AL ${factura.talonario.rangoFinalFactura.toString()}`:'',
+            text: (factura.talonario) ? `${factura.talonario.rangoInicialFactura.toString()} AL ${factura.talonario.rangoFinalFactura.toString()}` : '',
             bold: true,
             color: '#333333',
             fontSize: 7,
@@ -930,7 +1004,7 @@ const contenidoSinDetalles = (factura) => {
             alignment: 'left',
           },
           {
-            text: (factura.talonario)?`${factura.talonario.fechaLimiteEmision.toString().substring(8, 16)}`:'',
+            text: (factura.talonario) ? `${factura.talonario.fechaLimiteEmision.toString().substring(8, 16)}` : '',
             bold: true,
             color: '#333333',
             fontSize: 7,
@@ -952,7 +1026,7 @@ const contenidoSinDetalles = (factura) => {
                 color: '#aaaaab'
               },
               {
-                text: (factura.cliente)?`${(factura.cliente.nombreCliente)?factura.cliente.nombreCliente:''}`:'',
+                text: (factura.cliente) ? `${(factura.cliente.nombreCliente) ? factura.cliente.nombreCliente : ''}` : '',
                 bold: true,
                 fontSize: 9,
                 width: 345,
@@ -971,7 +1045,7 @@ const contenidoSinDetalles = (factura) => {
                 color: '#aaaaab'
               },
               {
-                text: (factura.cliente)?`${(factura.cliente.rtn)?factura.cliente.rtn:''}`:'',
+                text: (factura.cliente) ? `${(factura.cliente.rtn) ? factura.cliente.rtn : ''}` : '',
                 bold: true,
                 fontSize: 9,
                 width: 120,
@@ -1012,7 +1086,7 @@ const contenidoSinDetalles = (factura) => {
                 color: '#aaaaab'
               },
               {
-                text: `${(factura.cliente)?(factura.cliente.telefonoCliente)?factura.cliente.telefonoCliente:'':''}`,
+                text: `${(factura.cliente) ? (factura.cliente.telefonoCliente) ? factura.cliente.telefonoCliente : '' : ''}`,
                 bold: true,
                 fontSize: 9,
                 width: 120,
