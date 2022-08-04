@@ -1,11 +1,12 @@
 const db = require("../models/puntoDeVentas");
 //const db = require("../models/detalleventa");
 const config = require("../config/auth.config");
-const { detalleventa } = require("../models/puntoDeVentas");
+const { detalleventa, sequelize } = require("../models/puntoDeVentas");
 const Ventas = db.ventas;
 const DetalleVenta = db.detalleventa;
 const Role = db.role;
 const User = db.user;
+const Prod = db.producto
 const Op = db.sequelize.Op;
 
 //crear detalle venta
@@ -19,12 +20,15 @@ exports.creardetalleventa = async (req, res) => {
             totalDetalleVenta: req.body.totalDetalleVenta,
             idVentas: req.body.idVentas,
             idProducto: req.body.idProducto,
-        })
+        });
+        const actulizarinventario = await sequelize.query(`
+            UPDATE productos p INNER JOIN detalleventas dv 
+                                ON p.id = dv.idProducto
+            SET p.cantidadProducto = p.cantidadProducto - dv.cantidad
+            WHERE p.id = ${req.body.idProducto}`);
         return res.status(200).send({
             message: "Detalle de Venta creado"
         });
-
-
     } catch (error) {
         res.status(500).send({
             message: error.message
@@ -60,8 +64,8 @@ exports.mostrarDetalles = async (req = request, res = response) => {
 
 
 exports.actualizarDetalle = async (req = request, res = response) => {
-     try {
-         const detalleActualizar = await DetalleVenta.update({
+    try {
+        const detalleActualizar = await DetalleVenta.update({
             cantidad: req.body.cantidad,
             precioUnitario: req.body.precioUnitario,
             isvAplicado: req.body.isvAplicado,
@@ -69,19 +73,18 @@ exports.actualizarDetalle = async (req = request, res = response) => {
             totalDetalleVenta: req.body.totalDetalleVenta,
             idVentas: req.body.idVentas,
             idProducto: req.body.idProducto,
-         },{
-             where: {
-                 id: req.body.id
-             }
-         });
-         return res.status(200).send(detalleActualizar);
-         } catch (error) {
-         
-         return res.status(500).send({
-             message: "Ocurrio un error" + error
-         });
-     }
- }
+        },{
+            where: {
+                id: req.body.id
+            }
+        });
+        return res.status(200).send(detalleActualizar);
+        } catch (error) {
+        return res.status(500).send({
+            message: "Ocurrio un error" + error
+        });
+    }
+}
 //Eliminar
 exports.eliminarDetalle = async (req, res) => {
     try {
