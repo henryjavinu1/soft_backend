@@ -1,6 +1,6 @@
 //const { verifySignUp } = require("../middleware");
 const controller = require("../controllers/ventas.controller");
-
+const manipularventa = require("../controllers/manipularventa.controller");
 const { permisosJwt } = require("../middleware");
 const { authJwt } = require("../middleware");
 module.exports = function(app) {
@@ -17,5 +17,6 @@ module.exports = function(app) {
   app.post("/api/procesarVenta", controller.eliminarVentaProcesar);
   app.post("/api/eliminarVenta", controller.eliminarVenta);
   app.post("/api/actualizarVenta", controller.actualizarVenta);
+  app.post("/api/detalleVentaDetalladas", manipularventa.findAllVenta);
   
 };
