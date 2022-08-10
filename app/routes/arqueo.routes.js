@@ -9,10 +9,11 @@ module.exports = function(app) {
         next();
     });
     app.post("/api/arqueo/createArqueo",                    [verifyToken], controller.createArqueo);
-    app.put("/api/arqueo/actualizacionCerrandoSesion",      [verifyToken], controller.actualizacionCerrandoSesion);
+    app.put ("/api/arqueo/actualizacionCerrandoSesion",      [verifyToken], controller.actualizacionCerrandoSesion);
     app.post("/api/arqueo/deleteArqueo",                    [verifyToken], controller.deleteArqueo);
     app.post("/api/arqueo/mostrarArqueo",                   [verifyToken], controller.mostrarArqueo);
     app.post("/api/arqueo/buscarPorFechaInicioFechaFinal",  [verifyToken], controller.buscarPorFechaInicioFechaFinal);
     app.post("/api/arqueo/buscarPorUsuario",                [verifyToken], controller.buscarPorUsuario);
+    app.post("/api/arqueo/validarArqueoActivo",             [verifyToken], controller.validarArqueoActivo);
 
 };

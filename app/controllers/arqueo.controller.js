@@ -221,3 +221,28 @@ exports.buscarPorUsuario = async (req, res) => {
         });
     }
 }
+
+exports.validarArqueoActivo = async (req, res) => {
+    try {
+        //validar que el arqueo este activo
+        const arqueo = await Arque.findOne({
+            where: {
+                idSesion: req.idSesion,
+                isActive: true,
+                isDelete: false
+            }
+        });
+        //validar que el arqueo se mostro correctamente
+        if(!arqueo){
+            res.status(404).send({
+                message: "No se encontro ningun arqueo"
+            });
+        } 
+        return res.status(200).send({arqueo});
+    } catch (error) {
+        //enviar respuesta al cliente
+        return res.status(500).json({
+            message: "Error al validar arqueo activo" + error.message
+        });
+    }
+}
