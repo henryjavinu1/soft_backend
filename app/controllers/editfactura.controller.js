@@ -420,7 +420,7 @@ const descargarFactura = async (req = request, res = response) => {
                     res.setHeader('Content-Type', 'application/pdf');
                     res.setHeader('Content-Disposition', `attachment; filename=factura${facturaBuscada.numeroFactura}.pdf`);
                     file.pipe(res);
-                    fs.unlinkSync('app/pdf_files/primerarapida.pdf');
+                    // fs.unlinkSync('app/pdf_files/primerarapida.pdf');
                     // fs.unlinkSync('app/pdf_files/primera.pdf');
                 }).catch(err => {
                     res.status(500).json(
