@@ -1,6 +1,7 @@
-const { fs } = require('fs');
-const PdfPrinter = require("pdfmake");
-const {contenidoFactura, contenidoSinDetalles} = require('../pdf_files/pdf_styles/contenido.factura');
+var PdfPrinter = require('pdfmake');
+var fs = require('fs');
+const { contenidoFactura, contenidoSinDetalles } = require('../pdf_files/pdf_styles/contenido.factura');
+const { contenidoFacturaRapida } = require('../pdf_files/pdf_styles/contenido.facturarapida');
 const fonts = require('../pdf_files/pdf_styles/fonts');
 
 const filtrarFacturas = async (Factura, parametroBuscado = Factura, valorBuscado, Empleado, TipoPago, Talonario, Cliente) => {
@@ -168,7 +169,7 @@ const filtrarFacturasPorFechaQuery = async (Op, Factura, fecha1, fecha2, Emplead
     }
 }
 
-const construirFacturaEnPDF = (factura, detallesDeVentas) => {
+const construirFacturaEnPDF = (factura, detallesDeVentas, tiempo) => {
     var fonts = {
         Roboto: {
             normal: 'app/pdf_files/fonts/Roboto-Regular.ttf',
@@ -177,28 +178,30 @@ const construirFacturaEnPDF = (factura, detallesDeVentas) => {
             bolditalics: 'app/pdf_files/fonts/Roboto-MediumItalic.ttf'
         }
     };
-
-    var PdfPrinter = require('pdfmake');
-    var printer = new PdfPrinter(fonts);
-    var fs = require('fs');
     let content;
     if (detallesDeVentas.length > 0) {
-        console.log('detalle de ventas: '+detallesDeVentas.length);
+        console.log('detalle de ventas: ' + detallesDeVentas.length);
         content = contenidoFactura(factura, detallesDeVentas);
     } else {
         content = contenidoSinDetalles(factura);
     }
     // console.log(content.content);
 
-    var docDefinition = {
-        watermark: 'COPIA',
-        content: content.content,
-    };
+    if (tiempo === 1) {
+        var docDefinition = {
+            content: content.content,
+        };
+    } else {
+        var docDefinition = {
+            watermark: 'COPIA',
+            content: content.content,
+        };
+    }
 
     var options = {
         // ...
     }
-
+    var printer = new PdfPrinter(fonts);
     var pdfDoc = printer.createPdfKitDocument(docDefinition, options);
     pdfDoc.pipe(fs.createWriteStream('./app/pdf_files/primera.pdf'));
     pdfDoc.end();
@@ -215,7 +218,110 @@ const construirFacturaEnPDF = (factura, detallesDeVentas) => {
 
 }
 
-const construirFacturaRapida = (factura, detallesDeVentas) => {
+const construirFacturaRapida = (factura, detallesDeVentas, tiempo) => {
+    var fonts = {
+        Roboto: {
+            normal: 'app/pdf_files/fonts/Roboto-Regular.ttf',
+            bold: 'app/pdf_files/fonts/Roboto-Medium.ttf',
+            italics: 'app/pdf_files/fonts/Roboto-Italic.ttf',
+            bolditalics: 'app/pdf_files/fonts/Roboto-MediumItalic.ttf'
+        }
+    };
+    let content;
+    if (detallesDeVentas.length > 0) {
+        console.log('detalle de ventas: ' + detallesDeVentas.length);
+        content = contenidoFacturaRapida(factura, detallesDeVentas);
+    } else {
+        content = contenidoSinDetalles(factura);
+    }
+    // console.log(content.content);
+
+    if (tiempo === 1) {
+        var docDefinition = {
+            pageMargins: [10, 10, 10, 10],
+            pageSize: {
+                width: 226.8,
+                height: 'auto'
+            },
+            content: content.content,
+            styles: {
+                totales: {
+                    alignment: 'right',
+                    margin: [0, -2, 0, 0],
+                    textTransform: 'uppercase',
+                    fontSize: 8,
+                },
+                header: {
+                    fontSize: 12,
+                    alignment: 'center',
+                    bold: true,
+                    margin: [0, 0, 0, 4]
+                },
+                subheader: {
+                    fontSize: 8,
+                    alignment: 'center',
+                },
+                quote: {
+                    italics: true
+                },
+                small: {
+                    fontSize: 6
+                }
+            }
+        }
+    } else {
+        var docDefinition = {
+            watermark: 'COPIA',
+            pageMargins: [10, 10, 10, 10],
+            pageSize: {
+                width: 226.8,
+                height: 'auto'
+            },
+            content: content.content,
+            styles: {
+                totales: {
+                    alignment: 'right',
+                    margin: [0, -2, 0, 0],
+                    textTransform: 'uppercase',
+                    fontSize: 8,
+                },
+                header: {
+                    fontSize: 12,
+                    alignment: 'center',
+                    bold: true,
+                    margin: [0, 0, 0, 4]
+                },
+                subheader: {
+                    fontSize: 8,
+                    alignment: 'center',
+                },
+                quote: {
+                    italics: true
+                },
+                small: {
+                    fontSize: 6
+                }
+            }
+        }
+    }
+
+    var options = {
+        // ...
+    }
+    var printer = new PdfPrinter(fonts);
+    var pdfDoc = printer.createPdfKitDocument(docDefinition, options);
+    pdfDoc.pipe(fs.createWriteStream('./app/pdf_files/primerarapida.pdf'));
+    pdfDoc.end();
+
+    const promesa = new Promise((resolve, reject) => {
+        if (pdfDoc) {
+            resolve(pdfDoc);
+        } else {
+            reject('Error al crear pdf');
+        }
+    });
+
+    return promesa;
 
 }
 
