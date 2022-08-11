@@ -215,10 +215,15 @@ const construirFacturaEnPDF = (factura, detallesDeVentas) => {
 
 }
 
+const construirFacturaRapida = (factura, detallesDeVentas) => {
+
+}
+
 module.exports = {
     impresionDeFacturas,
     validarCampos,
     filtrarFacturasPorFechaQuery,
-    construirFacturaEnPDF
+    construirFacturaEnPDF,
+    construirFacturaRapida
     // filtrarFacturas,
 }
