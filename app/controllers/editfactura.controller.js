@@ -395,6 +395,7 @@ const descargarFactura = async (req = request, res = response) => {
             });
         }
         if (facturaBuscada) {
+            console.log('tipo de factura:'+tipoFactura);
             if (Number(tipoFactura) === 2) {
                 construirFacturaEnPDF(facturaBuscada, detallesDeVentas, Number(tiempo)).then(pdfDoc => {
                     var file = fs.createReadStream('./app/pdf_files/primera.pdf');
@@ -403,7 +404,7 @@ const descargarFactura = async (req = request, res = response) => {
                     res.setHeader('Content-Type', 'application/pdf');
                     res.setHeader('Content-Disposition', `attachment; filename=factura${facturaBuscada.numeroFactura}.pdf`);
                     file.pipe(res);
-                    fs.unlinkSync('app/pdf_files/primera.pdf');
+                    // fs.unlinkSync('app/pdf_files/primera.pdf');
                     // fs.unlinkSync('app/pdf_files/primera.pdf');
                 }).catch(err => {
                     res.status(500).json(
@@ -418,9 +419,9 @@ const descargarFactura = async (req = request, res = response) => {
                     // var stat = fs.statSync('./app/pdf_files/primera.pdf');
                     // res.setHeader('Content-Length', stat.size);
                     res.setHeader('Content-Type', 'application/pdf');
-                    res.setHeader('Content-Disposition', `attachment; filename=factura${facturaBuscada.numeroFactura}.pdf`);
+                    res.setHeader('Content-Disposition', `attachment; filename=factura${facturaBuscada.numeroFactura}-rapida.pdf`);
                     file.pipe(res);
-                    fs.unlinkSync('app/pdf_files/primerarapida.pdf');
+                    // fs.unlinkSync('app/pdf_files/primerarapida.pdf');
                     // fs.unlinkSync('app/pdf_files/primera.pdf');
                 }).catch(err => {
                     res.status(500).json(
