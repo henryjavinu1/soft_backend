@@ -1,3 +1,4 @@
+const NumeroALetras = require("../../helpers/generarfactura.helpers");
 
 const totalesFactura = async (detallesDeVentas = detalleventa) => {
   let totalFactura = 0.00;
@@ -231,7 +232,7 @@ const contenidoFactura = (factura, detallesDeVentas) => {
               //   width: 60,
             },
             {
-              text: 'Razón social del cliente',
+              text: `${factura.talonario.sucursale.nombreSucursal}`,
               bold: true,
               fontSize: 12,
               width: '50%',
@@ -277,7 +278,7 @@ const contenidoFactura = (factura, detallesDeVentas) => {
             alignment: 'left',
           },
           {
-            text: `'004654654654654654654654654654654654654001'`,
+            text: `${factura.talonario.sucursale.rtn}`,
             bold: true,
             color: '#333333',
             fontSize: 7,
@@ -308,19 +309,7 @@ const contenidoFactura = (factura, detallesDeVentas) => {
       {
         columns: [
           {
-            text: 'DIRECCION, DIRECCION, DIRECCION',
-            bold: true,
-            color: '#aaaaab',
-            fontSize: 7,
-            alignment: 'left',
-            width: '*',
-          },
-        ],
-      },
-      {
-        columns: [
-          {
-            text: 'DIRECCION, DIRECCION, DIRECCION, DIRECCION',
+            text: `${factura.talonario.sucursale.direccion}`,
             bold: true,
             color: '#aaaaab',
             fontSize: 7,
@@ -340,7 +329,7 @@ const contenidoFactura = (factura, detallesDeVentas) => {
             alignment: 'left',
           },
           {
-            text: '(504) 0000-1111',
+            text: `${factura.talonario.sucursale.telefono}`,
             bold: true,
             color: '#333333',
             fontSize: 7,
@@ -360,7 +349,7 @@ const contenidoFactura = (factura, detallesDeVentas) => {
             alignment: 'left',
           },
           {
-            text: 'xxxxxxxx@xxxx',
+            text: `${factura.talonario.sucursale.email}`,
             bold: true,
             color: '#333333',
             fontSize: 7,
@@ -554,7 +543,7 @@ const contenidoFactura = (factura, detallesDeVentas) => {
                   ],
                   [
                     {
-                      text: `${(factura.cantidadLetras)}`,
+                      text: `${NumeroALetras(totalFactura.toFixed(2))}`,
                       border: [true, true, true, true],
                       alignment: 'left',
                       fillColor: '#eaf2f5',
@@ -1273,7 +1262,7 @@ const contenidoSinDetalles = (factura) => {
                   ],
                   [
                     {
-                      text: `${(factura.cantidadLetras)}`,
+                      text: `${NumeroALetras(totalFactura.toFixed(2))}`,
                       border: [true, true, true, true],
                       alignment: 'left',
                       fillColor: '#eaf2f5',

@@ -1,3 +1,5 @@
+const NumeroALetras = require("../../helpers/generarfactura.helpers");
+
 // playground requires you to assign document definition to a variable called dd
 const contenidoFacturaRapida = (factura, detallesDeVentas) => {
     // console.log(factura);
@@ -88,7 +90,7 @@ const contenidoFacturaRapida = (factura, detallesDeVentas) => {
     var contenido = {
         content: [
             {
-                text: 'Razón social de la empresa',
+                text: `${factura.talonario.sucursale.nombreSucursal}`,
                 style: 'header'
             },
             {
@@ -295,7 +297,7 @@ const contenidoFacturaRapida = (factura, detallesDeVentas) => {
                 }
             },
             {
-                text: `${factura.cantidadLetras}`,
+                text: `${NumeroALetras(totalFactura.toFixed(2))}`,
                 style: 'subheader'
             },
             {

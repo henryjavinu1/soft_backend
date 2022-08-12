@@ -303,17 +303,24 @@ const construirFacturaRapida = (factura, detallesDeVentas, tiempo) => {
 
     var options = {
         // ...
+    } 
+    
+    try {
+        var printer = new PdfPrinter(fonts);
+        var pdfDoc = printer.createPdfKitDocument(docDefinition, options);
+        pdfDoc.pipe(fs.createWriteStream('./app/pdf_files/primerarapida.pdf'));
+        pdfDoc.end();
+    } catch (error) {
+        console.log(error);
     }
-    var printer = new PdfPrinter(fonts);
-    var pdfDoc = printer.createPdfKitDocument(docDefinition, options);
-    pdfDoc.pipe(fs.createWriteStream('./app/pdf_files/primerarapida.pdf'));
-    pdfDoc.end();
 
     const promesa = new Promise((resolve, reject) => {
         if (pdfDoc) {
             resolve(pdfDoc);
+            console.log('aqui está el PDF Fren'+pdfDoc)
         } else {
             reject('Error al crear pdf');
+            console.log('Error al crear pdf');
         }
     });
 
