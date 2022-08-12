@@ -228,12 +228,8 @@ const construirFacturaRapida = (factura, detallesDeVentas, tiempo) => {
         }
     };
     let content;
-    if (detallesDeVentas.length > 0) {
-        console.log('detalle de ventas: ' + detallesDeVentas.length);
-        content = contenidoFacturaRapida(factura, detallesDeVentas);
-    } else {
-        content = contenidoSinDetalles(factura);
-    }
+
+    content = contenidoFacturaRapida(factura, detallesDeVentas);
     // console.log(content.content);
 
     if (tiempo === 1) {
