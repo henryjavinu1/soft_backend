@@ -5,6 +5,7 @@ const controller = require("../controllers/auth.controller");
 const { DB } = require("./db.config");
 const Role = db.role;
 const User = db.user;
+const RolePermiso = db.roles_permisos;
 const Empleado = db.empleado;
 const Permiso = db.permiso;
 const TipoPag = db.tipopago;
@@ -298,6 +299,13 @@ exports.initial = async () => {
             fechaNacimiento: Date("2002-20-2"),
             sexo: "M",
         });
+        await RolePermiso.bulkCreate([{
+            idRol: "2",
+            idPermiso: "6"
+        },{
+            idRol: "2",
+            idPermiso: "7"
+        }]);
         await Empleado.create({
             id: 2,
             dni: "02013",
