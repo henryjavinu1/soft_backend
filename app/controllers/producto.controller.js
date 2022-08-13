@@ -91,6 +91,33 @@ exports.buscarxcodigo = async (req, res) =>{
     }
 }
 
+exports.buscarxnombre = async (req, res) =>{
+    try {
+        const producto = await Producto.findOne({
+            where: {
+                isDelete: false,
+                [Op.and]: [{nombreProducto: req.body.nombreProducto}, {isDelete: false}]                
+            }, include:[{
+                model: db.tipoproducto,
+                atributes: ['id','tipoProducto']
+                }
+                ]
+        });
+        if (!producto) {
+            return res.status(404).send({
+            });
+        } else {
+            return res.status(200).send({
+                producto: producto
+            });
+        }
+    } catch (error) {
+        return res.status(500).send({
+            message: "Ocurrio un error" + error
+        });
+    }
+}
+
 exports.findAll = async (req, res) =>{
     try {
         const producto = await Producto.findAll({
