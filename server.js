@@ -29,6 +29,7 @@ db.sequelize.sync({force: false}).then(() => {
   init.initial();
 });
 
+app.use('/images', express.static('images'))
 
 // simple route
 app.get("/", (req, res) => {

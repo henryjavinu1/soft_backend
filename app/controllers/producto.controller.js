@@ -9,6 +9,10 @@ const TipoProducto = db.tipoProducto;
 const { Op } = require("sequelize");
 const { tipoproducto } = require("../models/puntoDeVentas");
 
+const multer = require('multer');
+const path = require('path');
+
+
 
 // Pucha
 exports.createproducto = async (req = request, res = response) => {   
@@ -18,6 +22,7 @@ exports.createproducto = async (req = request, res = response) => {
             nombreProducto: req.body.nombreProducto,
             precioProducto: req.body.precioProducto,
             cantidadProducto: req.body.cantidadProducto,
+            image: req.file.path,
             isvProducto: req.body.isvProducto,
             descProducto: req.body.descProducto,
             isExcento: req.body.isExcento,
@@ -138,6 +143,7 @@ exports.update = async (req, res) => {
                     nombreProducto: req.body.nombreProducto,
                     precioProducto: req.body.precioProducto,
                     cantidadProducto: req.body.cantidadProducto,
+                    image: req.file.path,
                     isvProducto: req.body.isvProducto,
                     descProducto: req.body.descProducto,
                     isExcento: req.body.isExcento,
@@ -266,3 +272,23 @@ exports.updateSaldo = async (req, res) => {
         });
     }   
 }
+
+
+const storage = multer.diskStorage({
+
+    destination: (req, file, cb)=>{
+        cb(null, './images')
+    },
+    filename: (req, file, cb) =>{
+        cb(null,Date.now() + path.basename(file.originalname))
+    }
+    
+})
+
+exports.upload = multer({
+    storage: storage,
+    preservePath : false,
+    
+
+
+}).single('image');

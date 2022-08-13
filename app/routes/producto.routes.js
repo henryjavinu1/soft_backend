@@ -12,10 +12,10 @@ module.exports = function(app) {
     next();
   });
 
-  app.post("/api/producto/crearproducto", controller.createproducto);
+  app.post("/api/producto/crearproducto", controller.upload ,controller.createproducto);
   app.post("/api/producto/buscarproducto", controller.findOne);
   app.get("/api/producto/mostrarproductos", controller.findAll);
-  app.post("/api/producto/actualizarproducto", controller.update);
+  app.post("/api/producto/actualizarproducto",controller.upload , controller.update);
   app.post("/api/producto/eliminarproducto", controller.delete);
   app.post("/api/producto/restarsaldo", controller.setsaldo);
   app.post("/api/producto/buscarproductoxcodigo", controller.buscarxcodigo);
