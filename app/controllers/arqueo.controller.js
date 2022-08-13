@@ -86,14 +86,14 @@ exports.actualizacionCerrandoSesion = async (req, res) => {
                                                                                 ventaCredito = (SELECT SUM(totalFactura)
                                                                                                 FROM facturas
                                                                                                 WHERE idTipoPago = 3 AND idSesion = ${req.idSesion})
-                                                        WHERE idSesion = ${req.idSesion} AND isActive = true, AND isDelete = false`);
+                                                        WHERE arqueos.idSesion = ${req.idSesion} AND arqueos.isActive = true AND arqueos.isDelete = false AND arqueos.idUsuario = ${req.idUsuario}`);
                     const arqueo2 = await sequelize.query(`UPDATE arqueos SET efectivoTotal = (SELECT SUM(efectivoApertura + efectivoCierre)
                                                                                                 FROM arqueos
-                                                                                                WHERE arqueos.idSesion = ${req.idSesion}),
+                                                                                                WHERE arqueos.idSesion = ${req.idSesion} AND arqueos.idUsuario = ${req.idUsuario}),
                                                                                 ventaTotal = (SELECT SUM(efectivoCierre + otrosPagos + ventaCredito)
                                                                                                 FROM arqueos
-                                                                                                WHERE idSesion = ${req.idSesion})
-                                                            WHERE idSesion = ${req.idSesion} AND isActive = true, AND isDelete = false`);
+                                                                                                WHERE arqueos.idSesion = ${req.idSesion} AND arqueos.idUsuario = ${req.idUsuario}),
+                                                            WHERE arqueos.idSesion = ${req.idSesion} AND arqueos.isActive = true AND arqueos.isDelete = false AND arqueos.idUsuario = ${req.idUsuario}`);
                                                                                                 
 
                     const fe = await Arque.update({
@@ -102,6 +102,7 @@ exports.actualizacionCerrandoSesion = async (req, res) => {
                     },{
                         where: {
                             idSesion: req.idSesion,
+                            idUsuario: req.idUsuario,
                             isDelete: false,
                             isActive: true,
                         },
