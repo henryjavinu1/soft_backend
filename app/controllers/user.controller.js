@@ -47,7 +47,7 @@ exports.updateuser = async (req, res) => {
                   usuario: req.body.usuario,
                   //password: bcrypt.hashSync(req.body.password, 8),
                   email: req.body.email,
-                  idEmpleado: req.body.idEmpleado,
+                  //idEmpleado: req.body.idEmpleado,
                   idRol: req.body.idRol
                 },{
                   where: {
