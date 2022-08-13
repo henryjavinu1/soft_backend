@@ -19,6 +19,7 @@ module.exports = function(app) {
   app.post("/api/producto/eliminarproducto", controller.delete);
   app.post("/api/producto/restarsaldo", controller.setsaldo);
   app.post("/api/producto/buscarproductoxcodigo", controller.buscarxcodigo);
+  app.post("/api/producto/buscarproductoxnombre", controller.buscarxnombre);
   app.post("/api/producto/actualizarsaldo", controller.updateSaldo);
 
   
