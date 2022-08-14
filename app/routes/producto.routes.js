@@ -21,6 +21,8 @@ module.exports = function(app) {
   app.post("/api/producto/buscarproductoxcodigo", controller.buscarxcodigo);
   app.post("/api/producto/buscarproductoxnombre", controller.buscarxnombre);
   app.post("/api/producto/actualizarsaldo", controller.updateSaldo);
+  app.post("/api/producto/actualizarsinimagen", controller.updateSinImagen);
+
 
   
 

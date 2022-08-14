@@ -198,6 +198,51 @@ exports.update = async (req, res) => {
     }   
 }
 
+exports.updateSinImagen = async (req, res) => {
+    try {
+        const producto = await Producto.findOne({
+            where: {
+                id: req.body.id,
+                isDelete: false
+            }
+        });
+        if (!producto) {
+            return res.status(404).send({
+                message: "No existe el producto ingresado."
+            });
+        } else {
+            try {
+                const producto = await Producto.update({
+                    codigoProducto: req.body.codigoProducto,
+                    nombreProducto: req.body.nombreProducto,
+                    precioProducto: req.body.precioProducto,
+                    cantidadProducto: req.body.cantidadProducto,
+                    isvProducto: req.body.isvProducto,
+                    descProducto: req.body.descProducto,
+                    isExcento: req.body.isExcento,
+                    isDelete: false,
+                    idTipoProducto: req.body.idTipoProducto
+                } , {
+                    where: {
+                        id: req.body.id
+                    }
+                });
+                return res.status(200).send({
+                    message: "Producto actualizado."
+                });
+        
+            } catch (error) {
+                return res.status(500).send({
+                    message: "Ocurrio un error al actualizar el producto."  + error
+                });
+            }
+        }
+    } catch (error) {
+        return res.status(500).send({
+            message: "Ocurrio un error" + error
+        });
+    }   
+}
 exports.setsaldo = async (req, res) => {
     var saldoRecibir  = req.body.saldoRestar;
     var saldoActual = req.body.saldoActual;
