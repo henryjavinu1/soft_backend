@@ -6,12 +6,15 @@ const TipoPago = db.tipopago;
 const { impresionDeTipoPago} = require('../helpers/tipopago.helper');
 const { impresionDeVentas } = require("../helpers/extraerventas.helper");
 const Op = db.Sequelize.Op;
-//Insertar tipo de pago
+//Insertar tipo de pago con token implementado
+//Agregue token en insertar, eliminar y actualizar
 exports.insertarTipoPago = async (req, res) => {
     try {
               const tipopagoo = await db.tipopago.create({
+                idSesion: req.idSesion,
                 tipoDePago : req.body.tipoDePago, 
                 descripcionTipoPago: req.body.descripcionTipoPago, 
+                idUsuario: req.idUsuario,
         });
         return res.status(200).send({
             message: "Tipo de pago ingresado",
@@ -27,11 +30,14 @@ exports.insertarTipoPago = async (req, res) => {
 exports.updateTipoPago = async (req, res) => {
             try {
                 const tipopago = await TipoPago.update({
+                    idSesion: req.idSesion,
+                    idUsuario: req.idUsuario,
                     tipoDePago: req.body.tipoDePago,
                     descripcionTipoPago: req.body.descripcionTipoPago,
                     isDelete: false
                 } , {
                     where: {
+                        
                         idTipoPago: parseInt(req.body.idTipoPago)
                     }
                 });
@@ -96,9 +102,10 @@ exports.deleteTipoPago = async (req, res) => {
     try {
         const tipopago = await TipoPago.update({
             isDelete: true
+
         } , {
             where: {
-                idTipoPago: parseInt(req.body.idTipoPago)
+                idTipoPago: parseInt(req.body.idTipoPago),
             }
         });
         return res.status(200).send({

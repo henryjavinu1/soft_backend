@@ -806,7 +806,7 @@ exports.initial = async () => {
                 idVenta: 1,
                 idTalonario: 1,
                 idNumero: 1,
-                idSesion: 1
+       
             });
             await Fact.create({
                 idFactura: 2,
@@ -825,7 +825,7 @@ exports.initial = async () => {
                 idVenta: 2,
                 idTalonario: 1,
                 idNumero: 2,
-                idSesion: 2
+              
             });
             await Fact.create({
                 idFactura: 3,
@@ -844,7 +844,7 @@ exports.initial = async () => {
                 idVenta: 3,
                 idTalonario: 1,
                 idNumero: 3,
-                idSesion: 1
+              
             });
             await Fact.create({
                 idFactura: 4,
@@ -863,7 +863,7 @@ exports.initial = async () => {
                 idVenta: 4,
                 idTalonario: 1,
                 idNumero: 4,
-                idSesion: 2
+            
             });
             await Fact.create({
                 idFactura: 5,
@@ -882,7 +882,7 @@ exports.initial = async () => {
                 idVenta: 5,
                 idTalonario: 1,
                 idNumero: 5,
-                idSesion: 1
+          
             });
             await Fact.create({
                 idFactura: 6,
@@ -901,7 +901,7 @@ exports.initial = async () => {
                 idVenta: 6,
                 idTalonario: 1,
                 idNumero: 6,
-                idSesion: 2
+           
             });
         } catch (error) {
             console.log(error);
