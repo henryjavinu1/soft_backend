@@ -15,7 +15,7 @@ module.exports = function(app) {
   });
 
   app.post("/api/gene/vertipopago",controller.findTipoPago); //Vertipo de pagos
-  app.post("/api/gene/insertfact", controller.insertFactura); //Insertar factura
+  app.post("/api/gene/insertfact",  [verifyToken],controller.insertFactura); //Insertar factura
   app.post("/api/gene/buscar", controller.buscar); // Apoyo
   app.post("/api/gene/nuevo", controller.nuevo); //Generar numero factura
 

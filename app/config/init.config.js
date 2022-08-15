@@ -5,6 +5,7 @@ const controller = require("../controllers/auth.controller");
 const { DB } = require("./db.config");
 const Role = db.role;
 const User = db.user;
+const RolePermiso = db.roles_permisos;
 const Empleado = db.empleado;
 const Permiso = db.permiso;
 const TipoPag = db.tipopago;
@@ -298,6 +299,13 @@ exports.initial = async () => {
             fechaNacimiento: Date("2002-20-2"),
             sexo: "M",
         });
+        await RolePermiso.bulkCreate([{
+            idRol: "2",
+            idPermiso: "6"
+        },{
+            idRol: "2",
+            idPermiso: "7"
+        }]);
         await Empleado.create({
             id: 2,
             dni: "02013",
@@ -436,6 +444,7 @@ exports.initial = async () => {
             nombreProducto: "Coca Cola",
             precioProducto: 18,
             cantidadProducto: 500,
+            image:"images/1660425726953no-image.png",
             isvProducto: 10,
             descProducto: 0,
             isExcento: false,
@@ -446,6 +455,7 @@ exports.initial = async () => {
             nombreProducto: "Mortadela",
             precioProducto: 25,
             cantidadProducto: 250,
+            image:"images/1660425726953no-image.png",
             isvProducto: 10,
             descProducto: 0,
             isExcento: false,
@@ -456,6 +466,7 @@ exports.initial = async () => {
             nombreProducto: "Mantequilla",
             precioProducto: 45,
             cantidadProducto: 250,
+            image:"images/1660425726953no-image.png",
             isvProducto: 10,
             descProducto: 0,
             isExcento: false,
@@ -803,7 +814,7 @@ exports.initial = async () => {
                 idVenta: 1,
                 idTalonario: 1,
                 idNumero: 1,
-                idSesion: 1
+       
             });
             await Fact.create({
                 idFactura: 2,
@@ -822,7 +833,7 @@ exports.initial = async () => {
                 idVenta: 2,
                 idTalonario: 1,
                 idNumero: 2,
-                idSesion: 2
+              
             });
             await Fact.create({
                 idFactura: 3,
@@ -841,7 +852,7 @@ exports.initial = async () => {
                 idVenta: 3,
                 idTalonario: 1,
                 idNumero: 3,
-                idSesion: 1
+              
             });
             await Fact.create({
                 idFactura: 4,
@@ -860,7 +871,7 @@ exports.initial = async () => {
                 idVenta: 4,
                 idTalonario: 1,
                 idNumero: 4,
-                idSesion: 2
+            
             });
             await Fact.create({
                 idFactura: 5,
@@ -879,7 +890,7 @@ exports.initial = async () => {
                 idVenta: 5,
                 idTalonario: 1,
                 idNumero: 5,
-                idSesion: 1
+          
             });
             await Fact.create({
                 idFactura: 6,
@@ -898,7 +909,7 @@ exports.initial = async () => {
                 idVenta: 6,
                 idTalonario: 1,
                 idNumero: 6,
-                idSesion: 2
+           
             });
         } catch (error) {
             console.log(error);

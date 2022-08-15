@@ -19,6 +19,6 @@ module.exports = function(app) {
   app.post("/api/procesarVenta", controller.eliminarVentaProcesar);
   app.post("/api/eliminarVenta", [verifyToken], controller.eliminarVenta);
   app.post("/api/actualizarVenta", controller.actualizarVenta);
-  app.post("/api/detalleVentaDetalladas", manipularventa.findAllVenta);
+  app.post("/api/detalleVentaDetalladas", [verifyToken], manipularventa.findAllVenta);
   
 };

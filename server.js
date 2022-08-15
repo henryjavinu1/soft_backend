@@ -29,6 +29,7 @@ db.sequelize.sync({force: false}).then(() => {
   init.initial();
 });
 
+app.use('/images', express.static('images'))
 
 // simple route
 app.get("/", (req, res) => {
@@ -52,6 +53,7 @@ require("./app/routes/empleado.routes")(app);
 require("./app/routes/permisos.routes")(app);
 require("./app/routes/roles.routes")(app);
 require("./app/routes/sucursal.routes")(app);
+require("./app/routes/rolpermiso.route")(app);
 
 
 
@@ -61,4 +63,4 @@ app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
 
-app.use('images', express.static('./images'))
+//app.use('images', express.static('./images'))

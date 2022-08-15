@@ -13,6 +13,9 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.DECIMAL,
         allowNull: false
       },
+      image:{
+        type: Sequelize.STRING,
+      },
       cantidadProducto: {
         type: Sequelize.INTEGER,
         allowNull: false
