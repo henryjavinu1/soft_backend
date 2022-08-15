@@ -228,19 +228,20 @@ exports.validarArqueoActivo = async (req, res) => {
             where: {
                 idSesion: req.idSesion,
                 isActive: true,
-                isDelete: false
+                isDelete: false,
             }
         });
         //validar que el arqueo se mostro correctamente
         if(!arqueo){
-            res.status(404).send({
+            res.status(404).json({
                 message: "No se encontro ningun arqueo"
             });
-        } 
-        return res.status(200).send({arqueo});
+        }else {
+            res.status(200).send({arqueo});
+        }
     } catch (error) {
         //enviar respuesta al cliente
-        return res.status(500).json({
+        res.status(500).json({
             message: "Error al validar arqueo activo" + error.message
         });
     }

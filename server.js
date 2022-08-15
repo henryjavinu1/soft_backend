@@ -25,7 +25,7 @@ app.use(
 const db = require("./app/models/puntoDeVentas/");
 db.sequelize.sync();
 // force: true will drop the table if it already exists
-db.sequelize.sync({force: false}).then(() => {
+db.sequelize.sync({force: true}).then(() => {
   init.initial();
 });
 
@@ -62,4 +62,4 @@ app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
 
-app.use('images', express.static('./images'))
+//app.use('images', express.static('./images'))
