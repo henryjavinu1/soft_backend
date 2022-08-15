@@ -45,12 +45,6 @@ exports.insertFactura = async (req, res) => {
         //Llamamos al controlador nuevo que nos genera un nuevo numero de la factura
         await this.nuevo(req); 
         //Sesion por mientras modificamos los token 
-         const sesion = await db.sesion.findOne({
-            where: {
-                isActive: true,
-                isDelete: false
-            }
-        });
         //Datos extraidos de la venta
         const isvTotal = await ventas.totalISV; //ISV de la venta
         const descuentoVentas = await ventas.totalDescuentoVenta; // Descuento de la venta
@@ -88,8 +82,9 @@ exports.insertFactura = async (req, res) => {
                  //Usuario Sesion con la que se esta facturando
                 idVenta: ventas.id,
                 idTalonario: numero.idTalonario,
-                idSesion: sesion.id,
-                idNumero: numero.id,     
+                idSesion: req.idSesion,
+                idNumero: numero.id,  
+                idUsuario: req.idUsuario,   
         },
         );
         return res.status(200).send({

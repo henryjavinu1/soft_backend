@@ -86,22 +86,21 @@ exports.actualizacionCerrandoSesion = async (req, res) => {
                                                                                 ventaCredito = (SELECT SUM(totalFactura)
                                                                                                 FROM facturas
                                                                                                 WHERE idTipoPago = 3 AND idSesion = ${req.idSesion})
-                                                        WHERE idSesion = ${req.idSesion} AND isActive = true, AND isDelete = false`);
+                                                        WHERE arqueos.idSesion = ${req.idSesion} AND arqueos.isActive = true AND arqueos.isDelete = false AND arqueos.idUsuario = ${req.idUsuario}`)
                     const arqueo2 = await sequelize.query(`UPDATE arqueos SET efectivoTotal = (SELECT SUM(efectivoApertura + efectivoCierre)
                                                                                                 FROM arqueos
-                                                                                                WHERE arqueos.idSesion = ${req.idSesion}),
+                                                                                                WHERE idSesion = ${req.idSesion} AND idUsuario = ${req.idUsuario}),
                                                                                 ventaTotal = (SELECT SUM(efectivoCierre + otrosPagos + ventaCredito)
                                                                                                 FROM arqueos
-                                                                                                WHERE idSesion = ${req.idSesion})
-                                                            WHERE idSesion = ${req.idSesion} AND isActive = true, AND isDelete = false`);
-                                                                                                
-
+                                                                                                WHERE idSesion = ${req.idSesion} AND idUsuario = ${req.idUsuario})
+                                                            WHERE arqueos.isActive = true AND arqueos.isDelete = false`)
                     const fe = await Arque.update({
                         fechaFinal: new Date(),
-                        isActive: false,
+                        isActive: 0,
                     },{
                         where: {
                             idSesion: req.idSesion,
+                            idUsuario: req.idUsuario,
                             isDelete: false,
                             isActive: true,
                         },
@@ -113,7 +112,7 @@ exports.actualizacionCerrandoSesion = async (req, res) => {
                         }
                     });
                     //validar que el arqueo se actualizo correctamente
-                    if (arqueo1 && arqueo2 && fe) {
+                    if (arqueo1 && arqueo2 && fe ) {
                         return res.status(200).send({
                             message: "Arqueo actualizado correctamente",
                             arqueos
@@ -218,6 +217,32 @@ exports.buscarPorUsuario = async (req, res) => {
         //enviar respuesta al cliente
         return res.status(500).json({
             message: "Error al buscar arqueo por usuario" + error.message
+        });
+    }
+}
+
+exports.validarArqueoActivo = async (req, res) => {
+    try {
+        //validar que el arqueo este activo
+        const arqueo = await Arque.findOne({
+            where: {
+                idSesion: req.idSesion,
+                isActive: true,
+                isDelete: false,
+            }
+        });
+        //validar que el arqueo se mostro correctamente
+        if(!arqueo){
+            res.status(404).json({
+                message: "No se encontro ningun arqueo"
+            });
+        }else {
+            res.status(200).send({arqueo});
+        }
+    } catch (error) {
+        //enviar respuesta al cliente
+        res.status(500).json({
+            message: "Error al validar arqueo activo" + error.message
         });
     }
 }

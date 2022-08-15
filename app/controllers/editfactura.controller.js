@@ -2,7 +2,7 @@ const { request, response } = require('express');
 const { Op, DataTypes } = require("sequelize");
 const fs = require('fs');
 
-const { impresionDeFacturas, validarCampos, filtrarFacturasPorFechaQuery, construirFacturaEnPDF } = require('../helpers/manipularfactura.helper');
+const { impresionDeFacturas, validarCampos, filtrarFacturasPorFechaQuery, construirFacturaEnPDF, construirFacturaRapida } = require('../helpers/manipularfactura.helper');
 const db = require('../models/puntoDeVentas');
 const path = require('path');
 const Factura = db.factura;
@@ -13,6 +13,7 @@ const TipoPago = db.tipopago;
 const Venta = db.ventas;
 const DetalleVenta = db.detalleventa;
 const Producto = db.producto;
+const Sucursal = db.sucursal;
 
 const traerFacturas = async (req = request, res = response) => {
     try {
@@ -350,6 +351,8 @@ const imprimirUnaFactura = async (req = request, res = response) => {
 const descargarFactura = async (req = request, res = response) => {
 
     const numeroFactura = req.query.numerofactura;
+    const tipoFactura = req.query.tipo;
+    const tiempo = req.query.tiempo;
     // console.log('num factura: '+numeroFactura);
     let detallesDeVentas = [];
     let facturaBuscada
@@ -370,6 +373,11 @@ const descargarFactura = async (req = request, res = response) => {
                 },
                 {
                     model: Talonario,
+                    include: [
+                        {
+                            model: Sucursal
+                        }
+                    ]
                 },
                 {
                     model: Cliente,
@@ -387,22 +395,42 @@ const descargarFactura = async (req = request, res = response) => {
             });
         }
         if (facturaBuscada) {
-            construirFacturaEnPDF(facturaBuscada, detallesDeVentas).then(pdfDoc => {
-                var file = fs.createReadStream('./app/pdf_files/primera.pdf');
-                // var stat = fs.statSync('./app/pdf_files/primera.pdf');
-                // res.setHeader('Content-Length', stat.size);
-                res.setHeader('Content-Type', 'application/pdf');
-                res.setHeader('Content-Disposition', `attachment; filename=factura${facturaBuscada.numeroFactura}.pdf`);
-                file.pipe(res);
-                // fs.unlinkSync('app/pdf_files/primera.pdf');
-                // fs.unlinkSync('app/pdf_files/primera.pdf');
-            }).catch(err => {
-                res.status(500).json(
-                    {
-                        msg: err
-                    }
-                )
-            });
+            console.log('tipo de factura:'+tipoFactura);
+            if (Number(tipoFactura) === 2) {
+                construirFacturaEnPDF(facturaBuscada, detallesDeVentas, Number(tiempo)).then(pdfDoc => {
+                    var file = fs.createReadStream('./app/pdf_files/primera.pdf');
+                    // var stat = fs.statSync('./app/pdf_files/primera.pdf');
+                    // res.setHeader('Content-Length', stat.size);
+                    res.setHeader('Content-Type', 'application/pdf');
+                    res.setHeader('Content-Disposition', `attachment; filename=factura${facturaBuscada.numeroFactura}.pdf`);
+                    file.pipe(res);
+                    // fs.unlinkSync('app/pdf_files/primera.pdf');
+                    // fs.unlinkSync('app/pdf_files/primera.pdf');
+                }).catch(err => {
+                    res.status(500).json(
+                        {
+                            msg: err
+                        }
+                    )
+                });
+            } else {
+                construirFacturaRapida(facturaBuscada, detallesDeVentas, Number(tiempo)).then(pdfDoc => {
+                    var file = fs.createReadStream('./app/pdf_files/primerarapida.pdf');
+                    // var stat = fs.statSync('./app/pdf_files/primera.pdf');
+                    // res.setHeader('Content-Length', stat.size);
+                    res.setHeader('Content-Type', 'application/pdf');
+                    res.setHeader('Content-Disposition', `attachment; filename=factura${facturaBuscada.numeroFactura}-rapida.pdf`);
+                    file.pipe(res);
+                    // fs.unlinkSync('app/pdf_files/primerarapida.pdf');
+                    // fs.unlinkSync('app/pdf_files/primera.pdf');
+                }).catch(err => {
+                    res.status(500).json(
+                        {
+                            msg: err
+                        }
+                    )
+                });
+            }
         } else {
             return res.status(400).json({
                msg: 'No se encontró el documento solicitado.' 
@@ -411,7 +439,8 @@ const descargarFactura = async (req = request, res = response) => {
     } catch (error) {
         console.log(error);
         return res.status(500).json({
-            msg: 'Ocurrió un error al buscar el registro en la base de datos comuniquese con el administrador.'
+            msg: 'Ocurrió un error al buscar el registro en la base de datos comuniquese con el administrador.',
+            factura: facturaBuscada
         });
     }
 

@@ -9,6 +9,10 @@ const TipoProducto = db.tipoProducto;
 const { Op } = require("sequelize");
 const { tipoproducto } = require("../models/puntoDeVentas");
 
+const multer = require('multer');
+const path = require('path');
+
+
 
 // Pucha
 exports.createproducto = async (req = request, res = response) => {   
@@ -18,6 +22,7 @@ exports.createproducto = async (req = request, res = response) => {
             nombreProducto: req.body.nombreProducto,
             precioProducto: req.body.precioProducto,
             cantidadProducto: req.body.cantidadProducto,
+            image: req.file.path,
             isvProducto: req.body.isvProducto,
             descProducto: req.body.descProducto,
             isExcento: req.body.isExcento,
@@ -91,6 +96,33 @@ exports.buscarxcodigo = async (req, res) =>{
     }
 }
 
+exports.buscarxnombre = async (req, res) =>{
+    try {
+        const producto = await Producto.findOne({
+            where: {
+                isDelete: false,
+                [Op.and]: [{nombreProducto: req.body.nombreProducto}, {isDelete: false}]                
+            }, include:[{
+                model: db.tipoproducto,
+                atributes: ['id','tipoProducto']
+                }
+                ]
+        });
+        if (!producto) {
+            return res.status(404).send({
+            });
+        } else {
+            return res.status(200).send({
+                producto: producto
+            });
+        }
+    } catch (error) {
+        return res.status(500).send({
+            message: "Ocurrio un error" + error
+        });
+    }
+}
+
 exports.findAll = async (req, res) =>{
     try {
         const producto = await Producto.findAll({
@@ -138,6 +170,7 @@ exports.update = async (req, res) => {
                     nombreProducto: req.body.nombreProducto,
                     precioProducto: req.body.precioProducto,
                     cantidadProducto: req.body.cantidadProducto,
+                    image: req.file.path,
                     isvProducto: req.body.isvProducto,
                     descProducto: req.body.descProducto,
                     isExcento: req.body.isExcento,
@@ -165,6 +198,51 @@ exports.update = async (req, res) => {
     }   
 }
 
+exports.updateSinImagen = async (req, res) => {
+    try {
+        const producto = await Producto.findOne({
+            where: {
+                id: req.body.id,
+                isDelete: false
+            }
+        });
+        if (!producto) {
+            return res.status(404).send({
+                message: "No existe el producto ingresado."
+            });
+        } else {
+            try {
+                const producto = await Producto.update({
+                    codigoProducto: req.body.codigoProducto,
+                    nombreProducto: req.body.nombreProducto,
+                    precioProducto: req.body.precioProducto,
+                    cantidadProducto: req.body.cantidadProducto,
+                    isvProducto: req.body.isvProducto,
+                    descProducto: req.body.descProducto,
+                    isExcento: req.body.isExcento,
+                    isDelete: false,
+                    idTipoProducto: req.body.idTipoProducto
+                } , {
+                    where: {
+                        id: req.body.id
+                    }
+                });
+                return res.status(200).send({
+                    message: "Producto actualizado."
+                });
+        
+            } catch (error) {
+                return res.status(500).send({
+                    message: "Ocurrio un error al actualizar el producto."  + error
+                });
+            }
+        }
+    } catch (error) {
+        return res.status(500).send({
+            message: "Ocurrio un error" + error
+        });
+    }   
+}
 exports.setsaldo = async (req, res) => {
     var saldoRecibir  = req.body.saldoRestar;
     var saldoActual = req.body.saldoActual;
@@ -266,3 +344,23 @@ exports.updateSaldo = async (req, res) => {
         });
     }   
 }
+
+
+const storage = multer.diskStorage({
+
+    destination: (req, file, cb)=>{
+        cb(null, './images')
+    },
+    filename: (req, file, cb) =>{
+        cb(null,Date.now() + path.basename(file.originalname))
+    }
+    
+})
+
+exports.upload = multer({
+    storage: storage,
+    preservePath : false,
+    
+
+
+}).single('image');
