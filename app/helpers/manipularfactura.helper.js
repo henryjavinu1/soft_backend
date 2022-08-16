@@ -179,12 +179,8 @@ const construirFacturaEnPDF = (factura, detallesDeVentas, tiempo) => {
         }
     };
     let content;
-    if (detallesDeVentas.length > 0) {
-        console.log('detalle de ventas: ' + detallesDeVentas.length);
-        content = contenidoFactura(factura, detallesDeVentas);
-    } else {
-        content = contenidoSinDetalles(factura);
-    }
+    console.log('detalle de ventas: ' + detallesDeVentas.length);
+    content = contenidoFactura(factura, detallesDeVentas);
     // console.log(content.content);
 
     if (tiempo === 1) {
