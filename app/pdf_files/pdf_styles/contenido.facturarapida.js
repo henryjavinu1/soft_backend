@@ -74,7 +74,7 @@ const contenidoFacturaRapida = (factura, detallesDeVentas) => {
                         fontSize: 8,
                     },
                     {
-                        text: `${detallesDeVentas[i].totalDetalleVenta.toString()}`,
+                        text: `${(Number(detallesDeVentas[i].cantidad) * Number(detallesDeVentas[i].precioUnitario))}`,
                         border: [false, false, false, false],
                         alignment: 'right',
                         margin: [0, 0, 0, 0],
