@@ -408,7 +408,7 @@ const contenidoFactura = (factura, detallesDeVentas) => {
             alignment: 'left',
           },
           {
-            text: `${factura.talonario.fechaLimiteEmision.toString().substring(8, 16)}`,
+            text: `${factura.talonario.fechaLimiteEmision.toString().substring(4, 16)}`,
             bold: true,
             color: '#333333',
             fontSize: 7,

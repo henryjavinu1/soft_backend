@@ -119,7 +119,7 @@ const contenidoFacturaRapida = (factura, detallesDeVentas) => {
                 style: 'subheader'
             },
             {
-                text: `Fecha límite de emisión: ${factura.talonario.fechaLimiteEmision.toString().substring(8, 10)}/${factura.talonario.fechaLimiteEmision.toString().substring(5, 7)}/${factura.talonario.fechaLimiteEmision.toString().substring(0, 4)}`,
+                text: `Fecha límite de emisión: ${factura.talonario.fechaLimiteEmision.toString().substring(4, 16)}`,
                 style: 'subheader'
             },
             {
