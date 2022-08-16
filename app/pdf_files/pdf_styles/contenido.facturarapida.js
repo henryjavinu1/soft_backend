@@ -12,21 +12,21 @@ const contenidoFacturaRapida = (factura, detallesDeVentas) => {
     let isv18 = 0.00;
     if (detallesDeVentas.length !== 0) {
         for (let i = 0; i < detallesDeVentas.length; i++) {
-            totalFactura += Number(detallesDeVentas[i].totalDetalleVenta);
-            if (detallesDeVentas[i].producto.isExcento) {
-                totalExcento += Number(detallesDeVentas[i].totalDetalleVenta);
+          if (detallesDeVentas[i].producto.isExcento) {
+            totalExcento += (Number(detallesDeVentas[i].cantidad)*Number(detallesDeVentas[i].precioUnitario));
+          } else {
+            if (Number(detallesDeVentas[i].isvAplicado) === 18) {
+              importeGravado18 += ((Number(detallesDeVentas[i].cantidad)*Number(detallesDeVentas[i].precioUnitario)) / 1.18);
             } else {
-                if (Number(detallesDeVentas[i].isvAplicado) === 18) {
-                    importeGravado18 += (Number(detallesDeVentas[i].totalDetalleVenta) / 1.18);
-                    isv18 += (importeGravado18 * 0.18);
-                } else {
-                    importeGravado15 += (Number(detallesDeVentas[i].totalDetalleVenta) / 1.15);
-                    isv15 += (importeGravado15 * 0.15);
-                }
+              importeGravado15 += ((Number(detallesDeVentas[i].cantidad)*Number(detallesDeVentas[i].precioUnitario)) / 1.15);
             }
+          }
         }
+        isv18 += (importeGravado18 * 0.18);
+        isv15 += (importeGravado15 * 0.15);
         subTotal = (totalExcento + importeGravado15 + importeGravado18).toFixed(2);
-    } else {
+        totalFactura = (totalExcento + importeGravado15 + importeGravado18 + isv15 + isv18);
+      } else {
         totalFactura = 0.00;
         subTotal = 0.00;
         totalExcento = 0.00;
@@ -34,7 +34,8 @@ const contenidoFacturaRapida = (factura, detallesDeVentas) => {
         importeGravado18 = 0.00;
         isv15 = 0.00;
         isv18 = 0.00;
-    }
+      }
+    
 
     function itemTable() {
         listaDeItems = [];
