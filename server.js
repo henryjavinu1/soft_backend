@@ -53,7 +53,7 @@ require("./app/routes/empleado.routes")(app);
 require("./app/routes/permisos.routes")(app);
 require("./app/routes/roles.routes")(app);
 require("./app/routes/sucursal.routes")(app);
-require("./app/routes/rolpermiso.route")(app);
+require("./app/routes/rolpermiso.routes")(app);
 
 
 
